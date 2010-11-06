@@ -18,4 +18,9 @@ public class Main {
         // TODO code application logic here
     }
 
+    public void foo1()
+    {
+
+    }
+
 }
