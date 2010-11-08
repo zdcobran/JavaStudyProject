@@ -11,7 +11,7 @@ import javastudyproject.users.User;
 
 /**
  *
- * @author EladYarkoni
+ * @author AlonPisnoy
  */
 public class Order {
 
@@ -21,17 +21,35 @@ public class Order {
     private Date deliveryDate;
     private double totalPrice;
     private ArrayList<Product> products;
-    private DeliveryType delivery;
+    private DeliveryType deliveryType;
     private StateType state;
-    
-    public Order(User user, Date deliveryDate, DeliveryType delivery)
+
+    //constructor
+    public Order(User user, Date deliveryDate, DeliveryType deliveryType)
     {
-    
+        runid++;
+        this.user = user;
+        orderDate = new Date(System.currentTimeMillis());
+        this.deliveryDate = deliveryDate;
+        this.deliveryType = deliveryType;
+        state = StateType.New;
     }
 
+    public Order addProduct(Product product)
+    {
+        products.add(product);
+        return this;
+    }
 
+    public void updateState(StateType state)
+    {
+        if (this.state != state) this.state = state;
+    }
 
-
+    public void updateTotalPrice(double price)
+    {
+        totalPrice += price;
+    }
 
    public enum DeliveryType {Self, Shipping};
    public enum StateType {New, Pending, Ready, InProgress, Finished};

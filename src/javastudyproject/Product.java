@@ -17,6 +17,13 @@ public class Product {
     private int quantity;
     private Category.CategoryType type;
 
-    
-    
+    //constructor
+    public Product(String name, String serialNum, double price, int quantity, Category.CategoryType type)
+    {
+        this.name = name;
+        this.serialNum = serialNum;
+        this.price = price;
+        this.quantity = quantity;
+        this.type = type;
+    }
 }

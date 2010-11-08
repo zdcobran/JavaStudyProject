@@ -6,15 +6,31 @@
 package javastudyproject.reporting;
 
 /**
- *
- * @author EladYarkoni
+ * @author AlonPisnoy
+ * This is a reporter class that prints to console and throws
+ * Exceptions with messages.
  */
 public class Reporter {
 
-    public static void report(String message)
+    public static void report(String message) throws Exception
     {
-        System.out.println(message);
+        report(message, false);
     }
+
+    public static void report(String message,  boolean throwException) throws Exception
+    {
+        if (throwException)
+        {
+            throw new Exception(message);
+        }
+        else
+        {
+            System.out.println(message);
+        }
+    }
+
+
+
 
     
 }
