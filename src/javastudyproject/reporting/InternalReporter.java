@@ -5,6 +5,7 @@
 
 package javastudyproject.reporting;
 import java.util.ArrayList;
+import javastudyproject.Category;
 import javastudyproject.Order;
 import javastudyproject.Order.StateType;
 import javastudyproject.Product;
@@ -111,19 +112,109 @@ public class InternalReporter {
         }
     }
 
-    public static void printAllProducts(ArrayList<Product> products) throws Exception
+    public static void printAllProducts(ArrayList<Category> categories) throws Exception
     {
-        for (Product product : products)
+        for (Category category : categories)
         {
-               SystemReporter.report("Product info: ", new String[] {
-                    "Product name:\t" + product.getName(),
-                    "Product SN:\t" + product.getSerialNumber(),
-                    "Product price:\t" + product.getPrice(),
-                    "Product quantity:\t" + product.getQuantity(),
-                    "Product type:\t" + product.getType().toString()
-                });
+            ArrayList<Product> products =  category.getProductsList();
+            for (Product product : products)
+            {
+                printProduct(product);
+            }
         }
     }
+
+    //TODO: print sorted products
+
+    public static void printProductsByCategory(Category.CategoryType categoryType, ArrayList<Category> categories) throws Exception
+    {
+        for (Category category : categories)
+        {
+            if (category.getName() == categoryType)
+            {
+                ArrayList<Product> products =  category.getProductsList();
+                for (Product product : products)
+                {
+                    printProduct(product);
+                }
+                continue;
+            }
+        }
+    }
+
+    public static void printAllCategiries(ArrayList<Category> categories) throws Exception
+    {
+        for (Category category : categories)
+        {
+            SystemReporter.report("Products category : " + category.getName() + " info: ", new String[] {
+                "Categiry id:\t" + category.getRunId(),
+                "Category name:\t" + category.getName()
+                            });
+        }
+    }
+
+    /**
+     * Printing product amount for all categories
+     * @param categories = category list
+     * @throws Exception
+     */
+    public static void printProductsAmountByCategory(ArrayList<Category> categories) throws Exception
+    {
+        for (Category category : categories)
+        {
+            SystemReporter.report(
+                    "Products amount for category : " + category.getName() + " is: " + category.getProductsList().size());
+        }
+    }
+
+    public static void printProductsByPrice(LergerSmaller by, double price, ArrayList<Category> categories) throws Exception
+    {
+       for (Category category : categories)
+        {
+            ArrayList<Product> products =  category.getProductsList();
+            for (Product product : products)
+            {
+               switch(by)
+               {
+                   case Larger:
+                       if (product.getPrice() > price)
+                           printProduct(product);
+                       break;
+                   case Smaller:
+                      if (product.getPrice() <= price)
+                           printProduct(product);
+                       break;
+                   default:
+                       break;
+               }
+            }
+        }
+
+    }
+    
+    public enum LergerSmaller
+    {
+        Larger , Smaller
+    }
+    /**
+     * Print product helper
+     * @param product
+     * @throws Exception
+     */
+    private static void printProduct(Product product) throws Exception
+    {
+           SystemReporter.report("Product info: ", new String[] {
+                "Product name:\t" + product.getName(),
+                "Product SN:\t" + product.getSerialNumber(),
+                "Product price:\t" + product.getPrice(),
+                "Product quantity:\t" + product.getQuantity(),
+                "Product type:\t" + product.getType().toString()
+            });
+    }
+
+
+
+
 
     
 

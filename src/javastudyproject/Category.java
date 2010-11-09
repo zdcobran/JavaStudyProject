@@ -24,13 +24,27 @@ public class Category {
         this.name = name;
     }
 
-
     public Category addProduct(Product product)
     {
         productList.add(product);
         return this;
     }
 
+    public int getRunId()
+    {
+        return runid;
+    }
+
+    public ArrayList<Product> getProductsList()
+    {
+        return productList;
+    }
+
+    public CategoryType getName()
+    {
+        return name;
+    }
+    
     public static enum CategoryType
     {
         Electronics, Car, Office, Home
