@@ -7,7 +7,7 @@ package javastudyproject;
 
 /**
  *
- * @author EladYarkoni
+ * @author Alon pisnoy
  */
 public class Product {
 
@@ -25,5 +25,30 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
         this.type = type;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getSerialNumber()
+    {
+        return serialNum;
+    }
+
+    public double getPrice()
+    {
+        return price;
+    }
+
+    public int getQuantity()
+    {
+        return quantity;
+    }
+
+    public Category.CategoryType getType()
+    {
+        return type;
     }
 }
