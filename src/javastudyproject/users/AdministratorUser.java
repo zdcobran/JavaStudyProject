@@ -29,4 +29,10 @@ public class AdministratorUser extends User {
         this.age = age;
     }
 
+    @Override
+    public String toString()
+    {
+        return "AdministratorUser";
+    }
+
 }

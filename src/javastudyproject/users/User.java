@@ -23,6 +23,11 @@ public class User {
     protected String age;
     // todo: list of orders
 
+    public String getId()
+    {
+        return id;
+    }
+
     public String getFirstName()
     {
         return firstName;

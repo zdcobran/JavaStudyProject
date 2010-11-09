@@ -28,4 +28,10 @@ public class ReadWriteUser extends User {
         this.password = password;
         this.age = age;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ReadWriteUser";
+    }
 }

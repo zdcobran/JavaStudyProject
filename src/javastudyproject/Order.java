@@ -51,6 +51,36 @@ public class Order {
         totalPrice += price;
     }
 
+    public int getRunId()
+    {
+        return runid;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public Date getOrderDate()
+    {
+        return orderDate;
+    }
+
+    public Date getDeliveryDate()
+    {
+        return deliveryDate;
+    }
+
+    public DeliveryType getDeliveryType()
+    {
+        return deliveryType;
+    }
+
+    public StateType getState()
+    {
+        return state;
+    }
+
    public enum DeliveryType {Self, Shipping};
    public enum StateType {New, Pending, Ready, InProgress, Finished};
 }

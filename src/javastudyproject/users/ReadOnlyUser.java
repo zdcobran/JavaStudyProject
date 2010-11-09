@@ -28,4 +28,11 @@ public class ReadOnlyUser extends User {
         this.password = password;
         this.age = age;
     }
+
+
+    @Override
+    public String toString()
+    {
+        return "ReadOnlyUser";
+    }
 }

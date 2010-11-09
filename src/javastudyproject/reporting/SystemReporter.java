@@ -17,7 +17,7 @@ public class SystemReporter {
         report(message, false);
     }
 
-    public void report(String title, String[] messages) throws Exception
+    public static void report(String title, String[] messages) throws Exception
     {
         report(title);
         for (String message : messages)
