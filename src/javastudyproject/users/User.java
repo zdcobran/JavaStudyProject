@@ -4,8 +4,9 @@
  */
 
 package javastudyproject.users;
-
+import java.util.ArrayList;
 import java.util.Date;
+import javastudyproject.Order;
 
 /**
  *
@@ -21,7 +22,7 @@ public class User {
     protected String email;
     protected Date createDate;
     protected String age;
-    // todo: list of orders
+    protected ArrayList<Order> orders;
 
     public String getId()
     {
@@ -53,5 +54,13 @@ public class User {
         return age;
     }
 
+    public ArrayList<Order> getOrders()
+    {
+        return orders;
+    }
 
+    public void addOrder(Order order)
+    {
+        orders.add(order);
+    }
 }

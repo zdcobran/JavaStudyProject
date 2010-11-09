@@ -5,6 +5,9 @@
 
 package javastudyproject.reporting;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 import javastudyproject.Category;
 import javastudyproject.Order;
 import javastudyproject.Order.StateType;
@@ -80,13 +83,14 @@ public class InternalReporter {
      * @param orders the whole order list to print
      * @throws Exception
      */
-    public static void printAllOrders(ArrayList<Order> orders) throws Exception
+    public static void printAllOrders(ArrayList<User> users) throws Exception
     {
-           for (Order order : orders)
+           for (User user : users)
             {
-                SystemReporter.report("Order info: ", new String[] {
+               ArrayList<Order> orders = user.getOrders();
+               for (Order order: orders)
+                SystemReporter.report("Order info for user " + user.getId() + ": ", new String[] {
                         "Order ID:\t" + order.getRunId(),
-                        "For user:\t" + order.getUser().getId(),
                         "Order date:\t" + order.getOrderDate(),
                         "Order deliviry date:\t" + order.getDeliveryDate().toString(),
                         "Order deliviry type:\t" + order.getDeliveryType().toString(),
@@ -95,20 +99,25 @@ public class InternalReporter {
            }
     }
 
-    public static void printOrdersByState(ArrayList<Order> orders, StateType state) throws Exception
+    public static void printOrdersByState(ArrayList<User> users, StateType state) throws Exception
     {
-        for (Order order : orders)
-        {
-            if (order.getState() == state)
+
+       for (User user : users)
             {
-                SystemReporter.report("Printing order with this state " + state.toString() + ": ", new String[] {
-                        "Order ID:\t" + order.getRunId(),
-                        "For user:\t" + order.getUser().getId(),
-                        "Order date:\t" + order.getOrderDate(),
-                        "Order deliviry date:\t" + order.getDeliveryDate().toString(),
-                        "Order deliviry type:\t" + order.getDeliveryType().toString()
-                    });
-            }
+               ArrayList<Order> orders = user.getOrders();
+               for (Order order: orders)
+               {
+                    if (order.getState() == state)
+                    {
+                        SystemReporter.report("Printing order with this state " + state.toString() + ": ", new String[] {
+                                "Order ID:\t" + order.getRunId(),
+                                "For user:\t" + order.getUser().getId(),
+                                "Order date:\t" + order.getOrderDate(),
+                                "Order deliviry date:\t" + order.getDeliveryDate().toString(),
+                                "Order deliviry type:\t" + order.getDeliveryType().toString()
+                            });
+                    }
+                }
         }
     }
 
@@ -196,6 +205,72 @@ public class InternalReporter {
     {
         Larger , Smaller
     }
+
+
+    /**
+     * Used smart extended break statement to goto main loop
+     * @param productName
+     * @param users
+     */
+    public static void printUserAmountThatOrderedSpecificProduct(String productName, ArrayList<User> users)
+    {
+        int amount = 0;
+        first:{
+            for (User user : users)
+            {
+                ArrayList<Order> orders = user.getOrders();
+                Boolean exitLoop = false;
+                for (Order order : orders)
+                {
+                    ArrayList<Product> products = order.getProducts();
+                    for (Product product : products)
+                    {
+                        if (product.getName() == productName)
+                        {
+                            amount++;
+                            break first;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    //TODO:not finished
+    /**
+     *
+     * @param productName
+     * @param users
+     */
+    public static void printMostSaleableProduct(ArrayList<User> users)
+    {
+        Map<Product, Integer> productAmount =  new HashMap<Product, Integer>();
+        int amount = 0;
+            for (User user : users)
+            {
+                ArrayList<Order> orders = user.getOrders();
+                for (Order order : orders)
+                {
+                    ArrayList<Product> products = order.getProducts();
+                    for (Product product : products)
+                    {
+                        if (productAmount.containsKey(product))
+                        {
+                            int currAmount = productAmount.get(product);
+                            currAmount++;
+                            productAmount.put(product, currAmount);
+                        }
+                        else
+                        {
+                            productAmount.put(product, 1);
+                        }
+                    }
+                }
+            }
+    }
+    
+
     /**
      * Print product helper
      * @param product
@@ -211,6 +286,7 @@ public class InternalReporter {
                 "Product type:\t" + product.getType().toString()
             });
     }
+
 
 
 

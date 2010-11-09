@@ -35,10 +35,21 @@ public class Order {
         state = StateType.New;
     }
 
+    /**
+     * The return type is order is for fluent interfase to add multiple
+     * products in one line
+     * @param product
+     * @return
+     */
     public Order addProduct(Product product)
     {
         products.add(product);
         return this;
+    }
+
+    public ArrayList<Product> getProducts()
+    {
+         return products;
     }
 
     public void updateState(StateType state)
