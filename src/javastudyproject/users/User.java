@@ -23,5 +23,30 @@ public class User {
     protected String age;
     // todo: list of orders
 
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public Date getCreateDate()
+    {
+        return createDate;
+    }
+
+    public String getAge()
+    {
+        return age;
+    }
+
 
 }

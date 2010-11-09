@@ -10,5 +10,23 @@ package javastudyproject.users;
  * @author EladYarkoni
  */
 public class AdministratorUser extends User {
+    
+    public AdministratorUser(
+            String id,
+            String firstName, 
+            String lastName,
+            String email,
+            String password,
+            String age
+            )
+    {
+        runId++;
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.age = age;
+    }
 
 }

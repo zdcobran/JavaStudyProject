@@ -11,4 +11,21 @@ package javastudyproject.users;
  */
 public class ReadWriteUser extends User {
 
+    public ReadWriteUser(
+            String id,
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            String age
+            )
+    {
+        runId++;
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.age = age;
+    }
 }
