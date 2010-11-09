@@ -5,6 +5,9 @@
 
 package javastudyproject;
 
+import javastudyproject.menus.textual.*;
+
+
 
 /**
  *
@@ -16,6 +19,8 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        new LoginScreen("ERProduct","0.1 alpha");
+      
        
     }
 
