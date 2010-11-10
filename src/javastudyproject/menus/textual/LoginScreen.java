@@ -28,16 +28,22 @@ public class LoginScreen {
         reader = new BufferedReader(new InputStreamReader(System.in));
         userSystem = new UserSystem();
 
-        System.out.println("--------------------------------------------\n"
+        System.out.println("------------------------------------------------------------------------\n"
                 +          "Welcome to "+title+" version: "+version+"\n"
-                +          "--------------------------------------------\n");
+                +          "------------------------------------------------------------------------\n");
 
         try {
             System.out.print("User: ");
             user = reader.readLine();
             System.out.print("Password: ");
             password = reader.readLine();
-            String userType = userSystem.Authentication(user, password);
+            UserSystem.UserType userType = userSystem.Authentication(user, password);
+            if (userType.equals(UserSystem.UserType.Administrator)) {
+                new AdministratorScreen();
+            }
+            else if (userType.equals(UserSystem.UserType.ReadWriteUser)) {
+                new ReadWriteUserScreen();
+            }
         }
         catch (IOException ex) {}
         catch (LoginException lex) {

@@ -4,6 +4,7 @@
  */
 
 package javastudyproject.users;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import javastudyproject.Order;
@@ -12,7 +13,7 @@ import javastudyproject.Order;
  *
  * @author EladYarkoni
  */
-public class User {
+public class User implements Serializable  {
 
     protected static int runId;
     protected String id;

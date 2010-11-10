@@ -5,6 +5,7 @@
 
 package javastudyproject.users;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javastudyproject.db.FilesDB;
 
@@ -12,20 +13,44 @@ import javastudyproject.db.FilesDB;
  *
  * @author EladYarkoni
  */
-public class UserSystem {
+public class UserSystem implements Serializable {
 
     private ArrayList<User> users;
 
-    public void UserSystem() {
+    public  UserSystem() {
 
-        this.users = FilesDB.ReadUsers();
+         this.UserSystem(FilesDB.ReadUserSystem());
     }
 
-    public String Authentication(String user, String password) throws LoginException {
+    public  void UserSystem(UserSystem us) {
+
+        try {
+            this.users = us.users;
+        }
+         catch (NullPointerException ex) {
+            this.users = new ArrayList<User>();
+         }
+    }
+
+    public void AddReadOnlyUser(ReadOnlyUser user) {
+        users.add(user);
+    }
+
+    public UserType Authentication(String user, String password) throws LoginException {
         // code for authenticate
         
 
-        return "AdministratorUser";
+        return  UserType.ReadWriteUser;
+    }
+
+    public void Update() {
+        FilesDB.UpdateUsers(this);
+        this.UserSystem(FilesDB.ReadUserSystem());
+    }
+
+    public static enum UserType
+    {
+        Administrator, ReadOnlyUser, ReadWriteUser;
     }
 
 }

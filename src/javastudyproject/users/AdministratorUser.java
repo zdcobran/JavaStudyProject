@@ -9,7 +9,7 @@ package javastudyproject.users;
  *
  * @author EladYarkoni
  */
-public class AdministratorUser extends User {
+public class AdministratorUser extends User  {
     
     public AdministratorUser(
             String id,
