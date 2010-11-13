@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import javastudyproject.ObjectSystem;
 import javastudyproject.users.*;
 import javastudyproject.reporting.SystemReporter;
-import javastudyproject.users.LoginException;
 
 /**
  *
@@ -23,20 +22,20 @@ public class LoginScreen extends ObjectSystem {
     private String user;
     private String password;
 
-    public LoginScreen(String title, String version) {
+    public LoginScreen(String title, String version) throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.println("------------------------------------------------------------------------\n"
-                +          "Welcome to "+title+" version: "+version+"\n"
-                +          "------------------------------------------------------------------------\n");
+        SystemReporter.report("------------------------------------------------------------------------\n");
+        SystemReporter.report("Welcome to "+title+" version: "+version+"\n");
+        SystemReporter.report("------------------------------------------------------------------------\n");
 
         try {
-            System.out.print("User: ");
+            SystemReporter.report("User: ");
             user = reader.readLine();
-            System.out.print("Password: ");
+            SystemReporter.report("Password: ");
             password = reader.readLine();
-            User.UserType userType = authenticate(user, password);
+            User.UserType userType = UserOperations.authenticate(user, password);
 
             if (userType.equals(User.UserType.Administrator)) {
                 new AdministratorScreen();

@@ -5,6 +5,7 @@
 
 package javastudyproject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import javastudyproject.users.User;
@@ -13,7 +14,7 @@ import javastudyproject.users.User;
  *
  * @author AlonPisnoy
  */
-public class Order {
+public class Order implements Serializable{
 
     private static int runid;
     private User user;

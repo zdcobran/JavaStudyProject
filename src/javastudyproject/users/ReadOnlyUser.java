@@ -5,11 +5,13 @@
 
 package javastudyproject.users;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EladYarkoni
  */
-public class ReadOnlyUser extends User {
+public class ReadOnlyUser extends User implements Serializable{
 
     public ReadOnlyUser(
             String id,

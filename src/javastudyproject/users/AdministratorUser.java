@@ -5,11 +5,13 @@
 
 package javastudyproject.users;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EladYarkoni
  */
-public class AdministratorUser extends User  {
+public class AdministratorUser extends User implements Serializable {
     
     public AdministratorUser(
             String id,

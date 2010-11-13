@@ -5,11 +5,13 @@
 
 package javastudyproject;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Alon pisnoy
  */
-public class Product {
+public class Product implements Serializable{
 
     private String name;
     private String serialNum;

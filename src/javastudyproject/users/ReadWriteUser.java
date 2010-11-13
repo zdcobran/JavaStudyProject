@@ -5,11 +5,13 @@
 
 package javastudyproject.users;
 
+import java.io.Serializable;
+
 /**
  *
  * @author EladYarkoni
  */
-public class ReadWriteUser extends User {
+public class ReadWriteUser extends User implements Serializable{
 
     public ReadWriteUser(
             String id,

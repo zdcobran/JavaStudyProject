@@ -6,6 +6,7 @@
 package javastudyproject;
 
 import javastudyproject.menus.textual.*;
+import javastudyproject.reporting.SystemReporter;
 
 
 
@@ -21,8 +22,18 @@ public class Main {
 
     public static void main(String[] args) {
 
-        new LoginScreen("ERProduct","0.1 alpha");
-      
+        //Initialize the object system class that init all collections
+        new ObjectSystem();
+
+        try
+        {
+             new LoginScreen("ERProduct","0.1 alpha");
+        }
+        catch(Exception e)
+        {
+            System.out.println("Catched an exeption: " + e.getMessage());
+        }
+
        
     }
 
