@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javastudyproject.users.User;
-import javastudyproject.users.UserSystem;
 
 /**
  *
@@ -21,23 +20,23 @@ import javastudyproject.users.UserSystem;
 public class FilesDB {
 
     private static final String USERSFILE = "userSystem.db";
-
-    public static UserSystem ReadUserSystem() {
-
+    
+    public static ArrayList<User> ReadUsers() {
         try {
             ObjectInputStream istream = new ObjectInputStream(new FileInputStream(USERSFILE));
-            return (UserSystem) istream.readObject();
+            return (ArrayList<User>) istream.readObject();
         }
         catch (IOException ex) {}
         catch(ClassNotFoundException exc) {}
         return null;
     }
 
-    public static void UpdateUsers(UserSystem userSystem) {
+
+    public static void UpdateUsers(ArrayList<User> users) {
 
         try {
             ObjectOutputStream ostream = new ObjectOutputStream(new FileOutputStream(USERSFILE));
-            ostream.writeObject(userSystem);
+            ostream.writeObject(users);
         }
         catch (IOException ex) {}
     }

@@ -8,20 +8,19 @@ package javastudyproject.menus.textual;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import javastudyproject.ObjectSystem;
 import javastudyproject.users.*;
 
 /**
  *
  * @author eyarkoni
  */
-public class CreateUserScreen {
+public class CreateUserScreen extends ObjectSystem{
 
     private BufferedReader reader;
-    UserSystem userSystem;
 
-    public CreateUserScreen(UserSystem.UserType userType) {
+    public CreateUserScreen() {
 
-        userSystem = new UserSystem();
         reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("New User\n-----------------------------------------------");
         try {
@@ -38,8 +37,7 @@ public class CreateUserScreen {
             System.out.print("Age: ");
             String age = reader.readLine();
             ReadOnlyUser newuser = new ReadOnlyUser(id,name,lastName,email,password,age);
-            userSystem.AddReadOnlyUser(newuser);
-            userSystem.Update();
+            users.add(newuser);
 
         } catch (IOException ex) {}
     }

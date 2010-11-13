@@ -64,4 +64,9 @@ public class User implements Serializable  {
     {
         orders.add(order);
     }
+
+    public static enum UserType
+    {
+        Administrator, ReadOnlyUser, ReadWriteUser;
+    }
 }

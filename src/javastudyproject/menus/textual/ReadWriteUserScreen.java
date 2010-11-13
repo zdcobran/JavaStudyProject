@@ -8,7 +8,6 @@ package javastudyproject.menus.textual;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import javastudyproject.users.UserSystem;
 
 /**
  *
@@ -33,7 +32,7 @@ public class ReadWriteUserScreen {
             int choise=  Integer.parseInt(reader.readLine());
             switch (choise) {
                 case 1: {
-                    new CreateUserScreen(UserSystem.UserType.ReadWriteUser);
+                    new CreateUserScreen();
                 } break;
             }
 
