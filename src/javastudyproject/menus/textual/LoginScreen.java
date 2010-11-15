@@ -35,9 +35,9 @@ public class LoginScreen extends ObjectSystem {
             user = reader.readLine();
             SystemReporter.report("Password: ");
             password = reader.readLine();
-            User.UserType userType = UserOperations.authenticate(user, password);
+            UserOps.UserType userType = UserOps.authenticate(user, password);
 
-            if (userType.equals(User.UserType.Administrator)) {
+            if (userType.equals(UserOps.UserType.Administrator)) {
                 new AdministratorScreen();
             }
             else if (userType.equals(userType.ReadWriteUser)) {

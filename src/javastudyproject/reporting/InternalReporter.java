@@ -5,10 +5,10 @@
 
 package javastudyproject.reporting;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import javastudyproject.Category;
+import javastudyproject.ObjectSystem;
 import javastudyproject.Order;
 import javastudyproject.Order.StateType;
 import javastudyproject.Product;
@@ -18,14 +18,14 @@ import javastudyproject.users.User;
  *
  * @author alon
  */
-public class InternalReporter {
+public class InternalReporter extends ObjectSystem{
 
     /**
      * Print all user
      * @param users - all users list
      * @throws Exception
      */
-    public static void printAllUsers(ArrayList<User> users) throws Exception
+    public static void printAllUsers() throws Exception
     {
         for (User user : users)
         {
@@ -47,11 +47,11 @@ public class InternalReporter {
      * @throws Exception
      */
 
-    public static void printUserDetail(String desiredUserId, ArrayList<User> users, ArrayList<Order> orders) throws Exception
+    public static void printUserDetail(String desiredUserId) throws Exception
     {
         for (User user : users)
         {
-            if (user.getId() == desiredUserId)
+            if (user.getId().equals(desiredUserId))
             {
                 SystemReporter.report("Basic user info: ", new String[] {
                     "User ID:\t" + user.getId(),
@@ -60,20 +60,16 @@ public class InternalReporter {
                     "User last name:\t" + user.getLastName(),
                     "User Authorizations:\t" + user.toString()
                 });
-                for (Order order : orders)
+                ArrayList<Order> userOrders = user.getOrders();
+                for (Order order : userOrders)
                 {
-                    if(order.getUser() == user)
-                    {
-                        SystemReporter.report("Users " + user.getId() + " order: ", new String[] {
-                            "Order ID:\t" + order.getRunId(),
-                            "Order date:\t" + order.getOrderDate(),
-                            "Order deliviry date:\t" + order.getDeliveryDate().toString(),
-                            "Order deliviry type:\t" + order.getDeliveryType().toString(),
-                            "Order state:\t" + order.getState().toString()
-                        });
-                    }
+                    SystemReporter.report("Users " + user.getId() + " order: ", new String[] {
+                        "Order ID:\t" + order.getRunId(),
+                        "Order date:\t" + order.getOrderDate(),
+                        "Order deliviry date:\t" + order.getDeliveryDate().toString(),
+                        "Order deliviry type:\t" + order.getDeliveryType().toString(),
+                        "Order state:\t" + order.getState().toString()});
                 }
-               continue;
             }
         }
     }
@@ -83,7 +79,7 @@ public class InternalReporter {
      * @param orders the whole order list to print
      * @throws Exception
      */
-    public static void printAllOrders(ArrayList<User> users) throws Exception
+    public static void printAllOrders() throws Exception
     {
            for (User user : users)
             {
@@ -99,7 +95,7 @@ public class InternalReporter {
            }
     }
 
-    public static void printOrdersByState(ArrayList<User> users, StateType state) throws Exception
+    public static void printOrdersByState(StateType state) throws Exception
     {
 
        for (User user : users)
@@ -121,12 +117,12 @@ public class InternalReporter {
         }
     }
 
-    public static void printAllProducts(ArrayList<Category> categories) throws Exception
+    public static void printAllProducts() throws Exception
     {
         for (Category category : categories)
         {
-            ArrayList<Product> products =  category.getProductsList();
-            for (Product product : products)
+            ArrayList<Product> orderProducts =  category.getProductsList();
+            for (Product product : orderProducts)
             {
                 printProduct(product);
             }
@@ -135,14 +131,14 @@ public class InternalReporter {
 
     //TODO: print sorted products
 
-    public static void printProductsByCategory(Category.CategoryType categoryType, ArrayList<Category> categories) throws Exception
+    public static void printProductsByCategory(Category.CategoryType categoryType) throws Exception
     {
         for (Category category : categories)
         {
             if (category.getName() == categoryType)
             {
-                ArrayList<Product> products =  category.getProductsList();
-                for (Product product : products)
+                ArrayList<Product> orderProducts =  category.getProductsList();
+                for (Product product : orderProducts)
                 {
                     printProduct(product);
                 }
@@ -151,7 +147,7 @@ public class InternalReporter {
         }
     }
 
-    public static void printAllCategiries(ArrayList<Category> categories) throws Exception
+    public static void printAllCategiries() throws Exception
     {
         for (Category category : categories)
         {
@@ -167,7 +163,7 @@ public class InternalReporter {
      * @param categories = category list
      * @throws Exception
      */
-    public static void printProductsAmountByCategory(ArrayList<Category> categories) throws Exception
+    public static void printProductsAmountByCategory() throws Exception
     {
         for (Category category : categories)
         {
@@ -176,12 +172,12 @@ public class InternalReporter {
         }
     }
 
-    public static void printProductsByPrice(LergerSmaller by, double price, ArrayList<Category> categories) throws Exception
+    public static void printProductsByPrice(LergerSmaller by, double price) throws Exception
     {
        for (Category category : categories)
         {
-            ArrayList<Product> products =  category.getProductsList();
-            for (Product product : products)
+            ArrayList<Product> orderProducts =  category.getProductsList();
+            for (Product product : orderProducts)
             {
                switch(by)
                {
@@ -212,20 +208,19 @@ public class InternalReporter {
      * @param productName
      * @param users
      */
-    public static void printUserAmountThatOrderedSpecificProduct(String productName, ArrayList<User> users)
+    public static void printUserAmountThatOrderedSpecificProduct(String productName)
     {
         int amount = 0;
         first:{
             for (User user : users)
             {
-                ArrayList<Order> orders = user.getOrders();
-                Boolean exitLoop = false;
-                for (Order order : orders)
+                ArrayList<Order> userOrders = user.getOrders();
+                for (Order order : userOrders)
                 {
-                    ArrayList<Product> products = order.getProducts();
-                    for (Product product : products)
+                    ArrayList<Product> orderProducts = order.getProducts();
+                    for (Product product : orderProducts)
                     {
-                        if (product.getName() == productName)
+                        if (product.getName().equals(productName))
                         {
                             amount++;
                             break first;
@@ -243,17 +238,17 @@ public class InternalReporter {
      * @param productName
      * @param users
      */
-    public static void printMostSaleableProduct(ArrayList<User> users)
+    public static void printMostSaleableProduct()
     {
         Map<Product, Integer> productAmount =  new HashMap<Product, Integer>();
         int amount = 0;
             for (User user : users)
             {
-                ArrayList<Order> orders = user.getOrders();
-                for (Order order : orders)
+                ArrayList<Order> userOrders = user.getOrders();
+                for (Order order : userOrders)
                 {
-                    ArrayList<Product> products = order.getProducts();
-                    for (Product product : products)
+                    ArrayList<Product> orderProducts = order.getProducts();
+                    for (Product product : orderProducts)
                     {
                         if (productAmount.containsKey(product))
                         {
@@ -286,13 +281,4 @@ public class InternalReporter {
                 "Product type:\t" + product.getType().toString()
             });
     }
-
-
-
-
-
-
-    
-
-
 }

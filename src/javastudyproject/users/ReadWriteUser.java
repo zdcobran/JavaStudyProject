@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class ReadWriteUser extends User implements Serializable{
 
     public ReadWriteUser(
+            String userName,
             String id,
             String firstName,
             String lastName,
@@ -23,6 +24,7 @@ public class ReadWriteUser extends User implements Serializable{
             )
     {
         runId++;
+        this.userName = userName;
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

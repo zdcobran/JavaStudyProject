@@ -16,6 +16,7 @@ import javastudyproject.Order;
 public class User implements Serializable  {
 
     protected static int runId;
+    protected String userName;
     protected String id;
     protected String firstName;
     protected String lastName;
@@ -24,6 +25,12 @@ public class User implements Serializable  {
     protected Date createDate;
     protected String age;
     protected ArrayList<Order> orders;
+
+
+    public String getUserName()
+    {
+        return userName;
+    }
 
     public String getId()
     {
@@ -55,6 +62,41 @@ public class User implements Serializable  {
         return age;
     }
 
+    public void setUserName(String userName)
+    {
+        this.userName = userName;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public void setCreateDate(Date createDate)
+    {
+        this.createDate = createDate;
+    }
+
+    public void setAge(String age)
+    {
+        this.age = age;
+    }
+
     public ArrayList<Order> getOrders()
     {
         return orders;
@@ -63,10 +105,5 @@ public class User implements Serializable  {
     public void addOrder(Order order)
     {
         orders.add(order);
-    }
-
-    public static enum UserType
-    {
-        Administrator, ReadOnlyUser, ReadWriteUser;
     }
 }

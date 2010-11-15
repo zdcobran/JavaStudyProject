@@ -53,4 +53,29 @@ public class Product implements Serializable{
     {
         return type;
     }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setSerialNumber(String serialNum)
+    {
+        this.serialNum = serialNum;
+    }
+
+    public void setPrice(double price)
+    {
+        this.price = price;
+    }
+
+    public void setQuantity(int quantity)
+    {
+        this.quantity = quantity;
+    }
+
+    public void setType(Category.CategoryType type)
+    {
+        this.type = type;
+    }
 }

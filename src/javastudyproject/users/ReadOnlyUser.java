@@ -13,24 +13,52 @@ import java.io.Serializable;
  */
 public class ReadOnlyUser extends User implements Serializable{
 
+    private String owningUserName;
+    private int readOnlyUserOrderId;
+
     public ReadOnlyUser(
+            String userName,
             String id,
             String firstName,
             String lastName,
             String email,
             String password,
-            String age
+            String age,
+            String owningUserName,
+            int readOnlyUserOrderId
             )
     {
         runId++;
+        this.userName = userName;
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.age = age;
+        this.owningUserName = owningUserName;
+        this.readOnlyUserOrderId = readOnlyUserOrderId;
     }
 
+    public String getOwningUserName()
+    {
+        return owningUserName;
+    }
+
+    public void setOwningUserName(String owningUserName)
+    {
+        this.owningUserName = owningUserName;
+    }
+
+    public int getReadOnlyUserOrderId()
+    {
+        return readOnlyUserOrderId;
+    }
+
+    public void setReadOnlyUserOrderId(int readOnlyUserOrderId)
+    {
+        this.readOnlyUserOrderId = readOnlyUserOrderId;
+    }
 
     @Override
     public String toString()

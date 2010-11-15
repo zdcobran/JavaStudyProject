@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javastudyproject.ObjectSystem;
+import javastudyproject.reporting.SystemReporter;
 import javastudyproject.users.*;
 
 /**
@@ -19,27 +20,33 @@ public class CreateUserScreen extends ObjectSystem{
 
     private BufferedReader reader;
 
-    public CreateUserScreen() {
+    public CreateUserScreen() throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("New User\n-----------------------------------------------");
+        SystemReporter.report("New User\n-----------------------------------------------");
         try {
-            System.out.print("User ID: ");
+            SystemReporter.report("User name: ");
+            String userName = reader.readLine();
+            SystemReporter.report("User ID: ");
             String id = reader.readLine();
-            System.out.print("First name: ");
+            SystemReporter.report("First name: ");
             String name = reader.readLine();
-            System.out.print("Last name: ");
+            SystemReporter.report("Last name: ");
             String lastName = reader.readLine();
-            System.out.print("Email: ");
+            SystemReporter.report("Email: ");
             String email = reader.readLine();
-            System.out.print("Password: ");
+            SystemReporter.report("Password: ");
             String password = reader.readLine();
-            System.out.print("Age: ");
+            SystemReporter.report("Age: ");
             String age = reader.readLine();
-            ReadOnlyUser newuser = new ReadOnlyUser(id,name,lastName,email,password,age);
+            ReadWriteUser newuser = new ReadWriteUser(userName,id,name,lastName,email,password,age);
             users.add(newuser);
 
-        } catch (IOException ex) {}
+        } catch (IOException ex) {
+            SystemReporter.report("Catched I/O exception: " + ex.getMessage());
+            reader.close();
+        }
+        reader.close();
     }
 
 
