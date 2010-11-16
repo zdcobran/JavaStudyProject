@@ -23,7 +23,8 @@ public class Main {
     public static void main(String[] args) {
 
         //Initialize the object system class that init all collections
-        new ObjectSystem();
+        ObjectSystem objSystem = new ObjectSystem();
+        objSystem.initialize();
 
         try
         {

@@ -24,6 +24,7 @@ public class ReadWriteUser extends User implements Serializable{
             )
     {
         runId++;
+        this.userRunId = runId;
         this.userName = userName;
         this.id = id;
         this.firstName = firstName;

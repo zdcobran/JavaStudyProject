@@ -22,7 +22,7 @@ public class UserOps extends ObjectSystem{
     }
 
     public static UserType authenticate(String user, String password) {
-        return UserType.ReadOnlyUser;
+        return UserOps.UserType.ReadWriteUser;
     }
 
      /**
@@ -97,23 +97,6 @@ public class UserOps extends ObjectSystem{
                 if(ownningUserName == null)
                     SystemReporter.report("Owning user name was not provided", true);
                 boolean found = false;
-                for (User user : users)
-                {
-                     if (user.getUserName().equals(ownningUserName) && user.toString().equals("ReadWriteUser"))
-                     {
-                        ArrayList<Order> orders = user.getOrders();
-                        for(Order order: orders)
-                        {
-                           if (order.getRunId() == readOnlyUserOrderId)
-                           {
-                               found = true;
-                               break;
-                           }
-                        }
-                        if (found)
-                            break;
-                     }
-                }
                 if (!found)
                     SystemReporter.report("The provided owning user or id was not found", true);
                 users.add(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
@@ -315,6 +298,12 @@ public class UserOps extends ObjectSystem{
                     "User age: " + user.getAge(),
                     "Create date: " + user.getCreateDate(),
               });
+    }
+
+    public static void printAllUsers() throws Exception
+    {
+      
+
     }
 
     public enum UserCriteria

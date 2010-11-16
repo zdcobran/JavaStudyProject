@@ -1,29 +1,25 @@
 
 package javastudyproject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author AlonPisnoy
  */
-public class Category {
+public class Category implements Serializable {
 
     private static int runid;
-    private CategoryType name;
-    private ArrayList<Product> productList;
+    private int id;
+    private String  name;
     
     //constructor
-    public Category(CategoryType name)
+    public Category(String  name)
     {
         runid++;
+        id = runid;
         this.name = name;
-    }
-
-    public Category addProduct(Product product)
-    {
-        productList.add(product);
-        return this;
     }
 
     public int getRunId()
@@ -31,19 +27,10 @@ public class Category {
         return runid;
     }
 
-    public ArrayList<Product> getProductsList()
-    {
-        return productList;
-    }
-
-    public CategoryType getName()
+    public String getName()
     {
         return name;
     }
-    
-    public static enum CategoryType
-    {
-        Electronics, Car, Office, Home
-    }
+
 
 }

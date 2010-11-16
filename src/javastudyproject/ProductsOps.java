@@ -24,29 +24,39 @@ public class ProductsOps extends ObjectSystem{
      * @param type
      * @throws Exception
      */
-    public static void addNewProduct(String name, String serialNum, double price, int quantity, Category.CategoryType type) throws Exception
+    public static void addNewProduct(String name, String serialNum, double price, int quantity, Category category) throws Exception
     {
-        //validating that the new name is unique
-        for (Product productUnique: products)
+        for (Product prod : products)
         {
-             if (productUnique.getName().equals(name))
-             {
-                SystemReporter.report("The provided name: " + name + " is already exists in the system", true);
-             }
+            if (prod.getName().equals(name))
+            {
+                  SystemReporter.report("product with the same name is exist");
+                  return;
+            }
+            if (prod.getSerialNumber().equals(serialNum))
+            {
+                  SystemReporter.report("product with the same serial number is exist");
+                  return;
+            }
         }
-        //validating that the new sn is unique
-        for (Product productUnique: products)
-        {
-             if (productUnique.getSerialNumber().equals(serialNum))
-             {
-                SystemReporter.report("The provided SN: " + serialNum + " is already exists in the system", true);
-             }
-        }
-
-        Product newProduct = new Product(name, serialNum, price, quantity, type);
-        products.add(newProduct);
-        printProductInfoImpl(newProduct);
+        products.add(new Product(name, category, serialNum, price, quantity));
+        SystemReporter.report("Product is added");
     }
+
+     public static void addNewCategory(String name) throws Exception
+    {
+        for (Category cat : categories)
+        {
+            if (cat.getName().equals(name))
+            {
+                SystemReporter.report("Category is already exists");
+                return;
+            }
+        }
+        categories.add(new Category(name));
+        SystemReporter.report("Category is added");
+    }
+
 
     /**
      * Updating the product with given name
@@ -104,11 +114,6 @@ public class ProductsOps extends ObjectSystem{
                         SystemReporter.report(
                                 "Updated product quantity to: " + productContainer.getQuantity());
                         return;
-                    case Type:
-                        product.setType(productContainer.getType());
-                        SystemReporter.report(
-                                "Updated product type to: " + productContainer.getType());
-                        return;
                     default:
                         SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
                 }
@@ -128,45 +133,55 @@ public class ProductsOps extends ObjectSystem{
     public static ArrayList<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception
     {
         ArrayList<Product> returnList = new ArrayList<Product>();
-        for (Product product: products)
+        switch(criteria)
         {
-            switch(criteria)
-            {
-                case Name:
+            case Name:
+                for (Product product : products)
+                {
                     if (product.getName().equals(productContainer.getName()))
                     {
                         returnList.add(product);
-                        return returnList;
                     }
-                    break;
-                case SerialName:
-                   if (product.getSerialNumber().equals(productContainer.getSerialNumber()))
-                    {
-                        returnList.add(product);
-                        return returnList;
-                    }
-                    break;
-                case Price:
-                   if (product.getPrice() == (productContainer.getPrice()))
+                }
+                return returnList;
+            case SerialName:
+               for (Product product : products)
+                {
+                    if (product.getSerialNumber().equals(productContainer.getSerialNumber()))
                     {
                         returnList.add(product);
                     }
-                    break;
-                case Quantity:
-                    if (product.getQuantity() == (productContainer.getQuantity()))
+                }
+                return returnList;
+            case Price:
+               for (Product product : products)
+                {
+                    if (product.getPrice() == productContainer.getPrice())
                     {
                         returnList.add(product);
                     }
-                    break;
-                case Type:
-                    if (product.getType().equals(productContainer.getType()))
+                }
+                return returnList;
+            case Quantity:
+                for (Product product : products)
+                {
+                    if (product.getQuantity() == productContainer.getQuantity())
                     {
                         returnList.add(product);
                     }
-                    break;
-                default:
-                    SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
-            }
+                }
+                return returnList;
+            case Category:
+                for (Product product : products)
+                {
+                    if (product.getCategory().getName().equals(productContainer.getCategory().getName()))
+                    {
+                        returnList.add(product);
+                    }
+                }
+                return returnList;
+            default:
+                SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
         if (returnList.isEmpty())
             SystemReporter.report("Didn't find products for given search", true);
@@ -216,19 +231,24 @@ public class ProductsOps extends ObjectSystem{
      * @param product
      * @throws Exception
      */
-    private static  void printProductInfoImpl(Product product) throws Exception
+    public static  void printProductInfoImpl(Product product) throws Exception
     {
               SystemReporter.report("Product info:", new String[] {
                     "Product name: " + product.getName(),
                     "Serial number: " + product.getSerialNumber(),
                     "Price: " + product.getPrice(),
                     "Quantity: " + product.getQuantity(),
-                    "Type: " + product.getType()});
+                    "Category: " + product.getCategory().getName()});
+    }
+
+    public static void printAllProducts() throws Exception
+    {
+        
     }
 
     public enum ProductCriteria
     {
-        Name, SerialName, Price, Quantity, Type
+        Name, SerialName, Price, Quantity, Category
     }
 
 }

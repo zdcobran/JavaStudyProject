@@ -18,6 +18,7 @@ public class Order implements Serializable{
 
     private static int runid;
     private User user;
+    private int id;
     private Date orderDate;
     private Date deliveryDate;
     private double totalPrice;
@@ -29,6 +30,7 @@ public class Order implements Serializable{
     public Order(User user, Date deliveryDate, DeliveryType deliveryType)
     {
         runid++;
+        this.id = runid;
         this.user = user;
         orderDate = new Date(System.currentTimeMillis());
         this.deliveryDate = deliveryDate;

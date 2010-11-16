@@ -14,19 +14,24 @@ import java.io.Serializable;
 public class Product implements Serializable{
 
     private String name;
+    private Category category;
     private String serialNum;
     private double price;
     private int quantity;
-    private Category.CategoryType type;
 
     //constructor
-    public Product(String name, String serialNum, double price, int quantity, Category.CategoryType type)
+    public Product()
+    {
+        
+    }
+
+    public Product(String name, Category category,String serialNum, double price, int quantity)
     {
         this.name = name;
+        this.category = category;
         this.serialNum = serialNum;
         this.price = price;
         this.quantity = quantity;
-        this.type = type;
     }
 
     public String getName()
@@ -39,6 +44,11 @@ public class Product implements Serializable{
         return serialNum;
     }
 
+    public Category getCategory()
+    {
+        return category;
+    }
+
     public double getPrice()
     {
         return price;
@@ -47,11 +57,6 @@ public class Product implements Serializable{
     public int getQuantity()
     {
         return quantity;
-    }
-
-    public Category.CategoryType getType()
-    {
-        return type;
     }
 
     public void setName(String name)
@@ -74,8 +79,8 @@ public class Product implements Serializable{
         this.quantity = quantity;
     }
 
-    public void setType(Category.CategoryType type)
+    public void setCategory(Category category)
     {
-        this.type = type;
+        this.category  = category;
     }
 }

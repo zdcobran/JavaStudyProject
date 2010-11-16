@@ -16,6 +16,7 @@ import javastudyproject.Order;
 public class User implements Serializable  {
 
     protected static int runId;
+    protected int userRunId;
     protected String userName;
     protected String id;
     protected String firstName;
@@ -24,12 +25,16 @@ public class User implements Serializable  {
     protected String email;
     protected Date createDate;
     protected String age;
-    protected ArrayList<Order> orders;
 
 
     public String getUserName()
     {
         return userName;
+    }
+
+    public String getPassword()
+    {
+        return password;
     }
 
     public String getId()
@@ -95,15 +100,5 @@ public class User implements Serializable  {
     public void setAge(String age)
     {
         this.age = age;
-    }
-
-    public ArrayList<Order> getOrders()
-    {
-        return orders;
-    }
-
-    public void addOrder(Order order)
-    {
-        orders.add(order);
     }
 }
