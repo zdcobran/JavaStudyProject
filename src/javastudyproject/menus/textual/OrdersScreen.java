@@ -18,7 +18,7 @@ public class OrdersScreen {
 
     private BufferedReader reader;
 
-    public OrdersScreen() {
+    public OrdersScreen() throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Orders  menu\n-----------------------------------------------");

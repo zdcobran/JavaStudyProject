@@ -67,7 +67,7 @@ public class Order implements Serializable{
 
     public int getRunId()
     {
-        return runid;
+        return id;
     }
 
     public User getUser()
@@ -95,6 +95,6 @@ public class Order implements Serializable{
         return state;
     }
 
-   public enum DeliveryType {Self, Shipping};
+   public enum DeliveryType {Self, Shipping, None};
    public enum StateType {New, Pending, Ready, InProgress, Finished};
 }

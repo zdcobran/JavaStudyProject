@@ -28,7 +28,7 @@ public class Main {
 
         try
         {
-             new LoginScreen("ERProduct","0.1 alpha");
+             new LoginScreen();
         }
         catch(Exception e)
         {

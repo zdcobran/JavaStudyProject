@@ -6,7 +6,6 @@
 package javastudyproject.db;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import javastudyproject.Category;
 import javastudyproject.Order;
 import javastudyproject.Product;
+import javastudyproject.users.AdministratorUser;
 import javastudyproject.users.User;
 
 /**
@@ -27,6 +27,8 @@ public class FilesDB {
     private static final String PRODUCTSFILE = "products.db";
     private static final String CATEGORYFILE = "categories.db";
     private static final String ORDERFILE = "orders.db";
+    private static final String DEFAULT_ADMIN = "admin";
+    private static final String DEFAULT_ADMIN_PASS = "123456";
 
     public static ArrayList<User> ReadUsers() {
         try {
@@ -34,7 +36,10 @@ public class FilesDB {
             return (ArrayList<User>) istream.readObject();
         }
         catch (IOException ex) {
-            return new ArrayList<User>();
+            AdministratorUser admin = new AdministratorUser();
+            ArrayList<User> usersList = new ArrayList<User>();
+            usersList.add(admin.setUserName(DEFAULT_ADMIN).setPassword(DEFAULT_ADMIN_PASS).setEmail("root@email.com").setId("123456"));
+            return usersList;
         }
         catch(ClassNotFoundException exc) {}
         return null;

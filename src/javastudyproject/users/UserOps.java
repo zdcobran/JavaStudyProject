@@ -21,8 +21,23 @@ public class UserOps extends ObjectSystem{
         FilesDB.UpdateUsers(users);
     }
 
-    public static UserType authenticate(String user, String password) {
-        return UserOps.UserType.ReadWriteUser;
+    public static User authenticate(String userName, String password) throws Exception {
+        ArrayList<User> authUser = new ArrayList<User>();
+        try
+        {
+            authUser = getUserByGivenCriteria(UserCriteria.UserName, new User().setUserName(userName));
+        }
+        catch(Exception e)
+        {
+            SystemReporter.report("Wrong user name provided", true);
+        }
+        if (authUser.get(0).getPassword().equals(password))
+            return authUser.get(0);
+        else
+        {
+            SystemReporter.report("Wrong password provided", true);
+        }
+        return null;
     }
 
      /**
@@ -308,7 +323,7 @@ public class UserOps extends ObjectSystem{
 
     public enum UserCriteria
     {
-        UserName, Id, FirstName, LastName, Email, Age, CreateDate
+        UserName, Id, FirstName, LastName, Password, Email, Age, CreateDate
     }
 
     public static enum UserType

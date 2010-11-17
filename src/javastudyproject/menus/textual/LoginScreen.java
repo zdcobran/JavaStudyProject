@@ -19,39 +19,71 @@ import javastudyproject.reporting.SystemReporter;
 public class LoginScreen extends ObjectSystem {
 
     private BufferedReader reader;
-    private String user;
+    private String userName;
     private String password;
-    private static final String DEFAULT_ADMIN = "admin";
-    private static final String DEFAULT_ADMIN_PASS = "123456";
 
-    public LoginScreen(String title, String version) throws Exception {
+
+    public LoginScreen() throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("------------------------------------------------------------------------\n");
-         System.out.println("Welcome to "+title+" version: "+version+"\n");
-         System.out.println("------------------------------------------------------------------------\n");
-
-        try {
-            System.out.print("User: ");
-            user = reader.readLine();
-            System.out.print("Password: ");
-            password = reader.readLine();
-            UserOps.UserType userType;
-            if ((user.equals(DEFAULT_ADMIN))&&(password.equals(DEFAULT_ADMIN_PASS)))
-                userType = UserOps.UserType.Administrator;
-            else
-                userType = UserOps.authenticate(user, password);
-
-            if (userType.equals(UserOps.UserType.Administrator)) {
-                new AdministratorScreen();
+        System.out.println("Welcome to ERProduct version: 0.1 alpha \n");
+        System.out.println("------------------------------------------------------------------------\n");
+        int loginRetries = 0;
+        int maxRetries = 3;
+        boolean isConnected = false;
+        try
+        {
+            while (!isConnected && loginRetries != maxRetries)
+            {
+                isConnected = LoginOperationImpl();
+                loginRetries++;
             }
-            else if (userType.equals(userType.ReadWriteUser)) {
-                new ReadWriteUserScreen();
-            }
+            if (!isConnected)
+                SystemReporter.report(
+                    "Reached " + maxRetries + " login retries. Existing...", true);
         }
-        catch (IOException ex) {}
-
+        catch (IOException ex)
+        {
+            reader.close();
+            saveAll();
+        }
+        catch (Exception e)
+        {
+            reader.close();
+            saveAll();
+            SystemReporter.report(e.getMessage());
+        }
     }
 
+    private boolean LoginOperationImpl() throws IOException, Exception
+    {
+            reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("User: ");
+            userName = reader.readLine();
+            System.out.print("Password: ");
+            password = reader.readLine();
+            User user = new User();
+            try
+            {
+                user = UserOps.authenticate(userName, password);
+            }
+            catch (Exception e)
+            {
+                SystemReporter.report(e.getMessage());
+                return false;
+            }
+            if (user.toString().equals("AdministratorUser")) {
+                new AdministratorScreen();
+            }
+            else if (user.toString().equals("ReadWriteUser")) {
+                new ReadWriteUserScreen(user);
+            }
+            else if (user.toString().equals("ReadOnlyUser")) {
+                new ReadOnlyUserScreen(user);
+            }
+            return true;
+
+    }
 }

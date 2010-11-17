@@ -30,6 +30,14 @@ public class ObjectSystem {
         orders = FilesDB.ReadOrders();
     }
 
+    public void saveAll()
+    {
+        saveUsers();
+        saveProducts();
+        saveCategories();
+        saveOrders();
+    }
+
     public void saveUsers()
     {
         FilesDB.UpdateUsers(users);
@@ -45,9 +53,10 @@ public class ObjectSystem {
        FilesDB.UpdateCategories(categories);
     }
 
-     public void saveOrders()
+    public void saveOrders()
     {
        FilesDB.UpdateOrders(orders);
     }
+
 
 }

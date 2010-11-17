@@ -74,9 +74,10 @@ public class Product implements Serializable{
         this.price = price;
     }
 
-    public void setQuantity(int quantity)
+    public Product setQuantity(int quantity)
     {
         this.quantity = quantity;
+        return this;
     }
 
     public void setCategory(Category category)

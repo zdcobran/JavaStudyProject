@@ -12,7 +12,10 @@ import java.io.Serializable;
  * @author EladYarkoni
  */
 public class AdministratorUser extends User implements Serializable {
-    
+
+    public AdministratorUser()
+    {}
+
     public AdministratorUser(
             String userName,
             String id,
@@ -33,6 +36,8 @@ public class AdministratorUser extends User implements Serializable {
         this.password = password;
         this.age = age;
     }
+
+
 
     @Override
     public String toString()

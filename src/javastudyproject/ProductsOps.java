@@ -49,7 +49,7 @@ public class ProductsOps extends ObjectSystem{
         {
             if (cat.getName().equals(name))
             {
-                SystemReporter.report("Category is already exists");
+                SystemReporter.report("Category is already exists", true);
                 return;
             }
         }

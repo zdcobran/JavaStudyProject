@@ -10,8 +10,9 @@ import java.util.Date;
 import javastudyproject.Order;
 
 /**
- *
- * @author EladYarkoni
+ * Users class
+ * Using fluent interface with allows us to update the object fluently
+ * @author Alon Pisnoy
  */
 public class User implements Serializable  {
 
@@ -67,29 +68,34 @@ public class User implements Serializable  {
         return age;
     }
 
-    public void setUserName(String userName)
+    public User setUserName(String userName)
     {
         this.userName = userName;
+        return this;
     }
 
-    public void setId(String id)
+    public User setId(String id)
     {
         this.id = id;
+        return this;
     }
 
-    public void setFirstName(String firstName)
+    public User setFirstName(String firstName)
     {
         this.firstName = firstName;
+        return this;
     }
 
-    public void setLastName(String lastName)
+    public User setLastName(String lastName)
     {
         this.lastName = lastName;
+        return this;
     }
 
-    public void setEmail(String email)
+    public User setEmail(String email)
     {
         this.email = email;
+        return this;
     }
 
     public void setCreateDate(Date createDate)
@@ -97,8 +103,15 @@ public class User implements Serializable  {
         this.createDate = createDate;
     }
 
-    public void setAge(String age)
+    public User setPassword(String password)
+    {
+        this.password = password;
+        return this;
+    }
+
+    public User setAge(String age)
     {
         this.age = age;
+        return this;
     }
 }

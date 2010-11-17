@@ -90,6 +90,7 @@ public class ReportsScreen {
                     new AdministratorScreen();
                 }break;
             }
+            new AdministratorScreen();
         } catch (IOException ex) {}
         catch (Exception ex) {}
     }

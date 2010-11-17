@@ -13,6 +13,7 @@ import javastudyproject.Product;
 import javastudyproject.Category;
 import javastudyproject.ObjectSystem;
 import javastudyproject.ProductsOps;
+import javastudyproject.reporting.SystemReporter;
 
 /**
  *
@@ -29,7 +30,7 @@ public class ProductManagementScreen extends ObjectSystem {
         System.out.println("1. Add new Product");
         System.out.println("2. Add new Category");
         System.out.println("3. Search product");
-        System.out.println("4. Update exist product");
+        System.out.println("4. Update existing product");
         System.out.println("5. Print product info\n");
         System.out.println("6. Delete product\n");
         System.out.println("7. Back to main menu\n");
@@ -69,7 +70,7 @@ public class ProductManagementScreen extends ObjectSystem {
                }break;
                case 7:
                {
-                        new AdministratorScreen();
+                    new AdministratorScreen();
                }break;
            }
            new ProductManagementScreen();
@@ -78,7 +79,7 @@ public class ProductManagementScreen extends ObjectSystem {
             catch (Exception ex) {}
     }
 
-    private void AddNewProduct() {
+    private void AddNewProduct() throws IOException {
 
         try {
             System.out.print("name: ");
@@ -90,6 +91,10 @@ public class ProductManagementScreen extends ObjectSystem {
             System.out.print("quantity: ");
             int quantity = Integer.parseInt(reader.readLine());
             System.out.println("Select category from list -> ");
+            if ( categories.isEmpty() )
+            {
+                SystemReporter.report("There is no categories yet, please create one", true);
+            }
             for (int i=0; i< categories.size(); i++)
                 System.out.println(i+". "+categories.get(i).getName());
             System.out.print("Select category Number:  ");
@@ -97,18 +102,29 @@ public class ProductManagementScreen extends ObjectSystem {
             Category category = categories.get(catnum);
             // --- Creating the product ---
             ProductsOps.addNewProduct(name, serial, price, quantity,category);
-        } catch (IOException ee) {}
-            catch (Exception ee) {}
+        }
+        catch (IOException ee) {}
+        catch (Exception e) 
+        {
+            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("Going back to the products menu...");
+            new ProductManagementScreen();
+        }
     }
 
     private void AddNewCategory() {
         try {
-            System.out.print("Name: ");
+            System.out.print("Category name: ");
             String name = reader.readLine();
             ProductsOps.addNewCategory(name);
         }
         catch (IOException ex) {}
-        catch (Exception ex) {}
+        catch (Exception e)
+        {
+            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("Going back to the products menu...");
+            new ProductManagementScreen();
+        }
     }
 
     private void SearchProduct() {
@@ -155,8 +171,14 @@ public class ProductManagementScreen extends ObjectSystem {
                             ProductsOps.printProductInfoImpl(prodInList);
                 }break;
             }
-        } catch (IOException ee) {}
-            catch (Exception ee) {}
+        }
+        catch (IOException e) {}
+        catch (Exception e)
+        {
+            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("Going back to the products menu...");
+            new ProductManagementScreen();
+        }
     }
 
     private void UpdateProduct() {
@@ -209,7 +231,12 @@ public class ProductManagementScreen extends ObjectSystem {
            }
 
         } catch(IOException ee) {}
-            catch(Exception ee) {}
+        catch (Exception e)
+        {
+            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("Going back to the products menu...");
+            new ProductManagementScreen();
+        }
     }
 
 
