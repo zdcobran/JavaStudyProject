@@ -11,16 +11,16 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import javastudyproject.*;
-import javastudyproject.db.FilesDB;
 import javastudyproject.reporting.SystemReporter;
 import javastudyproject.users.User;
 import javastudyproject.users.UserOps;
 import javastudyproject.users.UserOps.UserType;
 
 /**
- *
- * @author eyarkoni
+ * Read write user screen implementation
+ * @author Alon pisnoy
  */
 public class ReadWriteUserScreen extends ObjectSystem {
 
@@ -31,7 +31,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
         workingUser = user;
-        System.out.println("User  menu\n-----------------------------------------------");
+        System.out.println("\nUser  menu\n-----------------------------------------------");
         System.out.println("1. Create new user");
         System.out.println("2. Update your user settings");
         System.out.println("3. Create Order");
@@ -101,7 +101,8 @@ public class ReadWriteUserScreen extends ObjectSystem {
                             email, password, age, workingUser.getUserName(), orderId);
                 }break;
             }
-            FilesDB.UpdateUsers(users);
+            saveUsers();
+            new ReadWriteUserScreen(workingUser);
         }
         catch (IOException ee) 
         {
@@ -128,13 +129,16 @@ public class ReadWriteUserScreen extends ObjectSystem {
         }
     }
 
+    /*
+     * Udating exisitng user
+     */
     private void UpdateExistUser() throws Exception
     {
         try {
             System.out.print("Select user name to update: ");
             String  username = reader.readLine();
             User selectedUser = UserOps.getUserByGivenCriteria(UserOps.UserCriteria.UserName, new User().setUserName(username)).get(0);
-            if (selectedUser.toString().equals("AdministratorUser"))
+            if (selectedUser.toString().equals("AdministratorUser")) //no permissions to update administrator user
                 SystemReporter.report("Cannot edit user: " + username + " insufficient  permissions");
             SystemReporter.report("Select field to update ",
                 new String[] {
@@ -189,6 +193,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
                 }break;
             }
             saveUsers();
+            new ReadWriteUserScreen(workingUser);
         }
         catch (IOException ee) {}
         catch (Exception e)
@@ -212,17 +217,29 @@ public class ReadWriteUserScreen extends ObjectSystem {
         }
     }
 
+    /**
+     * Create new order and handling all end cases
+     * @throws Exception
+     */
     public void CreateNewOrder() throws Exception
     {
         ArrayList<Product> myProductList = new ArrayList<Product>();
+        
+        //To dynamicaly update the product amount in case that the order didn't take place
+        HashMap<String, Integer> productsAmount =  new HashMap<String, Integer>();
+        for (int i=0; i<products.size();i++)
+        {
+            productsAmount.put(products.get(i).getName(), products.get(i).getQuantity());
+        }
+
         try {
             int selectedProductNumber = 1;
             while (selectedProductNumber != 0)
             {
-                System.out.println("Products list\n----------------------------");
+                System.out.println("\nProducts list\n----------------------------");
                 for (int i=0; i<products.size();i++)
                 {
-                    System.out.println(i+1+". "+ products.get(i).getName());
+                    System.out.println((i+1) + ". " + products.get(i).getName() + " (Available: " + productsAmount.get(products.get(i).getName()) + ")");
                 }
 
                 System.out.print("Add product number (Type '0' close list and continue): ");
@@ -231,13 +248,15 @@ public class ReadWriteUserScreen extends ObjectSystem {
                     continue;
                 System.out.print("Type product quantity: ");
                 int quantity = Integer.parseInt(reader.readLine());
-                Product selectedProduct = products.get(selectedProductNumber - 1);
+                Product selectedProduct = new Product(products.get(selectedProductNumber - 1));
                 if (quantity > selectedProduct.getQuantity())
                 {
                     System.out.print("The provided quantity is greater than the actual, actual: " + selectedProduct.getQuantity());
                     continue;
                 }
-                myProductList.add(selectedProduct.setQuantity(quantity));
+                addToCart(myProductList, selectedProduct, quantity);
+                productsAmount.put(products.get(selectedProductNumber - 1).getName(),
+                        productsAmount.get(products.get(selectedProductNumber - 1).getName()) - quantity); //update the dynamic list amount
             }
 
             System.out.print("Select Delivery type (1. Self 2. Shipping): ");
@@ -249,7 +268,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
                 case 2: {deliveryType =Order.DeliveryType.Shipping; }break;
             }
 
-            System.out.print("Enter Delivery date (Format: dd/MM/yy hh:mm)\n");
+            System.out.print("Enter Delivery date (Format: dd/MM/yy hh:mm): ");
             SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yy hh:mm");
             String dateString = reader.readLine();
             Date date = df1.parse(dateString);
@@ -262,10 +281,12 @@ public class ReadWriteUserScreen extends ObjectSystem {
             switch (choise) {
                 case 1:
                     Order newOrder = new Order(workingUser, date, deliveryType);
+                    newOrder.addMultipleProducts(myProductList);
                     newOrder = updateOrderTotalPrice(newOrder);
                     updateTheProductsQuantityByOrder(newOrder);
                     orders.add(newOrder);
                     saveOrders();
+                    saveProducts();
                     break;
                 case 2:
                     new ReadWriteUserScreen(workingUser);
@@ -295,6 +316,11 @@ public class ReadWriteUserScreen extends ObjectSystem {
         }
     }
 
+    /**
+     * Updating the total price of the order
+     * @param order
+     * @return
+     */
     private Order updateOrderTotalPrice(Order order)
     {
         for (Product product: order.getProducts())
@@ -304,6 +330,11 @@ public class ReadWriteUserScreen extends ObjectSystem {
         return order;
     }
 
+    /**
+     * Update the system products quantity to the amount the we buy
+     * new quantity = old - order quantity
+     * @param order
+     */
     private void updateTheProductsQuantityByOrder(Order order)
     {
         for (Product product: order.getProducts())
@@ -317,5 +348,27 @@ public class ReadWriteUserScreen extends ObjectSystem {
                 }
             }
         }
+    }
+
+    /**
+     * Adding the new product to the product list
+     * Handling duplicate products (merging)
+     * @param productsList
+     * @param newProduct
+     * @param quantity
+     * @return
+     */
+    private ArrayList<Product> addToCart(ArrayList<Product> productsList, Product newProduct, int quantity)
+    {
+        for (Product product: productsList)
+        {
+            if (product.getName().equals(newProduct.getName()))
+            {
+                product.setQuantity(quantity);
+                return productsList;
+            }
+        }
+        productsList.add(newProduct.setQuantity(quantity));
+        return productsList;
     }
 }

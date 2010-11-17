@@ -317,8 +317,10 @@ public class UserOps extends ObjectSystem{
 
     public static void printAllUsers() throws Exception
     {
-      
-
+        for (User user: users)
+        {
+            printUserInfoImpl(user);
+        }
     }
 
     public enum UserCriteria

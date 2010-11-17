@@ -84,24 +84,22 @@ public class InternalReporter extends ObjectSystem{
      */
     public static void printAllOrders() throws Exception
     {
-           for (User user : users)
-            {
-               for (Order order: orders)
+           for (Order order: orders)
 
-                SystemReporter.report("Order info for user " + user.getId() + ": ", new String[] {
-                        "Order ID:\t" + order.getRunId(),
-                        "Order date:\t" + order.getOrderDate(),
-                        "Order deliviry date:\t" + order.getDeliveryDate().toString(),
-                        "Order deliviry type:\t" + order.getDeliveryType().toString(),
-                        "Order state:\t" + order.getState().toString()
-                    });
-           }
+            SystemReporter.report("Order info for user " + order.getUser().getUserName() + ": ", new String[] {
+                    "Order ID:\t" + order.getRunId(),
+                    "Order date:\t" + order.getOrderDate(),
+                    "Order deliviry date:\t" + order.getDeliveryDate().toString(),
+                    "Order deliviry type:\t" + order.getDeliveryType().toString(),
+                    "Order state:\t" + order.getState().toString()
+                });
     }
 
     
 
     public static void printAllProducts() throws Exception
     {
+
 
     }
 
@@ -133,17 +131,9 @@ public class InternalReporter extends ObjectSystem{
        
     }
 
-    public static void printProductsByPrice(LergerSmaller by, double price) throws Exception
-    {
 
-
-    }
     
-    public enum LergerSmaller
-    {
-        Larger , Smaller
-    }
-
+ 
 
   
     //TODO:not finished
@@ -154,7 +144,7 @@ public class InternalReporter extends ObjectSystem{
      */
     public static void printMostSaleableProduct()
     {
-        Map<Product, Integer> productAmount =  new HashMap<Product, Integer>();
+        HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
         int amount = 0;
                 for (Order order : orders)
                 {

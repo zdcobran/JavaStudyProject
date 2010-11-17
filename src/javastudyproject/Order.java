@@ -22,7 +22,7 @@ public class Order implements Serializable{
     private Date orderDate;
     private Date deliveryDate;
     private double totalPrice;
-    private ArrayList<Product> products;
+    private ArrayList<Product> orderProducts;
     private DeliveryType deliveryType;
     private StateType state;
 
@@ -30,6 +30,7 @@ public class Order implements Serializable{
     public Order(User user, Date deliveryDate, DeliveryType deliveryType)
     {
         runid++;
+        orderProducts = new ArrayList<Product>();
         this.id = runid;
         this.user = user;
         orderDate = new Date(System.currentTimeMillis());
@@ -39,20 +40,29 @@ public class Order implements Serializable{
     }
 
     /**
-     * The return type is order is for fluent interfase to add multiple
+     * The return type is order is for fluent interface to add multiple
      * products in one line
      * @param product
      * @return
      */
     public Order addProduct(Product product)
     {
-        products.add(product);
+        orderProducts.add(product);
+        return this;
+    }
+
+    public Order addMultipleProducts(ArrayList<Product> productsList)
+    {
+        for (Product product: productsList)
+        {
+            orderProducts.add(product);
+        }
         return this;
     }
 
     public ArrayList<Product> getProducts()
     {
-         return products;
+         return orderProducts;
     }
 
     public void updateState(StateType state)

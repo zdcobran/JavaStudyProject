@@ -34,6 +34,16 @@ public class Product implements Serializable{
         this.quantity = quantity;
     }
 
+    //Copy contructor
+    public Product(Product another)
+    {
+        this.name = another.name;
+        this.category = another.category;
+        this.serialNum = another.serialNum;
+        this.price = another.price;
+        this.quantity = another.quantity;
+    }
+
     public String getName()
     {
         return name;

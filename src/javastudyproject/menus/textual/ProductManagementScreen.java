@@ -106,7 +106,7 @@ public class ProductManagementScreen extends ObjectSystem {
         catch (IOException ee) {}
         catch (Exception e) 
         {
-            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
             System.out.print("Going back to the products menu...");
             new ProductManagementScreen();
         }
@@ -121,7 +121,7 @@ public class ProductManagementScreen extends ObjectSystem {
         catch (IOException ex) {}
         catch (Exception e)
         {
-            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
             System.out.print("Going back to the products menu...");
             new ProductManagementScreen();
         }
@@ -175,7 +175,7 @@ public class ProductManagementScreen extends ObjectSystem {
         catch (IOException e) {}
         catch (Exception e)
         {
-            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
             System.out.print("Going back to the products menu...");
             new ProductManagementScreen();
         }
@@ -233,7 +233,7 @@ public class ProductManagementScreen extends ObjectSystem {
         } catch(IOException ee) {}
         catch (Exception e)
         {
-            System.out.print("There was problem in your last request.\r\n Details: " + e.getMessage());
+            System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
             System.out.print("Going back to the products menu...");
             new ProductManagementScreen();
         }

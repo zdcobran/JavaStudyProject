@@ -243,7 +243,37 @@ public class ProductsOps extends ObjectSystem{
 
     public static void printAllProducts() throws Exception
     {
-        
+        for (Product product:products)
+        {
+            printProductInfoImpl(product);
+        }
+    }
+
+    public static void printProductsByPrice(LergerSmaller by, double price) throws Exception
+    {
+        for (Product product: products)
+        {
+            switch(by)
+            {
+                case Larger:
+                    if (product.getPrice() >= price)
+                    {
+                        printProductInfoImpl(product);
+                    }
+                    break;
+                case Smaller:
+                    if (product.getPrice() < price)
+                    {
+                        printProductInfoImpl(product);
+                    }
+                    break;
+            }
+        }
+    }
+
+    public enum LergerSmaller
+    {
+        Larger , Smaller
     }
 
     public enum ProductCriteria

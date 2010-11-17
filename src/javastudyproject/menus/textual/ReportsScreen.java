@@ -18,10 +18,10 @@ public class ReportsScreen {
 
     private BufferedReader reader;
 
-    public ReportsScreen() {
+    public ReportsScreen() throws IOException, Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Reports menu\n-----------------------------------------------");
+        System.out.println("\nReports menu\n-----------------------------------------------");
         System.out.println("--------------------------------------------------------------------------------");
         System.out.println("1. Print all users");
         System.out.println("2. Print user information");
@@ -72,7 +72,20 @@ public class ReportsScreen {
                     ProductsOps.printAllProducts();
                 }break;
                 case 6: {
-                    // print products by price function...
+                    System.out.print("1. Larger 2. Smaller : ");
+                    int stateChosen = Integer.parseInt(reader.readLine());
+                    System.out.print("Than number : ");
+                    double number = Double.parseDouble(reader.readLine());
+
+                    switch (stateChosen)
+                    {
+                        case 1:
+                            ProductsOps.printProductsByPrice(ProductsOps.LergerSmaller.Larger, number);
+                            break;
+                        case 2:
+                            ProductsOps.printProductsByPrice(ProductsOps.LergerSmaller.Smaller, number);
+                            break;
+                    }
                 }break;
                 case 7: {
                     // print products by price category...
@@ -91,8 +104,26 @@ public class ReportsScreen {
                 }break;
             }
             new AdministratorScreen();
-        } catch (IOException ex) {}
-        catch (Exception ex) {}
+        } catch (IOException e) {}
+        catch (Exception e)
+        {
+            System.out.println("Failed to show the report, error: " + e.getMessage());
+            System.out.println("1. Try again");
+            System.out.println("2. Back to main menu\n");
+
+            System.out.println("Ente your choise: ");
+
+            int choise =  Integer.parseInt(reader.readLine());
+            switch (choise)
+            {
+                case 1:
+                    new ReportsScreen();
+                    break;
+                case 2:
+                    new AdministratorScreen();
+                    break;
+            }
+        }
     }
 
 
