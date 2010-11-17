@@ -262,6 +262,8 @@ public class ReadWriteUserScreen extends ObjectSystem {
             switch (choise) {
                 case 1:
                     Order newOrder = new Order(workingUser, date, deliveryType);
+                    newOrder = updateOrderTotalPrice(newOrder);
+                    updateTheProductsQuantityByOrder(newOrder);
                     orders.add(newOrder);
                     saveOrders();
                     break;
@@ -293,5 +295,27 @@ public class ReadWriteUserScreen extends ObjectSystem {
         }
     }
 
+    private Order updateOrderTotalPrice(Order order)
+    {
+        for (Product product: order.getProducts())
+        {
+            order.updateTotalPrice(product.getPrice() * product.getQuantity());
+        }
+        return order;
+    }
 
+    private void updateTheProductsQuantityByOrder(Order order)
+    {
+        for (Product product: order.getProducts())
+        {
+            for (Product genProduct: products)
+            {
+                if(product.getName().equals(genProduct.getName()))
+                {
+                    genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
+                    break;
+                }
+            }
+        }
+    }
 }
