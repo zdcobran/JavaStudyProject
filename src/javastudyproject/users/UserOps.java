@@ -112,6 +112,17 @@ public class UserOps extends ObjectSystem{
                 if(ownningUserName == null)
                     SystemReporter.report("Owning user name was not provided", true);
                 boolean found = false;
+                for (Order order: orders)
+                {
+                    if (order.getUser().getUserName().equals(ownningUserName))
+                    {
+                        if (order.getRunId() == readOnlyUserOrderId)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
                 if (!found)
                     SystemReporter.report("The provided owning user or id was not found", true);
                 users.add(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
@@ -313,6 +324,7 @@ public class UserOps extends ObjectSystem{
                     "User age: " + user.getAge(),
                     "Create date: " + user.getCreateDate(),
               });
+              SystemReporter.report("\n");
     }
 
     public static void printAllUsers() throws Exception

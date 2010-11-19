@@ -70,7 +70,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
     private void  CreateNewUser() throws Exception
     {
         try {
-            System.out.print("user type (1. ReadWrite 3. ReadOnly): ");
+            System.out.print("user type (1. ReadWrite 2. ReadOnly): ");
             int userType = Integer.parseInt(reader.readLine());
             System.out.print("first name: ");
             String origName = reader.readLine();
@@ -94,10 +94,11 @@ public class ReadWriteUserScreen extends ObjectSystem {
                 case 2: {
                     for (Order order : orders)
                     {
+                        System.out.print("Printing user " + workingUser.getUserName() + " orders: \n");
                         if (order.getUser().getUserName().equals(workingUser.getUserName()))
-                            System.out.print("Order id " + order.getRunId());
+                            System.out.print("Order id " + order.getRunId() + "\n");
                     }
-                    System.out.print("Enter the order id for the read only user");
+                    System.out.print("Enter the order id for the read only user: ");
                     int orderId = Integer.parseInt(reader.readLine());
                     UserOps.addNewUser(UserType.ReadOnlyUser,
                             userName, id, lastName, lastName,

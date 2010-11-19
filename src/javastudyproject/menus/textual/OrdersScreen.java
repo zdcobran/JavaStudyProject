@@ -66,8 +66,8 @@ public class OrdersScreen extends ObjectSystem{
             System.out.print("Choose order: ");
                     for (int i = 0; i < orders.size(); i++)
                     {
-                       SystemReporter.report( i + 1 + ". Run ID: "
-                               + orders.get(i).getRunId() + " of user: "
+                       SystemReporter.report( i + ". Run ID-"
+                               + orders.get(i).getRunId() + " of user-"
                                + orders.get(i).getUser().getUserName());
                     }
                     int id = Integer.parseInt(reader.readLine());
@@ -81,7 +81,7 @@ public class OrdersScreen extends ObjectSystem{
                         case 4: {state = Order.StateType.InProgress;}break;
                         case 5: {state = Order.StateType.Finished;}break;
                     }
-                    OrederOps.updateOrderStatus(id - 1, state);
+                    OrederOps.updateOrderStatus(id, state);
         }
         catch (Exception e)
         {

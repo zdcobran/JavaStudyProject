@@ -248,6 +248,8 @@ public class ProductsOps extends ObjectSystem{
                     "Price: " + product.getPrice(),
                     "Quantity: " + product.getQuantity(),
                     "Category: " + product.getCategory().getName()});
+              SystemReporter.report("\n");
+
     }
 
     public static void printAllProducts() throws Exception
