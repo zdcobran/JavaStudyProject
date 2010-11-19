@@ -13,7 +13,7 @@ import javastudyproject.users.*;
 import javastudyproject.reporting.SystemReporter;
 
 /**
- *
+ * This is the login screen which is the first screen of the program
  * @author EladYarkoni
  */
 public class LoginScreen extends ObjectSystem {
@@ -44,11 +44,6 @@ public class LoginScreen extends ObjectSystem {
                 SystemReporter.report(
                     "Reached " + maxRetries + " login retries. Existing...", true);
         }
-        catch (IOException ex)
-        {
-            reader.close();
-            saveAll();
-        }
         catch (Exception e)
         {
             reader.close();
@@ -57,6 +52,12 @@ public class LoginScreen extends ObjectSystem {
         }
     }
 
+    /**
+     * do the logins attempts
+     * @return true if login success or false
+     * @throws IOException
+     * @throws Exception
+     */
     private boolean LoginOperationImpl() throws IOException, Exception
     {
             reader = new BufferedReader(new InputStreamReader(System.in));

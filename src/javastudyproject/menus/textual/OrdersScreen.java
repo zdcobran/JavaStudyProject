@@ -13,13 +13,18 @@ import javastudyproject.OrederOps;
 import javastudyproject.reporting.SystemReporter;
 
 /**
- *
+ * this is the order management screen for administrator user
  * @author eyarkoni
  */
 public class OrdersScreen extends ObjectSystem{
 
     private BufferedReader reader;
 
+
+    /**
+     * this function do the three operations from the orderScreen menu
+     * @throws Exception
+     */
     public OrdersScreen() throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
@@ -35,7 +40,30 @@ public class OrdersScreen extends ObjectSystem{
             switch (choise)
             {
                 case 1: {
-                    System.out.print("Choose order: ");
+                    updateOrderStatus();
+                }break;
+                 case 2: {
+                   deleteOrderstatus();
+                }break;
+                 case 3: {
+                    new AdministratorScreen();
+                }break;
+            }
+        } catch (IOException e)
+          {
+                SystemReporter.report("Failed to update user details, error: " + e.getMessage());
+                new OrdersScreen();
+          }
+    }
+
+    /**
+     * update an order
+     * @throws Exception
+     */
+    private void updateOrderStatus() throws Exception
+    {
+        try {
+            System.out.print("Choose order: ");
                     for (int i = 0; i < orders.size(); i++)
                     {
                        SystemReporter.report( i + 1 + ". Run ID: "
@@ -54,9 +82,36 @@ public class OrdersScreen extends ObjectSystem{
                         case 5: {state = Order.StateType.Finished;}break;
                     }
                     OrederOps.updateOrderStatus(id - 1, state);
-                }break;
-                 case 2: {
-                    System.out.print("Choose order: ");
+        }
+        catch (Exception e)
+        {
+            SystemReporter.report("Failed to perform last action, error: " + e.getMessage());
+            System.out.println("1. Try again");
+            System.out.println("2. Back to main menu\n");
+
+            System.out.println("Ente your choise: ");
+
+            int choise=  Integer.parseInt(reader.readLine());
+            switch (choise)
+            {
+                case 1:
+                    new OrdersScreen();
+                    break;
+                case 2:
+                    new AdministratorScreen();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * delete order
+     * @throws Exception
+     */
+    private void deleteOrderstatus() throws Exception
+    {
+        try {
+         System.out.print("Choose order: ");
                     for (int i = 0; i < orders.size(); i++)
                     {
                        SystemReporter.report( i + 1 + ". Run ID: "
@@ -65,14 +120,27 @@ public class OrdersScreen extends ObjectSystem{
                     }
                     int id = Integer.parseInt(reader.readLine());
                     OrederOps.deleteOrder(id - 1);
-                }break;
-                 case 3: {
-                    new AdministratorScreen();
-                }break;
-            }
-        } catch (IOException ex) {}
-    }
+        }
+        catch (Exception e)
+        {
+            SystemReporter.report("Failed to perform last action, error: " + e.getMessage());
+            System.out.println("1. Try again");
+            System.out.println("2. Back to main menu\n");
 
+            System.out.println("Ente your choise: ");
+
+            int choise=  Integer.parseInt(reader.readLine());
+            switch (choise)
+            {
+                case 1:
+                    new CustomersScreen();
+                    break;
+                case 2:
+                    new AdministratorScreen();
+                    break;
+            }
+        }
+    }
 
 
 

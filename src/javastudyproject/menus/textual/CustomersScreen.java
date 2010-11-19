@@ -14,7 +14,7 @@ import javastudyproject.users.User;
 import javastudyproject.users.UserOps;
 
 /**
- *
+ * the customers management administrator screen
  * @author eyarkoni
  */
 public class CustomersScreen extends ObjectSystem{
@@ -59,7 +59,6 @@ public class CustomersScreen extends ObjectSystem{
             }
             new CustomersScreen();
         }
-        catch (IOException ex) {}
         catch (Exception e)
         {
             SystemReporter.report("Failed to perform last action, error: " + e.getMessage());
@@ -81,6 +80,10 @@ public class CustomersScreen extends ObjectSystem{
         }
     }
 
+    /**
+     * Adding new user by using the UserOps class, administrator can add any user type
+     * @throws Exception
+     */
     private void AddNewUser() throws Exception {
 
         try {
@@ -112,7 +115,6 @@ public class CustomersScreen extends ObjectSystem{
             }
             saveUsers();
         }
-        catch (IOException ee) {}
         catch (Exception e)
         {
             SystemReporter.report("Failed to add user, error: " + e.getMessage());
@@ -133,7 +135,10 @@ public class CustomersScreen extends ObjectSystem{
             }
         }
     }
-
+/**
+ * update exist user from user database by using the class UserOps
+ * @throws Exception
+ */
  private void UpdateExistingUser() throws Exception {
 
         try {
@@ -142,7 +147,7 @@ public class CustomersScreen extends ObjectSystem{
             SystemReporter.report("Select field to update ",
                 new String[] {
                 "1. User name",
-                "2. Fisrt name",
+                "2. First name",
                 "3. Last name",
                 "4. Email",
                 "5. Password",
@@ -193,7 +198,6 @@ public class CustomersScreen extends ObjectSystem{
             }
             saveUsers();
         }
-        catch (IOException ee) {}
         catch (Exception e)
         {
             SystemReporter.report("Failed to update user details, error: " + e.getMessage());

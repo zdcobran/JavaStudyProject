@@ -12,13 +12,14 @@ import javastudyproject.ObjectSystem;
 import javastudyproject.reporting.SystemReporter;
 
 /**
- *
+ * The Administrator main menu
  * @author eyarkoni
  */
 public class AdministratorScreen extends ObjectSystem {
 
     private BufferedReader reader;
 
+   
     public AdministratorScreen() throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
@@ -45,7 +46,7 @@ public class AdministratorScreen extends ObjectSystem {
                 }break;
             }
             new AdministratorScreen();
-        } catch (IOException ex) {}
+        } 
         catch(Exception e)
         {
             SystemReporter.report("Failed to perform last action, error: " + e.getMessage());
