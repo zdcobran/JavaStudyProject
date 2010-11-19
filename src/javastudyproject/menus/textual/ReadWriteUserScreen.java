@@ -56,7 +56,6 @@ public class ReadWriteUserScreen extends ObjectSystem {
             }
             new ReadWriteUserScreen(workingUser);
         }
-        catch (IOException ex) {}
         catch (Exception e)
         {
             SystemReporter.report("Failed to perform last action, error: " + e.getMessage());
@@ -64,6 +63,10 @@ public class ReadWriteUserScreen extends ObjectSystem {
         }
     }
 
+    /**
+     * create new user function
+     * @throws Exception
+     */
     private void  CreateNewUser() throws Exception
     {
         try {
@@ -104,10 +107,6 @@ public class ReadWriteUserScreen extends ObjectSystem {
             saveUsers();
             new ReadWriteUserScreen(workingUser);
         }
-        catch (IOException ee) 
-        {
-
-        }
         catch (Exception e)
         {
             SystemReporter.report("Failed to add user, error: " + e.getMessage());
@@ -130,7 +129,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
     }
 
     /*
-     * Udating exisitng user
+     * Updating exisitng user
      */
     private void UpdateExistUser() throws Exception
     {
@@ -195,7 +194,6 @@ public class ReadWriteUserScreen extends ObjectSystem {
             saveUsers();
             new ReadWriteUserScreen(workingUser);
         }
-        catch (IOException ee) {}
         catch (Exception e)
         {
             SystemReporter.report("Failed to edit user, error: " + e.getMessage());
@@ -294,7 +292,6 @@ public class ReadWriteUserScreen extends ObjectSystem {
             }
             new ReadWriteUserScreen(workingUser);
         }
-        catch (IOException ex) {}
         catch (Exception e)
         {
             SystemReporter.report("Failed to add order, error: " + e.getMessage());

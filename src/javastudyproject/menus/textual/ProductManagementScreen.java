@@ -16,12 +16,13 @@ import javastudyproject.ProductsOps;
 import javastudyproject.reporting.SystemReporter;
 
 /**
- *
+ * the product management screen for administrator user
  * @author eyarkoni
  */
 public class ProductManagementScreen extends ObjectSystem {
 
     private BufferedReader reader;
+
 
     public ProductManagementScreen() {
 
@@ -75,10 +76,14 @@ public class ProductManagementScreen extends ObjectSystem {
            }
            new ProductManagementScreen();
 
-        } catch (IOException ex) {}
-            catch (Exception ex) {}
+        } 
+        catch (Exception ex) {}
     }
 
+    /**
+     * adding a new product
+     * @throws IOException
+     */
     private void AddNewProduct() throws IOException {
 
         try {
@@ -103,7 +108,6 @@ public class ProductManagementScreen extends ObjectSystem {
             // --- Creating the product ---
             ProductsOps.addNewProduct(name, serial, price, quantity,category);
         }
-        catch (IOException ee) {}
         catch (Exception e) 
         {
             System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
@@ -111,14 +115,15 @@ public class ProductManagementScreen extends ObjectSystem {
             new ProductManagementScreen();
         }
     }
-
+    /**
+     * adding a new category
+     */
     private void AddNewCategory() {
         try {
             System.out.print("Category name: ");
             String name = reader.readLine();
             ProductsOps.addNewCategory(name);
         }
-        catch (IOException ex) {}
         catch (Exception e)
         {
             System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
@@ -126,7 +131,9 @@ public class ProductManagementScreen extends ObjectSystem {
             new ProductManagementScreen();
         }
     }
-
+    /**
+     * search a product by 4 fields
+     */
     private void SearchProduct() {
 
         try {
@@ -172,7 +179,6 @@ public class ProductManagementScreen extends ObjectSystem {
                 }break;
             }
         }
-        catch (IOException e) {}
         catch (Exception e)
         {
             System.out.print("There was problem in your last request.\n Details: " + e.getMessage());
@@ -181,6 +187,9 @@ public class ProductManagementScreen extends ObjectSystem {
         }
     }
 
+    /**
+     * update selected product
+     */
     private void UpdateProduct() {
 
         try {
@@ -230,7 +239,7 @@ public class ProductManagementScreen extends ObjectSystem {
                break;
            }
 
-        } catch(IOException ee) {}
+        }
         catch (Exception e)
         {
             System.out.print("There was problem in your last request.\n Details: " + e.getMessage());

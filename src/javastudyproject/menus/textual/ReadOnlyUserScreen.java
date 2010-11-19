@@ -14,7 +14,7 @@ import javastudyproject.users.ReadOnlyUser;
 import javastudyproject.users.User;
 
 /**
- *
+ * read only user main menu
  * @author eyarkoni
  */
 public class ReadOnlyUserScreen extends ObjectSystem {
@@ -47,7 +47,6 @@ public class ReadOnlyUserScreen extends ObjectSystem {
             }
             new ReadOnlyUserScreen(workingUser);
         }
-       catch (IOException ex) {}
        catch (Exception e)
        {
             SystemReporter.report("Failed to perform last action, error: " + e.getMessage());
@@ -55,6 +54,11 @@ public class ReadOnlyUserScreen extends ObjectSystem {
        }
     }
 
+    /**
+     * prints the orders that related to the user
+     * @param user
+     * @throws Exception
+     */
     public void PrintGrantedOrders(User user) throws Exception
     {
         boolean isPrinted = false;
