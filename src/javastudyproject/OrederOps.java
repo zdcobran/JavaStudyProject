@@ -9,7 +9,7 @@ import javastudyproject.users.User;
  */
 public class OrederOps extends ObjectSystem{
 
-    public static void updateOrderStatus(User user, int orderRunId, Order.StateType status) throws Exception
+    public static void updateOrderStatus(int orderRunId, Order.StateType status) throws Exception
     {
         for (Order order: orders)
         {
@@ -23,7 +23,7 @@ public class OrederOps extends ObjectSystem{
         SystemReporter.report("Didn't found order id: " + orderRunId, true);
     }
     
-    public static void deleteOrder(User user, int orderRunId) throws Exception
+    public static void deleteOrder(int orderRunId) throws Exception
     {
         for (Order order: orders)
         {

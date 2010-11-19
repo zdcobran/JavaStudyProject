@@ -40,10 +40,7 @@ public class AdministratorScreen extends ObjectSystem {
                 case 3: { new OrdersScreen(); }break;
                 case 4: { new ReportsScreen(); }break;
                 case 5: {
-                    saveCategories();
-                    saveOrders();
-                    saveProducts();
-                    saveUsers();
+                    saveAll();
                     new LoginScreen();
                 }break;
             }
