@@ -98,7 +98,7 @@ public class ProductManagementScreen extends ObjectSystem {
             System.out.println("Select category from list -> ");
             if ( categories.isEmpty() )
             {
-                SystemReporter.report("There is no categories yet, please create one", true);
+                SystemReporter.report("There is no categories yet, please create one\n", true);
             }
             for (int i=0; i< categories.size(); i++)
                 System.out.println(i+". "+categories.get(i).getName());

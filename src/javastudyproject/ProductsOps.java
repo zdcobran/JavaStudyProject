@@ -252,6 +252,10 @@ public class ProductsOps extends ObjectSystem{
 
     public static void printAllProducts() throws Exception
     {
+        if (products.isEmpty())
+        {
+            SystemReporter.report("There is no products in the system", true);
+        }
         for (Product product:products)
         {
             printProductInfoImpl(product);

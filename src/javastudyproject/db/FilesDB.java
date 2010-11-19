@@ -29,6 +29,11 @@ public class FilesDB {
     private static final String ORDERFILE = "orders.db";
     private static final String DEFAULT_ADMIN = "admin";
     private static final String DEFAULT_ADMIN_PASS = "123456";
+    private static final String DEFAULT_CATEGORY_ELECTRONICS = "Electronics";
+    private static final String DEFAULT_CATEGORY_CAR = "Car";
+    private static final String DEFAULT_CATEGORY_HOME = "Home";
+    private static final String DEFAULT_CATEGORY_OFFICE = "Office";
+
 
     public static ArrayList<User> ReadUsers() {
         try {
@@ -95,7 +100,12 @@ public class FilesDB {
             return (ArrayList<Category>) istream.readObject();
         }
         catch (IOException ex) {
-            return new ArrayList<Category>();
+            ArrayList<Category> categoryList = new ArrayList<Category>();
+            categoryList.add(new Category(DEFAULT_CATEGORY_CAR));
+            categoryList.add(new Category(DEFAULT_CATEGORY_ELECTRONICS));
+            categoryList.add(new Category(DEFAULT_CATEGORY_HOME));
+            categoryList.add(new Category(DEFAULT_CATEGORY_OFFICE));
+           return categoryList;
         }
         catch(ClassNotFoundException exc) {}
         return null;
@@ -108,7 +118,7 @@ public class FilesDB {
             ObjectOutputStream ostream = new ObjectOutputStream(new FileOutputStream(CATEGORYFILE));
             ostream.writeObject(categories);
         }
-        catch (IOException ex) {}
+        catch (IOException ex){}
     }
 
     public static void UpdateOrders(ArrayList<Order> orders) {
