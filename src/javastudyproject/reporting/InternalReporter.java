@@ -6,11 +6,9 @@
 package javastudyproject.reporting;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import javastudyproject.Category;
 import javastudyproject.ObjectSystem;
 import javastudyproject.Order;
-import javastudyproject.Order.StateType;
 import javastudyproject.Product;
 import javastudyproject.users.User;
 

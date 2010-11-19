@@ -10,11 +10,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import javastudyproject.users.UserOps;
 import javastudyproject.*;
+import javastudyproject.reporting.SystemReporter;
+
 /**
- *
+ * Contains all administrator reports in the system
  * @author eyarkoni
  */
-public class ReportsScreen {
+public class ReportsScreen extends ObjectSystem{
 
     private BufferedReader reader;
 
@@ -30,14 +32,15 @@ public class ReportsScreen {
         System.out.println("4. Print orders by state");
         System.out.println("--------------------------------------------------------------------------------");
         System.out.println("5. Print all products");
-        System.out.println("6. Print products by price");
+        System.out.println("6. Print products larger/smaller than specific price");
         System.out.println("7. Print  products by category");
         System.out.println("8. Print product orders from history");
         System.out.println("9. Print best selling product");
+        System.out.println("10. Print products by price (sorted)");
         System.out.println("--------------------------------------------------------------------------------");
-        System.out.println("10. Print all categories");
+        System.out.println("11. Print all categories");
         System.out.println("--------------------------------------------------------------------------------");
-        System.out.println("11. Back to main menu\n");
+        System.out.println("12. Back to main menu\n");
         System.out.print("Your choise: ");
 
         try {
@@ -74,7 +77,7 @@ public class ReportsScreen {
                 case 6: {
                     System.out.print("1. Larger 2. Smaller : ");
                     int stateChosen = Integer.parseInt(reader.readLine());
-                    System.out.print("Than number : ");
+                    System.out.print("\nThan number : ");
                     double number = Double.parseDouble(reader.readLine());
 
                     switch (stateChosen)
@@ -88,23 +91,59 @@ public class ReportsScreen {
                     }
                 }break;
                 case 7: {
-                    // print products by price category...
+                    System.out.print("All categories: ");
+                    for (int i = 0; i < categories.size(); i++)
+                    {
+                        System.out.print(i+ 1 + ". " + categories.get(i).getName());
+                    }
+                    System.out.print("Choose category index: ");
+                    int catIndex = Integer.parseInt(reader.readLine());
+                    ProductsOps.printProductsByCategory(categories.get(catIndex - 1));
                 }break;
                 case 8: {
-                    // print products orders from history function ...
+                    if (products.isEmpty())
+                    {
+                        SystemReporter.report("There are no products in the system", true);
+                    }
+                    System.out.print("All products: ");
+                    for (int i = 0; i < products.size(); i++)
+                    {
+                        System.out.print(i+ 1 + ". " + products.get(i).getName());
+                    }
+                    System.out.print("Type product index: ");
+                    int productIndex = Integer.parseInt(reader.readLine());
+                    OrederOps.printOrdersUserNamesByPurchasedProduct(products.get(productIndex -1));
                 }break;
                 case 9: {
-                    // print best selling product
+                    ProductsOps.printMostSaleableProduct();
                 }break;
                 case 10: {
-                    // print all categories...
+                    ProductsOps.printSortedProductsByPrice();
                 }break;
                 case 11: {
+                    ProductsOps.printAllCategories();
+                }break;
+                case 12: {
                     new AdministratorScreen();
                 }break;
             }
-            new AdministratorScreen();
-        } catch (IOException e) {}
+            System.out.println("\n1. View another report");
+            System.out.println("2. Back to main menu\n");
+
+            System.out.println("Ente your choise: ");
+
+            int newChoise =  Integer.parseInt(reader.readLine());
+            switch (newChoise)
+            {
+                case 1:
+                    new ReportsScreen();
+                    break;
+                case 2:
+                    new AdministratorScreen();
+                    break;
+            }
+
+        } 
         catch (Exception e)
         {
             System.out.println("Failed to show the report, error: " + e.getMessage());

@@ -57,6 +57,22 @@ public class OrederOps extends ObjectSystem{
        }
     }
 
+    public static void printOrdersUserNamesByPurchasedProduct(Product productToFind) throws Exception
+    {
+        SystemReporter.report("Finding all user that purchased " + productToFind.getName());
+        for (Order order : orders)
+        {
+            for(Product product: order.getProducts())
+            {
+                if(product == productToFind)
+                {
+                    SystemReporter.report("The user: " + order.getUser().getUserName() + " Purchased this product.");
+                    break;
+                }
+            }
+        }
+    }
+
     private static void printOrderImpl(Order order) throws Exception
     {
         SystemReporter.report("Order info for user " + order.getUser().getUserName() + ": ", new String[] {

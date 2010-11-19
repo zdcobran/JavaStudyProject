@@ -1,12 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package javastudyproject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import javastudyproject.reporting.SystemReporter;
+import projectUtils.ProductPriceComparator;
 
 /**
  * The class handling all products operations
@@ -43,6 +41,7 @@ public class ProductsOps extends ObjectSystem{
         SystemReporter.report("Product is added");
     }
 
+
      public static void addNewCategory(String name) throws Exception
     {
         for (Category cat : categories)
@@ -57,6 +56,16 @@ public class ProductsOps extends ObjectSystem{
         SystemReporter.report("Category is added");
     }
 
+    public static void printAllCategories() throws Exception
+    {
+         SystemReporter.report("Printing all categories: ");
+
+         for (Category category: categories)
+         {
+             SystemReporter.report(
+                     "Category run id : " + category.getRunId() +" name: " + category.getName());
+         }
+     }
 
     /**
      * Updating the product with given name
@@ -251,6 +260,13 @@ public class ProductsOps extends ObjectSystem{
 
     public static void printProductsByPrice(LergerSmaller by, double price) throws Exception
     {
+        if (products.isEmpty())
+        {
+            SystemReporter.report("There is no products in the system", true);
+        }
+
+        SystemReporter.report(
+                "Printing products with price " + by.toString() + " than " + price);
         for (Product product: products)
         {
             switch(by)
@@ -268,6 +284,74 @@ public class ProductsOps extends ObjectSystem{
                     }
                     break;
             }
+        }
+    }
+
+    /**
+     * Printing all products by given category
+     * @param category
+     * @throws Exception
+     */
+    public static void printProductsByCategory(Category category) throws Exception
+    {
+        if (products.isEmpty())
+        {
+            SystemReporter.report("There is no products in the system", true);
+        }
+
+        SystemReporter.report("Printing all product for category:" + category.getName());
+        for (Product product: products)
+        {
+            if (product.getCategory().equals(category))
+            {
+                printProductInfoImpl(product);
+            }
+        }
+    }
+
+    /**
+     * print the most saleable product
+     * @throws Exception
+     */
+    public static void printMostSaleableProduct() throws Exception
+    {
+        if (products.isEmpty())
+        {
+            SystemReporter.report("There is no products in the system", true);
+        }
+        HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
+        int amount = 0;
+                for (Order order : orders)
+                {
+                    ArrayList<Product> orderProducts = order.getProducts();
+                    for (Product product : orderProducts)
+                    {
+                        if (productAmount.containsKey(product))
+                        {
+                            int currAmount = productAmount.get(product);
+                            currAmount++;
+                            productAmount.put(product, currAmount);
+                        }
+                        else
+                        {
+                            productAmount.put(product, 1);
+                        }
+                    }
+                }
+    }
+
+    /**
+     * print all products by sorted price
+     * @throws Exception
+     */
+    public static void printSortedProductsByPrice() throws Exception
+    {
+        ArrayList<Product> productsCopy = (ArrayList<Product>) products.clone();
+        Collections.sort(productsCopy, new ProductPriceComparator());
+        SystemReporter.report("Printing sorted products by price: ");
+        for(Product product : productsCopy)
+        {
+            printProductInfoImpl(product);
         }
     }
 
