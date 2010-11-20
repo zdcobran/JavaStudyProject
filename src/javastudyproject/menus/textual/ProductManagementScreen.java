@@ -65,9 +65,11 @@ public class ProductManagementScreen extends ObjectSystem {
                }break;
                 case 6:
                {
-                    System.out.print("enter product name: ");
-                    String prodName =  reader.readLine();
-                    ProductsOps.deleteProduct(prodName);
+                    System.out.print("Select product: ");
+                    for (int i=0; i<products.size(); i++)
+                       System.out.println(i+ ". " + products.get(i).getName());
+                    int prodIndex = Integer.parseInt(reader.readLine());
+                    ProductsOps.deleteProduct(products.get(prodIndex).getName());
                }break;
                case 7:
                {
@@ -193,8 +195,10 @@ public class ProductManagementScreen extends ObjectSystem {
     private void UpdateProduct() {
 
         try {
-            System.out.print("Select product by name: ");
-            String prodName = reader.readLine();
+            System.out.print("Select product: ");
+            for (int i=0;i<products.size();i++)
+              System.out.println(i+ ". " + products.get(i).getName());
+            int prodIndex = Integer.parseInt(reader.readLine());
             System.out.print("Select product property to change (1. category 2. serialNumber 3. price 4. quantity):");
            int fieldChangeInder = Integer.parseInt(reader.readLine());
            switch (fieldChangeInder)
@@ -207,7 +211,7 @@ public class ProductManagementScreen extends ObjectSystem {
                       int selectedCategoryIndex = Integer.parseInt(reader.readLine());
                       Product prodContainder = new Product();
                       prodContainder.setCategory(categories.get(selectedCategoryIndex));
-                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.Category, prodName, prodContainder);
+                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.Category, products.get(prodIndex).getName(), prodContainder);
                }
                 break;
                case 2:
@@ -216,7 +220,9 @@ public class ProductManagementScreen extends ObjectSystem {
                       String snumber = reader.readLine();
                       Product prodContainer = new Product();
                       prodContainer.setSerialNumber(snumber);
-                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.SerialName, prodName, prodContainer);
+                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.SerialName,
+                              products.get(prodIndex).getName(),
+                              prodContainer);
                }
                 break;
                case 3:
@@ -225,7 +231,9 @@ public class ProductManagementScreen extends ObjectSystem {
                       double newprice = Double.parseDouble(reader.readLine());
                       Product prodContainer = new Product();
                       prodContainer.setPrice(newprice);
-                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.Price, prodName, prodContainer);
+                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.Price,
+                              products.get(prodIndex).getName(),
+                              prodContainer);
                }
                break;
                case 4:
@@ -234,7 +242,7 @@ public class ProductManagementScreen extends ObjectSystem {
                       int newquantity = Integer.parseInt(reader.readLine());
                       Product prodContainer = new Product();
                       prodContainer.setQuantity(newquantity);
-                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.Quantity, prodName, prodContainer);
+                      ProductsOps.updateProductByName(ProductsOps.ProductCriteria.Quantity, products.get(prodIndex).getName(), prodContainer);
                }
                break;
            }
