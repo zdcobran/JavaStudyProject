@@ -82,7 +82,7 @@ public class OrederOps extends ObjectSystem{
         SystemReporter.report("Order info for user " + order.getUser().getUserName() + ": ", new String[] {
             "Order ID:\t" + order.getRunId(),
             "Order date:\t" + order.getOrderDate(),
-            "Order deliviry date:\t" + order.getDeliveryDate().toString(),
+            "Order deliviry date:\t" + order.getDeliveryDate(),
             "Order deliviry type:\t" + order.getDeliveryType().toString(),
             "Order state:\t" + order.getState().toString()
         });

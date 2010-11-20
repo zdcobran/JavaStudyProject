@@ -1,8 +1,10 @@
 package javastudyproject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
 import javastudyproject.reporting.SystemReporter;
 import projectUtils.ProductPriceComparator;
 
@@ -333,23 +335,33 @@ public class ProductsOps extends ObjectSystem{
         }
         HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
         int amount = 0;
-                for (Order order : orders)
+        for (Order order : orders)
+        {
+            for (Product product : order.getProducts())
+            {
+                if (productAmount.containsKey(product))
                 {
-                    ArrayList<Product> orderProducts = order.getProducts();
-                    for (Product product : orderProducts)
-                    {
-                        if (productAmount.containsKey(product))
-                        {
-                            int currAmount = productAmount.get(product);
-                            currAmount++;
-                            productAmount.put(product, currAmount);
-                        }
-                        else
-                        {
-                            productAmount.put(product, 1);
-                        }
-                    }
+                    int currAmount = productAmount.get(product);
+                    currAmount++;
+                    productAmount.put(product, currAmount);
                 }
+                else
+                {
+                    productAmount.put(product, 1);
+                }
+            }
+        }
+        Product mostSaleble = new Product();
+        int max = 0;
+        for (Product product : productAmount.keySet())
+        {
+            if (productAmount.get(product) >= max)
+            {
+                max = productAmount.get(product);
+                mostSaleble = product;
+            }
+        }
+        SystemReporter.report("The most saleable product is: " + mostSaleble.getName() + " with sales of: " + max);
     }
 
     /**
