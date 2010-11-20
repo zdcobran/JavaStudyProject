@@ -65,9 +65,9 @@ public class ProductManagementScreen extends ObjectSystem {
                }break;
                 case 6:
                {
-                    System.out.print("Select product: ");
                     for (int i=0; i<products.size(); i++)
                        System.out.println(i+ ". " + products.get(i).getName());
+                    System.out.print("Select product: ");
                     int prodIndex = Integer.parseInt(reader.readLine());
                     ProductsOps.deleteProduct(products.get(prodIndex).getName());
                }break;
@@ -173,9 +173,9 @@ public class ProductManagementScreen extends ObjectSystem {
      */
     private void UpdateProduct() throws Exception
     {
-        System.out.print("Select product: ");
         for (int i=0;i<products.size();i++)
             System.out.println(i+ ". " + products.get(i).getName());
+        System.out.print("Select product: ");
         int prodIndex = Integer.parseInt(reader.readLine());
         System.out.print("Select product property to change (1. category 2. serialNumber 3. price 4. quantity):");
         int fieldChangeInder = Integer.parseInt(reader.readLine());

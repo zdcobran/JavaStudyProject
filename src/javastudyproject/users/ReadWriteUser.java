@@ -6,6 +6,7 @@
 package javastudyproject.users;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -32,6 +33,7 @@ public class ReadWriteUser extends User implements Serializable{
         this.email = email;
         this.password = password;
         this.age = age;
+        this.createDate = new Date(System.currentTimeMillis());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class Category implements Serializable {
 
     public int getRunId()
     {
-        return runid;
+        return id;
     }
 
     public String getName()

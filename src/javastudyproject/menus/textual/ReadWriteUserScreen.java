@@ -150,7 +150,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
                 "6. Age"});
 
             int fieldchoise = Integer.parseInt(reader.readLine());
-            System.out.print("Enter new value");
+            System.out.print("Enter new value: ");
             String newValue = reader.readLine();
 
             switch (fieldchoise)

@@ -126,8 +126,8 @@ public class ProductsOps extends ObjectSystem{
                     case Category:
                         product.setCategory(productContainer.getCategory());
                         SystemReporter.report(
-                                "Updated product category to: " + productContainer.getCategory());
-
+                                "Updated product category to: " + productContainer.getCategory().getName());
+                        return;
                     default:
                         SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
                 }

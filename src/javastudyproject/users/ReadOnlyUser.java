@@ -6,6 +6,7 @@
 package javastudyproject.users;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -39,6 +40,7 @@ public class ReadOnlyUser extends User implements Serializable{
         this.age = age;
         this.owningUserName = owningUserName;
         this.readOnlyUserOrderId = readOnlyUserOrderId;
+        this.createDate = new Date(System.currentTimeMillis());
     }
 
     public String getOwningUserName()
