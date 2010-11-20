@@ -36,7 +36,7 @@ public class ReportsScreen extends ObjectSystem{
         System.out.println("7. Print  products by category");
         System.out.println("8. Print product orders from history");
         System.out.println("9. Print best selling product");
-        System.out.println("10. Print products by price (sorted)");
+        System.out.println("10. Print products by price (decreasing sort)");
         System.out.println("--------------------------------------------------------------------------------");
         System.out.println("11. Print all categories");
         System.out.println("--------------------------------------------------------------------------------");
