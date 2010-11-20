@@ -32,4 +32,5 @@ Authors comments
   2. The product user messages can be forward in the future to a log file so the whole messages are passing through
      our special Report System that can be changed once.
   3. Users are stored in the users.db file and the db initializing is create the default admin user
+  4. When read only user is deleted, it's orders remain in the orders for history
   
