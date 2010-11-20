@@ -227,6 +227,7 @@ public class ProductsOps extends ObjectSystem{
      */
     public static void deleteProduct(String name) throws Exception
     {
+
         for (Product product: products)
         {
             if (product.getName().equals(name))
@@ -253,7 +254,7 @@ public class ProductsOps extends ObjectSystem{
                     "Price: " + product.getPrice(),
                     "Quantity: " + product.getQuantity(),
                     "Category: " + product.getCategory().getName()});
-              SystemReporter.report("\n");
+              SystemReporter.report("-----------------------------------");
 
     }
 
@@ -326,9 +327,9 @@ public class ProductsOps extends ObjectSystem{
      */
     public static void printMostSaleableProduct() throws Exception
     {
-        if (products.isEmpty())
+        if (orders.isEmpty())
         {
-            SystemReporter.report("There is no products in the system", true);
+            SystemReporter.report("There is no orders in the system", true);
         }
         HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
         int amount = 0;

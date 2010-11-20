@@ -324,7 +324,7 @@ public class UserOps extends ObjectSystem{
                     "User age: " + user.getAge(),
                     "Create date: " + user.getCreateDate(),
               });
-              SystemReporter.report("\n");
+              SystemReporter.report("--------------------------------");
     }
 
     public static void printAllUsers() throws Exception

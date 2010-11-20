@@ -65,7 +65,9 @@ public class ReadOnlyUserScreen extends ObjectSystem {
         for (Order order: orders)
         {
             if (order.getUser().getUserName().equals(
-                    ((ReadOnlyUser)user).getOwningUserName()))
+                    ((ReadOnlyUser)user).getOwningUserName())
+                    && order.getRunId()
+                    == ((ReadOnlyUser)user).getReadOnlyUserOrderId())
             {
                 for (Product product : order.getProducts())
                 {

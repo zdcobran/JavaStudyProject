@@ -92,11 +92,11 @@ public class ReadWriteUserScreen extends ObjectSystem {
                             userName, id, lastName, lastName, email, password, age);
                 }break;
                 case 2: {
+                    System.out.print("Printing user " + workingUser.getUserName() + " orders: \n");
                     for (Order order : orders)
                     {
-                        System.out.print("Printing user " + workingUser.getUserName() + " orders: \n");
                         if (order.getUser().getUserName().equals(workingUser.getUserName()))
-                            System.out.print("Order id " + order.getRunId() + "\n");
+                            System.out.print("Order id: '" + order.getRunId() + "'\n");
                     }
                     System.out.print("Enter the order id for the read only user: ");
                     int orderId = Integer.parseInt(reader.readLine());
@@ -253,7 +253,7 @@ public class ReadWriteUserScreen extends ObjectSystem {
                     System.out.print("The provided quantity is greater than the actual, actual: " + selectedProduct.getQuantity());
                     continue;
                 }
-                addToCart(myProductList, selectedProduct, quantity);
+                myProductList = addToCart(myProductList, selectedProduct, quantity);
                 productsAmount.put(products.get(selectedProductNumber - 1).getName(),
                         productsAmount.get(products.get(selectedProductNumber - 1).getName()) - quantity); //update the dynamic list amount
             }
@@ -267,11 +267,15 @@ public class ReadWriteUserScreen extends ObjectSystem {
                 case 2: {deliveryType =Order.DeliveryType.Shipping; }break;
             }
 
-            System.out.print("Enter Delivery date (Format: dd/MM/yy hh:mm): ");
-            SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yy hh:mm");
-            String dateString = reader.readLine();
-            Date date = df1.parse(dateString);
-
+            //Updating the
+            Date date = null;
+            if (deliveryType.equals(Order.DeliveryType.Shipping))
+            {
+                System.out.print("Enter Delivery date (Format: dd/MM/yy hh:mm): ");
+                SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yy hh:mm");
+                String dateString = reader.readLine();
+                date = df1.parse(dateString);
+            }
             System.out.println("1. Save order");
             System.out.println("2. Back to main menu\n");
             System.out.print("Your choise: ");

@@ -24,7 +24,7 @@ public class CustomersScreen extends ObjectSystem{
     public CustomersScreen() throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Customers  menu\n-----------------------------------------------");
+        System.out.println("\nCustomers  menu\n-----------------------------------------------");
         System.out.println("1. Add new user");
         System.out.println("2. Update existing user");
         System.out.println("3. Delete user");

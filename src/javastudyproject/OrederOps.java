@@ -39,6 +39,10 @@ public class OrederOps extends ObjectSystem{
 
     public static void printAllOrders() throws Exception
     {
+        if (orders.isEmpty())
+        {
+            SystemReporter.report("There is no orders", true);
+        }
        for (Order order: orders)
        {
            printOrderImpl(order);
