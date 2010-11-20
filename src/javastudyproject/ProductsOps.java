@@ -1,10 +1,8 @@
 package javastudyproject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Set;
 import javastudyproject.reporting.SystemReporter;
 import projectUtils.ProductPriceComparator;
 
@@ -272,6 +270,13 @@ public class ProductsOps extends ObjectSystem{
         }
     }
 
+    /**
+     * Printing products by it price when the by value is larger or smaller than
+     * the provided amount
+     * @param by
+     * @param price
+     * @throws Exception
+     */
     public static void printProductsByPrice(LergerSmaller by, double price) throws Exception
     {
         if (products.isEmpty())
@@ -334,7 +339,6 @@ public class ProductsOps extends ObjectSystem{
             SystemReporter.report("There is no orders in the system", true);
         }
         HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
-        int amount = 0;
         for (Order order : orders)
         {
             for (Product product : order.getProducts())
@@ -342,12 +346,12 @@ public class ProductsOps extends ObjectSystem{
                 if (productAmount.containsKey(product))
                 {
                     int currAmount = productAmount.get(product);
-                    currAmount++;
+                    currAmount += currAmount + product.getQuantity();
                     productAmount.put(product, currAmount);
                 }
                 else
                 {
-                    productAmount.put(product, 1);
+                    productAmount.put(product, product.getQuantity());
                 }
             }
         }
@@ -388,5 +392,4 @@ public class ProductsOps extends ObjectSystem{
     {
         Name, SerialName, Price, Quantity, Category
     }
-
 }
