@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import javastudyproject.Category;
-import javastudyproject.Order;
-import javastudyproject.Product;
-import javastudyproject.users.AdministratorUser;
-import javastudyproject.users.User;
+import javastudyproject.model.Category;
+import javastudyproject.model.Order;
+import javastudyproject.model.Product;
+import javastudyproject.model.AdministratorUser;
+import javastudyproject.model.User;
 
 /**
  *

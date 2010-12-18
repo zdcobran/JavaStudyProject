@@ -2,7 +2,7 @@ package projectUtils;
 
 
 import java.util.Comparator;
-import javastudyproject.Product;
+import javastudyproject.model.Product;
 
 public class ProductPriceComparator implements Comparator<Product>{
 

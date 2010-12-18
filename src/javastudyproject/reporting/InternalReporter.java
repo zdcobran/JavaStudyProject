@@ -6,17 +6,17 @@
 package javastudyproject.reporting;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javastudyproject.Category;
-import javastudyproject.ObjectSystem;
-import javastudyproject.Order;
-import javastudyproject.Product;
-import javastudyproject.users.User;
+import javastudyproject.model.Category;
+import javastudyproject.service.ServiceSystem;
+import javastudyproject.model.Order;
+import javastudyproject.model.Product;
+import javastudyproject.model.User;
 
 /**
  *
  * @author alon
  */
-public class InternalReporter extends ObjectSystem{
+public class InternalReporter extends ServiceSystem{
 
     /**
      * Print all user
@@ -25,6 +25,8 @@ public class InternalReporter extends ObjectSystem{
      */
     public static void printAllUsers() throws Exception
     {
+    
+
         for (User user : users)
         {
             SystemReporter.report("Basic user info: ", new String[] {
