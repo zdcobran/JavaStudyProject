@@ -138,7 +138,7 @@ public class ProductManagementScreen extends ServiceSystem {
                  String serialNum =  reader.readLine();
                  Product prodContainer = new Product();
                  prodContainer.setSerialNumber(serialNum);
-                 ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.SerialName, prodContainer);
+                 ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.ProductCriteria.this.serialNum, prodContainer);
                  for (Product prodInList : plist)
                         ProductsOpsBean.printProductInfoImpl(prodInList);
             }break;
@@ -147,7 +147,7 @@ public class ProductManagementScreen extends ServiceSystem {
                 String name = reader.readLine();
                 Product prodContainer = new Product();
                  prodContainer.setName(name);
-                ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.Name, prodContainer);
+                ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.ProductCriteria.this.name, prodContainer);
                  for (Product prodInList : plist)
                         ProductsOpsBean.printProductInfoImpl(prodInList);
             }break;
@@ -156,7 +156,7 @@ public class ProductManagementScreen extends ServiceSystem {
                 double price = Double.parseDouble(reader.readLine());
                 Product prodContainer = new Product();
                  prodContainer.setPrice(price);
-                  ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.Price, prodContainer);
+                  ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.ProductCriteria.this.price, prodContainer);
                  for (Product prodInList : plist)
                         ProductsOpsBean.printProductInfoImpl(prodInList);
             }break;
@@ -165,7 +165,7 @@ public class ProductManagementScreen extends ServiceSystem {
                  String category = reader.readLine();                     Product prodContainer = new Product();
                  Category categoryContainer=  new Category(category);
                  prodContainer.setCategory(categoryContainer);
-                  ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.Category, prodContainer);
+                  ArrayList<Product> plist = ProductsOpsBean.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.ProductCriteria.this.category, prodContainer);
                  for (Product prodInList : plist)
                         ProductsOpsBean.printProductInfoImpl(prodInList);
             }break;
@@ -196,7 +196,7 @@ public class ProductManagementScreen extends ServiceSystem {
                   int selectedCategoryIndex = Integer.parseInt(reader.readLine());
                   Product prodContainder = new Product();
                   prodContainder.setCategory(categories.get(selectedCategoryIndex));
-                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.Category, products.get(prodIndex).getName(), prodContainder);
+                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.category, products.get(prodIndex).getName(), prodContainder);
            }
             break;
            case 2:
@@ -205,7 +205,7 @@ public class ProductManagementScreen extends ServiceSystem {
                   String snumber = reader.readLine();
                   Product prodContainer = new Product();
                   prodContainer.setSerialNumber(snumber);
-                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.SerialName,
+                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.serialNum,
                           products.get(prodIndex).getName(),
                           prodContainer);
            }
@@ -216,7 +216,7 @@ public class ProductManagementScreen extends ServiceSystem {
                   double newprice = Double.parseDouble(reader.readLine());
                   Product prodContainer = new Product();
                   prodContainer.setPrice(newprice);
-                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.Price,
+                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.price,
                           products.get(prodIndex).getName(),
                           prodContainer);
            }
@@ -227,7 +227,7 @@ public class ProductManagementScreen extends ServiceSystem {
                   int newquantity = Integer.parseInt(reader.readLine());
                   Product prodContainer = new Product();
                   prodContainer.setQuantity(newquantity);
-                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.Quantity, products.get(prodIndex).getName(), prodContainer);
+                  ProductsOpsBean.updateProductByName(ProductsOpsBean.ProductCriteria.quantity, products.get(prodIndex).getName(), prodContainer);
            }
            break;
        }

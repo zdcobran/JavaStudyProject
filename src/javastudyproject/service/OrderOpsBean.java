@@ -11,7 +11,7 @@ import javax.persistence.Query;
  * This class providing orders management
  * @author alon
  */
-public class OrderOpsBean {
+public class OrderOpsBean implements OrderOps{
 
     private EntityManager em;
 
@@ -19,36 +19,26 @@ public class OrderOpsBean {
         em = entityManager;
     }
 
-    public static void updateOrderStatus(int orderRunId, Order.StateType status) throws Exception
+    public void updateOrderStatus(int orderRunId, Order.StateType status) throws Exception
     {
-        for (Order order: orders)
-        {
-            if (order.getRunId() == orderRunId)
-            {
-                order.updateState(status);
-                SystemReporter.report("Updating order: " + orderRunId + " status to: " + status);
-                return;
-            }
-        }
-        SystemReporter.report("Didn't found order id: " + orderRunId, true);
+        Order order = em.find(Order.class, orderRunId);
+        order.updateState(status);
+        em.merge(order);
+
+        //Catch exc
+        //SystemReporter.report("Didn't found order id: " + orderRunId, true);
     }
     
     public void deleteOrder(int orderRunId) throws Exception
     {
-        for (Order order: orders)
-        {
-            if (order.getRunId() == orderRunId)
-            {
-                SystemReporter.report("Deleting order with this id: " + orderRunId) ;
-                orders.remove(order);
-                return;
-            }
-        }
+        Order order = em.find(Order.class, orderRunId);
+        em.remove(order);
         SystemReporter.report("Didn't found order id: " + orderRunId, true);
     }
 
-    public static void printAllOrders() throws Exception
+    public void printAllOrders() throws Exception
     {
+        ArrayList<Order> orders = getAllOrders();
         if (orders.isEmpty())
         {
             SystemReporter.report("There is no orders", true);
@@ -59,21 +49,27 @@ public class OrderOpsBean {
        }
     }
 
-    public static void printOrdersByState(Order.StateType state) throws Exception
+    public void printOrdersByState(Order.StateType state) throws Exception
     {
         SystemReporter.report("Printing all orders with this state: " + state);
-       for (Order order: orders)
-       {
-           if (order.getState().equals(state))
-           {
-               printOrderImpl(order);
-           }
-       }
+        Query query = em.createQuery("SELECT o FROM Order o where o.state = " + state);
+        ArrayList<Order> orders = (ArrayList<Order>) query.getResultList();
+        if (orders.isEmpty())
+        {
+            SystemReporter.report("There is no orders with state: " + state, true);
+        }
+        for (Order order: orders)
+        {
+           printOrderImpl(order);
+        }
     }
 
-    public static void printOrdersUserNamesByPurchasedProduct(Product productToFind) throws Exception
+    public void printOrdersUserNamesByPurchasedProduct(Product productToFind) throws Exception
     {
         SystemReporter.report("Finding all user that purchased " + productToFind.getName());
+        Query query = em.createQuery("SELECT o FROM Order o "); //Fix query
+        ArrayList<Order> orders = (ArrayList<Order>) query.getResultList();
+
         for (Order order : orders)
         {
             for(Product product: order.getProducts())
@@ -87,7 +83,7 @@ public class OrderOpsBean {
         }
     }
 
-    private static void printOrderImpl(Order order) throws Exception
+    private void printOrderImpl(Order order) throws Exception
     {
         SystemReporter.report("Order info for user " + order.getUser().getUserName() + ": ", new String[] {
             "Order ID:\t" + order.getRunId(),

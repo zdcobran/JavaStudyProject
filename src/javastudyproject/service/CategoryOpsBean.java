@@ -15,7 +15,7 @@ import projectUtils.ProductPriceComparator;
  * The class handling all products operations
  * @author alon
  */
-public class CategoryOpsBean{
+public class CategoryOpsBean implements CategoryOps{
 
 
     private EntityManager em;

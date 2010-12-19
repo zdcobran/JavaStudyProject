@@ -15,7 +15,7 @@ import projectUtils.ProductPriceComparator;
  * The class handling all products operations
  * @author alon
  */
-public class ProductsOpsBean{
+public class ProductsOpsBean implements ProductsOps{
 
 
     private EntityManager em;
@@ -34,44 +34,24 @@ public class ProductsOpsBean{
      * @param type
      * @throws Exception
      */
-    public static void addNewProduct(String name, String serialNum, double price, int quantity, Category category) throws Exception
+    public void addNewProduct(String name, String serialNum, double price, int quantity, Category category) throws Exception
     {
-        for (Product prod : products)
-        {
-            if (prod.getName().equals(name))
-            {
-                  SystemReporter.report("product with the same name is exist");
-                  return;
-            }
-            if (prod.getSerialNumber().equals(serialNum))
-            {
-                  SystemReporter.report("product with the same serial number is exist");
-                  return;
-            }
-        }
-        products.add(new Product(name, category, serialNum, price, quantity));
+        em.persist(new Product(name, category, serialNum, price, quantity));
+        //ToDoCatch exc
         SystemReporter.report("Product is added");
     }
 
-
-     public static void addNewCategory(String name) throws Exception
+    public void addNewCategory(String name) throws Exception
     {
-        for (Category cat : categories)
-        {
-            if (cat.getName().equals(name))
-            {
-                SystemReporter.report("Category is already exists", true);
-                return;
-            }
-        }
-        categories.add(new Category(name));
+        em.persist(new Category(name));
+        //ToDoCatch exc
         SystemReporter.report("Category is added");
     }
 
-    public static void printAllCategories() throws Exception
+    public void printAllCategories() throws Exception
     {
          SystemReporter.report("Printing all categories: ");
-
+         ArrayList<Category> categories = getAllCategories();
          for (Category category: categories)
          {
              SystemReporter.report(
@@ -86,66 +66,41 @@ public class ProductsOpsBean{
      * @param productContainer
      * @throws Exception
      */
-    public static void updateProductByName(ProductCriteria criteria, String name, Product productContainer) throws Exception
+    public void updateProductByName(ProductCriteria criteria, String name, Product productContainer) throws Exception
     {
-        for (Product product: products)
+        Product product = em.find(Product.class, name);
+        switch(criteria)
         {
-            if (product.getName().equals(name))
-            {
-                switch(criteria)
-                {
-                    case Name:
-                        //validating that the new name is unique
-                        for (Product productUnique: products)
-                        {
-                             if (productUnique.getName().equals(productContainer.getName()))
-                             {
-                                SystemReporter.report(
-                                        "The provided name: "
-                                        + productContainer.getName() + " is already exists in the system", true);
-                             }
-                        }
-
-                        product.setName(productContainer.getName());
-                        SystemReporter.report("Updated product name to: " + productContainer.getName());
-                        return;
-                    case SerialName:
-                        //validating that the new sn is unique
-                        for (Product productUnique: products)
-                        {
-                             if (productUnique.getSerialNumber().equals(productContainer.getSerialNumber()))
-                             {
-                                SystemReporter.report(
-                                        "The provided SN: "
-                                        + productContainer.getSerialNumber() + " is already exists in the system", true);
-                             }
-                        }
-
-                        product.setSerialNumber(productContainer.getSerialNumber());
-                        SystemReporter.report(
-                                "Updated product serial number to: " + productContainer.getSerialNumber());
-                        return;
-                    case Price:
-                        product.setPrice(productContainer.getPrice());
-                        SystemReporter.report(
-                                "Updated product price to: " + productContainer.getPrice());
-                        return;
-                    case Quantity:
-                        product.setQuantity(productContainer.getQuantity());
-                        SystemReporter.report(
-                                "Updated product quantity to: " + productContainer.getQuantity());
-                        return;
-                    case Category:
-                        product.setCategory(productContainer.getCategory());
-                        SystemReporter.report(
-                                "Updated product category to: " + productContainer.getCategory().getName());
-                        return;
-                    default:
-                        SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
-                }
-            }
+            case name:
+                //TODO: validating that the new name is unique
+                product.setName(productContainer.getName());
+                SystemReporter.report("Updating product name to: " + productContainer.getName());
+                return;
+            case serialNum:
+                //TODO: validating that the new sn is unique
+                product.setSerialNumber(productContainer.getSerialNumber());
+                SystemReporter.report(
+                        "Updating product serial number to: " + productContainer.getSerialNumber());
+                return;
+            case price:
+                product.setPrice(productContainer.getPrice());
+                SystemReporter.report(
+                        "Updating product price to: " + productContainer.getPrice());
+                return;
+            case quantity:
+                product.setQuantity(productContainer.getQuantity());
+                SystemReporter.report(
+                        "Updating product quantity to: " + productContainer.getQuantity());
+                return;
+            case category:
+                product.setCategory(productContainer.getCategory());
+                SystemReporter.report(
+                        "Updating product category to: " + productContainer.getCategory().getName());
+                return;
+            default:
+                SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
-        SystemReporter.report("Didn't find product with name: " + name, true);
+        em.merge(product);
     }
 
     /**
@@ -156,12 +111,12 @@ public class ProductsOpsBean{
      * @return
      * @throws Exception
      */
-    public static ArrayList<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception
+    public ArrayList<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception
     {
         ArrayList<Product> returnList = new ArrayList<Product>();
         switch(criteria)
         {
-            case Name:
+            case name:
                 for (Product product : products)
                 {
                     if (product.getName().equals(productContainer.getName()))
@@ -170,7 +125,7 @@ public class ProductsOpsBean{
                     }
                 }
                 return returnList;
-            case SerialName:
+            case serialNum:
                for (Product product : products)
                 {
                     if (product.getSerialNumber().equals(productContainer.getSerialNumber()))
@@ -179,7 +134,7 @@ public class ProductsOpsBean{
                     }
                 }
                 return returnList;
-            case Price:
+            case price:
                for (Product product : products)
                 {
                     if (product.getPrice() == productContainer.getPrice())
@@ -188,7 +143,7 @@ public class ProductsOpsBean{
                     }
                 }
                 return returnList;
-            case Quantity:
+            case quantity:
                 for (Product product : products)
                 {
                     if (product.getQuantity() == productContainer.getQuantity())
@@ -197,7 +152,7 @@ public class ProductsOpsBean{
                     }
                 }
                 return returnList;
-            case Category:
+            case category:
                 for (Product product : products)
                 {
                     if (product.getCategory().getName().equals(productContainer.getCategory().getName()))
@@ -219,7 +174,7 @@ public class ProductsOpsBean{
      * @param name
      * @throws Exception
      */
-    public static void printProductInfo(String name) throws Exception
+    public void printProductInfo(String name) throws Exception
     {
         for (Product product: products)
         {
@@ -237,7 +192,7 @@ public class ProductsOpsBean{
      * @param name
      * @throws Exception
      */
-    public static void deleteProduct(String name) throws Exception
+    public void deleteProduct(String name) throws Exception
     {
 
         for (Product product: products)
@@ -258,7 +213,7 @@ public class ProductsOpsBean{
      * @param product
      * @throws Exception
      */
-    public static  void printProductInfoImpl(Product product) throws Exception
+    public void printProductInfoImpl(Product product) throws Exception
     {
               SystemReporter.report("Product info:", new String[] {
                     "Product name: " + product.getName(),
@@ -270,7 +225,7 @@ public class ProductsOpsBean{
 
     }
 
-    public static void printAllProducts() throws Exception
+    public void printAllProducts() throws Exception
     {
         if (products.isEmpty())
         {
@@ -289,7 +244,7 @@ public class ProductsOpsBean{
      * @param price
      * @throws Exception
      */
-    public static void printProductsByPrice(LergerSmaller by, double price) throws Exception
+    public void printProductsByPrice(LergerSmaller by, double price) throws Exception
     {
         if (products.isEmpty())
         {
@@ -323,7 +278,7 @@ public class ProductsOpsBean{
      * @param category
      * @throws Exception
      */
-    public static void printProductsByCategory(Category category) throws Exception
+    public void printProductsByCategory(Category category) throws Exception
     {
         if (products.isEmpty())
         {
@@ -344,7 +299,7 @@ public class ProductsOpsBean{
      * print the most saleable product
      * @throws Exception
      */
-    public static void printMostSaleableProduct() throws Exception
+    public void printMostSaleableProduct() throws Exception
     {
         if (orders.isEmpty())
         {
@@ -384,7 +339,7 @@ public class ProductsOpsBean{
      * print all products by sorted price
      * @throws Exception
      */
-    public static void printSortedProductsByPrice() throws Exception
+    public void printSortedProductsByPrice() throws Exception
     {
         ArrayList<Product> productsCopy = (ArrayList<Product>) products.clone();
         Collections.sort(productsCopy, new ProductPriceComparator());
@@ -402,12 +357,18 @@ public class ProductsOpsBean{
 
     public enum ProductCriteria
     {
-        Name, SerialName, Price, Quantity, Category
+        name, serialNum, price, quantity, category
     }
 
     public ArrayList<Product> getAllProducts()
     {
        Query query = em.createQuery("SELECT o FROM Order o");
        return (ArrayList<Product>) query.getResultList();
+    }
+
+    public ArrayList<Category> getAllCategories()
+    {
+       Query query = em.createQuery("SELECT c FROM Category c");
+       return (ArrayList<Category>) query.getResultList();
     }
 }

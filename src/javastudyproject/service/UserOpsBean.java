@@ -21,7 +21,7 @@ import javax.persistence.Query;
  * This class providing user management
  * @author alon
  */
-public class UserOpsBean {
+public class UserOpsBean implements UserOps{
 
 
     private EntityManager em;
@@ -30,11 +30,11 @@ public class UserOpsBean {
         em = entityManager;
     }
 
-    public static void UpdateUsers() {
+    public void UpdateUsers() {
         FilesDB.UpdateUsers(users);
     }
 
-    public static User authenticate(String userName, String password) throws Exception {
+    public User authenticate(String userName, String password) throws Exception {
         ArrayList<User> authUser = new ArrayList<User>();
         try
         {
@@ -63,7 +63,7 @@ public class UserOpsBean {
      * @param type
      * @throws Exception
      */
-    public static void addNewUser(
+    public void addNewUser(
             UserType type,
             String userName,
             String id,
@@ -76,7 +76,7 @@ public class UserOpsBean {
         addNewUser(type, userName,id, firstName, lastName,email,password,age, null, 0);
     }
 
-    public static void addNewUser(
+    public void addNewUser(
             UserType type,
             String userName,
             String id,
@@ -151,7 +151,7 @@ public class UserOpsBean {
      * @param productContainer
      * @throws Exception
      */
-    public static void updateUserDetailsByUserName(UserCriteria criteria, String userName, User userContainer) throws Exception
+    public void updateUserDetailsByUserName(UserCriteria criteria, String userName, User userContainer) throws Exception
     {
         for (User user : users)
         {
@@ -238,7 +238,7 @@ public class UserOpsBean {
      * @return
      * @throws Exception
      */
-    public static ArrayList<User> getUserByGivenCriteria(UserCriteria criteria, User userContainer) throws Exception
+    public ArrayList<User> getUserByGivenCriteria(UserCriteria criteria, User userContainer) throws Exception
     {
         ArrayList<User> returnList = new ArrayList<User>();
         for (User user: users)
@@ -293,7 +293,7 @@ public class UserOpsBean {
      * @param name
      * @throws Exception
      */
-    public static void printUserInfo(String userName) throws Exception
+    public void printUserInfo(String userName) throws Exception
     {
         User userContainer = new User();
         userContainer.setUserName(userName);
@@ -306,7 +306,7 @@ public class UserOpsBean {
      * @param name
      * @throws Exception
      */
-    public static void deleteUser(String userName) throws Exception
+    public void deleteUser(String userName) throws Exception
     {
         for (User user: users)
         {
@@ -326,7 +326,7 @@ public class UserOpsBean {
      * @param product
      * @throws Exception
      */
-    private static  void printUserInfoImpl(User user) throws Exception
+    private  void printUserInfoImpl(User user) throws Exception
     {
               SystemReporter.report("User info:", new String[] {
                     "User name: " + user.getUserName(),
@@ -340,7 +340,7 @@ public class UserOpsBean {
               SystemReporter.report("--------------------------------");
     }
 
-    public static void printAllUsers() throws Exception
+    public void printAllUsers() throws Exception
     {
         for (User user: users)
         {

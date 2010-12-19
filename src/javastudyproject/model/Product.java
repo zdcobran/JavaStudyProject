@@ -17,10 +17,10 @@ import javax.persistence.OneToOne;
 @Entity
 public class Product implements Serializable{
 
+    @Id
     private String name;
     @OneToOne
     private Category category;
-    @Id
     private String serialNum;
     private double price;
     private int quantity;

@@ -21,10 +21,10 @@ import javax.persistence.Persistence;
 public class ServiceSystem {
 
     protected EntityManager em;
-    protected OrderOpsBean orderService;
-    protected ProductsOpsBean productService;
-    protected UserOpsBean userService;
-    protected CategoryOpsBean categoryService;
+    protected OrderOps orderService;
+    protected ProductsOps productService;
+    protected UserOps userService;
+    protected CategoryOps categoryService;
 
     public ServiceSystem ()
     {

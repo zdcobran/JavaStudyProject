@@ -50,7 +50,6 @@ public class FilesDB {
         return null;
     }
 
-
     public static void UpdateUsers(ArrayList<User> users) {
 
         try {
@@ -60,7 +59,7 @@ public class FilesDB {
         catch (IOException ex) {}
     }
     
-        public static ArrayList<Product> ReadProducts() {
+    public static ArrayList<Product> ReadProducts() {
         try {
             ObjectInputStream istream = new ObjectInputStream(new FileInputStream(PRODUCTSFILE));
             return (ArrayList<Product>) istream.readObject();
@@ -72,7 +71,7 @@ public class FilesDB {
         return null;
     }
 
-        public static ArrayList<Order> ReadOrders() {
+    public static ArrayList<Order> ReadOrders() {
         try {
             ObjectInputStream istream = new ObjectInputStream(new FileInputStream(ORDERFILE));
             return (ArrayList<Order>) istream.readObject();
@@ -84,7 +83,6 @@ public class FilesDB {
         return null;
     }
 
-
     public static void UpdateProducts(ArrayList<Product> products) {
 
         try {
@@ -94,7 +92,7 @@ public class FilesDB {
         catch (IOException ex) {}
     }
     
-        public static ArrayList<Category> ReadCategories() {
+    public static ArrayList<Category> ReadCategories() {
         try {
             ObjectInputStream istream = new ObjectInputStream(new FileInputStream(CATEGORYFILE));
             return (ArrayList<Category>) istream.readObject();
@@ -110,7 +108,6 @@ public class FilesDB {
         catch(ClassNotFoundException exc) {}
         return null;
     }
-
 
     public static void UpdateCategories(ArrayList<Category> categories) {
 
