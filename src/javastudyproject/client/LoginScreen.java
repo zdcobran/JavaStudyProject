@@ -68,7 +68,7 @@ public class LoginScreen extends ServiceSystem {
             User user = new User();
             try
             {
-                user = UserOpsBean.authenticate(userName, password);
+                user = userService.authenticate(userName, password);
             }
             catch (Exception e)
             {

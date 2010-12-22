@@ -30,22 +30,19 @@ public class UserOpsBean implements UserOps{
         em = entityManager;
     }
 
-    public void UpdateUsers() {
-        FilesDB.UpdateUsers(users);
-    }
-
     public User authenticate(String userName, String password) throws Exception {
-        ArrayList<User> authUser = new ArrayList<User>();
+
+        User user = null;
         try
         {
-            authUser = getUserByGivenCriteria(UserCriteria.UserName, new User().setUserName(userName));
+            user = em.find(User.class, userName);
         }
         catch(Exception e)
         {
             SystemReporter.report("Wrong user name provided", true);
         }
-        if (authUser.get(0).getPassword().equals(password))
-            return authUser.get(0);
+        if (user.getPassword().equals(password))
+            return user;
         else
         {
             SystemReporter.report("Wrong password provided", true);
@@ -88,57 +85,52 @@ public class UserOpsBean implements UserOps{
             String ownningUserName,
             int readOnlyUserOrderId) throws Exception
     {
-        //validating that the new user name is unique
-        for (User user : users)
-        {
-             if (user.getUserName().equals(userName))
-             {
-                SystemReporter.report("The provided user name: " + userName + " is already exists in the system", true);
-             }
-        }
+
+         //validating that the new user name is unique
+         if (em.find(User.class, userName) != null)
+         {
+            SystemReporter.report("The provided user name: " + userName + " is already exists in the system", true);
+         }
         //validating that the new user ID is unique
-        for (User user : users)
+        if (em.createQuery("select u from User u where u.id = " + id ).getFirstResult() == 0)
         {
-             if (user.getId().equals(id))
-             {
-                SystemReporter.report("The provided user id: " + id + " is already exists in the system", true);
-             }
+            SystemReporter.report("The provided user id: " + id + " is already exists in the system", true);
         }
 
        //validating that the new user email is unique
-        for (User user : users)
+       if (em.createQuery("select u from User u where u.email = " + email ).getFirstResult() == 0)
         {
-             if (user.getEmail().equals(email))
-             {
-                SystemReporter.report("The provided user email: " + email + " is already exists in the system", true);
-             }
+            SystemReporter.report("The provided user email: " + email + " is already exists in the system", true);
         }
+ 
         switch(type)
         {
+
             case Administrator:
-                users.add(new AdministratorUser(userName, id, firstName, lastName, email, password, age));
+                em.persist(new AdministratorUser(userName, id, firstName, lastName, email, password, age));
                 break;
             case ReadWriteUser:
-                users.add(new ReadWriteUser(userName, id, firstName, lastName, email, password, age));
+                em.persist(new ReadWriteUser(userName, id, firstName, lastName, email, password, age));
                 break;
             case ReadOnlyUser:
-                if(ownningUserName == null)
-                    SystemReporter.report("Owning user name was not provided", true);
-                boolean found = false;
-                for (Order order: orders)
-                {
-                    if (order.getUser().getUserName().equals(ownningUserName))
-                    {
-                        if (order.getRunId() == readOnlyUserOrderId)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (!found)
-                    SystemReporter.report("The provided owning user or id was not found", true);
-                users.add(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
+                // TODO: need appropriate query
+//                if(ownningUserName == null)
+//                    SystemReporter.report("Owning user name was not provided", true);
+//                boolean found = false;
+//                for (Order order: orders)
+//                {
+//                    if (order.getUser().getUserName().equals(ownningUserName))
+//                    {
+//                        if (order.getRunId() == readOnlyUserOrderId)
+//                        {
+//                            found = true;
+//                            break;
+//                        }
+//                    }
+//                }
+//                if (!found)
+//                    SystemReporter.report("The provided owning user or id was not found", true);
+                em.persist(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
                 break;
         }
         SystemReporter.report("User created successfully");
@@ -153,81 +145,63 @@ public class UserOpsBean implements UserOps{
      */
     public void updateUserDetailsByUserName(UserCriteria criteria, String userName, User userContainer) throws Exception
     {
-        for (User user : users)
+        User user = em.find(User.class, userName);
+        if (user == null)
+            SystemReporter.report("Didn't find user with user name: " + userName, true);
+
+        switch(criteria)
         {
-            if (user.getUserName().equals(userName))
-            {
-                switch(criteria)
+            case UserName:
+                //validating that the new user name is unique
+                 if (em.find(User.class, userName) != null)
+                 {
+                    SystemReporter.report("The provided user name: " + userName + " is already exists in the system", true);
+                 }
+
+                user.setUserName(userContainer.getUserName());
+                SystemReporter.report("Updated user name to: " + userContainer.getUserName());
+                return;
+            case Id:
+                //validating that the new id is unique
+                 if (em.createQuery("select u from User u where u.id = " + userContainer.getId() ).getFirstResult() == 0)
                 {
-                    case UserName:
-                        //validating that the new user name is unique
-                        for (User userUnique: users)
-                        {
-                             if (userUnique.getUserName().equals(userContainer.getUserName()))
-                             {
-                                SystemReporter.report(
-                                        "The provided user name: "
-                                        + userContainer.getUserName() + " is already exists in the system", true);
-                             }
-                        }
-
-                        user.setUserName(userContainer.getUserName());
-                        SystemReporter.report("Updated user name to: " + userContainer.getUserName());
-                        return;
-                    case Id:
-                        //validating that the new id is unique
-                        for (User userUnique: users)
-                        {
-                             if (userUnique.getId().equals(userContainer.getId()))
-                             {
-                                SystemReporter.report(
-                                        "The provided ID: "
-                                        + userContainer.getId() + " is already exists in the system", true);
-                             }
-                        }
-
-                        user.setId(userContainer.getId());
-                        SystemReporter.report(
-                                "Updated user id to: " + userContainer.getId());
-                        return;
-                    case FirstName:
-                        user.setFirstName(userContainer.getFirstName());
-                        SystemReporter.report(
-                                "Updated users first name to: " + userContainer.getFirstName());
-                        return;
-                    case LastName:
-                        user.setLastName(userContainer.getLastName());
-                        SystemReporter.report(
-                                "Updated users last name to: " + userContainer.getLastName());
-                        return;
-                    case Email:
-                       //validating that the new id is unique
-                        for (User userUnique: users)
-                        {
-                             if (userUnique.getEmail().equals(userContainer.getEmail()))
-                             {
-                                SystemReporter.report(
-                                        "The provided Email: "
-                                        + userContainer.getEmail() + " is already exists in the system", true);
-                             }
-                        }
-
-                        user.setEmail(userContainer.getEmail());
-                        SystemReporter.report(
-                                "Updated users email to: " + userContainer.getEmail());
-                        return;
-                    case Age:
-                        user.setAge(userContainer.getAge());
-                        SystemReporter.report(
-                                "Updated users age to: " + userContainer.getAge());
-                        return;
-
-                    default:
-                        SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
+                    SystemReporter.report("The provided user id: " + userContainer.getId() + " is already exists in the system", true);
                 }
-            }
+                user.setId(userContainer.getId());
+                SystemReporter.report(
+                        "Updated user id to: " + userContainer.getId());
+                return;
+            case FirstName:
+                user.setFirstName(userContainer.getFirstName());
+                SystemReporter.report(
+                        "Updated users first name to: " + userContainer.getFirstName());
+                return;
+            case LastName:
+                user.setLastName(userContainer.getLastName());
+                SystemReporter.report(
+                        "Updated users last name to: " + userContainer.getLastName());
+                return;
+            case Email:
+               //validating that the new id is unique
+                  if (em.createQuery("select u from User u where u.email = " + userContainer.getEmail() ).getFirstResult() == 0)
+                {
+                    SystemReporter.report("The provided user email: " + userContainer.getEmail() + " is already exists in the system", true);
+                }
+
+                user.setEmail(userContainer.getEmail());
+                SystemReporter.report(
+                        "Updated users email to: " + userContainer.getEmail());
+                return;
+            case Age:
+                user.setAge(userContainer.getAge());
+                SystemReporter.report(
+                        "Updated users age to: " + userContainer.getAge());
+                return;
+
+            default:
+                SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
-        SystemReporter.report("Didn't find user with user name: " + userName, true);
+        em.merge(user);
     }
 
     /**
@@ -241,48 +215,30 @@ public class UserOpsBean implements UserOps{
     public ArrayList<User> getUserByGivenCriteria(UserCriteria criteria, User userContainer) throws Exception
     {
         ArrayList<User> returnList = new ArrayList<User>();
-        for (User user: users)
+        ArrayList<User> queryList = new ArrayList<User>();
+        switch(criteria)
         {
-            switch(criteria)
-            {
-                case FirstName:
-                    if (user.getFirstName().equals(userContainer.getFirstName()))
-                    {
-                        returnList.add(user);
-                    }
-                    break;
-                case LastName:
-                   if (user.getLastName().equals(userContainer.getLastName()))
-                    {
-                        returnList.add(user);
-                    }
-                    break;
-                case UserName:
-                   if (user.getUserName().equals(userContainer.getUserName()))
-                    {
-                        returnList.add(user);
-                        return returnList;
-
-                    }
-                    break;
-                case Id:
-                    if (user.getId().equals(userContainer.getId()))
-                    {
-                        returnList.add(user);
-                        return returnList;
-                    }
-                    break;
-                case Email:
-                    if (user.getEmail().equals(userContainer.getEmail()))
-                    {
-                        returnList.add(user);
-                        return returnList;
-                    }
-                    break;
-                default:
-                    SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
-            }
+            case FirstName:
+                returnList.addAll((ArrayList<User>)em.createQuery("select u from User u whrer u.firstName = " + userContainer.getFirstName())
+                        .getResultList());
+                break;
+            case LastName:
+                  returnList.addAll((ArrayList<User>)em.createQuery("select u from User u whrer u.lastName = " + userContainer.getLastName())
+                        .getResultList());
+                break;
+            case UserName:
+                returnList.add(em.find(User.class, userContainer.getUserName()));
+                break;
+            case Id:
+                returnList.add((User)em.createQuery("select u from User u whrer u.id = " + userContainer.getUserName()).getSingleResult());
+                break;
+            case Email:
+                returnList.add((User)em.createQuery("select u from User u whrer u.email = " + userContainer.getEmail()).getSingleResult());
+                break;
+            default:
+                SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
+        
         if (returnList.isEmpty())
             SystemReporter.report("Didn't find users for given search", true);
         return returnList;
@@ -295,10 +251,8 @@ public class UserOpsBean implements UserOps{
      */
     public void printUserInfo(String userName) throws Exception
     {
-        User userContainer = new User();
-        userContainer.setUserName(userName);
-        ArrayList<User> returnList = getUserByGivenCriteria(UserCriteria.UserName, userContainer);
-        printUserInfoImpl(returnList.get(0));
+        User userContainer = em.find(User.class, userName);
+        printUserInfoImpl(userContainer);
     }
 
     /**
@@ -308,17 +262,10 @@ public class UserOpsBean implements UserOps{
      */
     public void deleteUser(String userName) throws Exception
     {
-        for (User user: users)
-        {
-            if (user.getUserName().equals(userName))
-            {
-                SystemReporter.report("Deleting user with this info: ");
-                printUserInfoImpl(user);
-                users.remove(user);
-                return;
-            }
-        }
-        SystemReporter.report("Didn't find user with given name", true);
+        User user = em.find(User.class, userName);
+        if(user.isNull())
+            SystemReporter.report("Didn't find user with given name", true);
+        em.remove(user);
     }
 
     /**
@@ -342,6 +289,7 @@ public class UserOpsBean implements UserOps{
 
     public void printAllUsers() throws Exception
     {
+        ArrayList<User> users = getAllUsers();
         for (User user: users)
         {
             printUserInfoImpl(user);
@@ -352,6 +300,18 @@ public class UserOpsBean implements UserOps{
     {
        Query query = em.createQuery("SELECT o FROM Order o");
        return (ArrayList<User>) query.getResultList();
+    }
+
+    public void createAdminUserIfNeeded()
+    {
+        try
+        {
+            authenticate("admin", "123456");
+        }
+        catch (Exception e)
+        {
+            em.persist(new AdministratorUser("admin", "admin", "admin", "admin", "admin@root.com", "123456", "99"));
+        }
     }
 
     public enum UserCriteria

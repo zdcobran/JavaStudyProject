@@ -16,7 +16,6 @@ import javastudyproject.service.UserOpsBean.UserType;
  */
 public interface UserOps {
 
-    public void UpdateUsers();
     public User authenticate(String userName, String password) throws Exception;
     public void addNewUser(
             UserType type,
@@ -43,5 +42,7 @@ public interface UserOps {
      public void printUserInfo(String userName) throws Exception;
      public void deleteUser(String userName) throws Exception;
      public ArrayList<User> getAllUsers();
+     public void printAllUsers() throws Exception;
+     public void createAdminUserIfNeeded();
 
 }

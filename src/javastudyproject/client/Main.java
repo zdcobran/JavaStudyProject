@@ -4,10 +4,7 @@
  */
 
 package javastudyproject.client;
-
-import javastudyproject.client.*;
 import javastudyproject.service.ServiceSystem;
-import javastudyproject.reporting.SystemReporter;
 
 
 
@@ -33,9 +30,9 @@ public class Main {
         catch(Exception e)
         {
             System.out.println("Catched an exeption: " + e.getMessage());
+            objSystem.cleanup();
         }
-
-       
+        objSystem.cleanup();
     }
 
 

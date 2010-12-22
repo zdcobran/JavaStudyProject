@@ -88,7 +88,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
             String age = reader.readLine();
             switch (userType) {
                 case 1: {
-                    UserOpsBean.addNewUser(UserType.ReadWriteUser,
+                    userService.addNewUser(UserType.ReadWriteUser,
                             userName, id, lastName, lastName, email, password, age);
                 }break;
                 case 2: {
@@ -101,7 +101,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
                     }
                     System.out.print("Enter the order id for the read only user: ");
                     int orderId = Integer.parseInt(reader.readLine());
-                    UserOpsBean.addNewUser(UserType.ReadOnlyUser,
+                    userService.addNewUser(UserType.ReadOnlyUser,
                             userName, id, lastName, lastName,
                             email, password, age, workingUser.getUserName(), orderId);
                 }break;
@@ -137,7 +137,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
         try {
             System.out.print("Select user name to update: ");
             String  username = reader.readLine();
-            User selectedUser = UserOpsBean.getUserByGivenCriteria(UserOpsBean.UserCriteria.UserName, new User().setUserName(username)).get(0);
+            User selectedUser = userService.getUserByGivenCriteria(UserOpsBean.UserCriteria.UserName, new User().setUserName(username)).get(0);
             if (selectedUser.toString().equals("AdministratorUser")) //no permissions to update administrator user
                 SystemReporter.report("Cannot edit user: " + username + " insufficient  permissions");
             SystemReporter.report("Select field to update ",
@@ -157,37 +157,37 @@ public class ReadWriteUserScreen extends OrdersScreen {
             {
                 case 1:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.UserName,
                             username, new User().setUserName(newValue));
                 }break;
                 case 2:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.FirstName,
                             username, new User().setFirstName(newValue));
                 }break;
                 case 3:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.LastName,
                             username, new User().setLastName(newValue));
                 }break;
                 case 4:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.Email,
                             username, new User().setEmail(newValue));
                 }break;
                 case 5:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.Password,
                             username, new User().setPassword(newValue));
                 }break;
                 case 6:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.Age,
                             username, new User().setAge(newValue));
                 }break;
@@ -221,6 +221,8 @@ public class ReadWriteUserScreen extends OrdersScreen {
      */
     public void CreateNewOrder() throws Exception
     {
+
+        //TODO: need to integrate the em
         ArrayList<Product> myProductList = new ArrayList<Product>();
         
         //To dynamicaly update the product amount in case that the order didn't take place
@@ -338,19 +340,20 @@ public class ReadWriteUserScreen extends OrdersScreen {
      */
     private void updateTheProductsQuantityByOrder(Order order)
     {
-        ArrayList<Product> products = productService.getAllProducts();
-
-        for (Product product: order.getProducts())
-        {
-            for (Product genProduct: products)
-            {
-                if(product.getName().equals(genProduct.getName()))
-                {
-                    genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
-                    break;
-                }
-            }
-        }
+        //TODO: Create appropriate query
+//        ArrayList<Product> products = productService.getAllProducts();
+//
+//        for (Product product: order.getProducts())
+//        {
+//            for (Product genProduct: products)
+//            {
+//                if(product.getName().equals(genProduct.getName()))
+//                {
+//                    genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
+//                    break;
+//                }
+//            }
+//        }
     }
 
     /**

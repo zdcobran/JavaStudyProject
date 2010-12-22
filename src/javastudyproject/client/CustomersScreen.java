@@ -45,12 +45,12 @@ public class CustomersScreen extends ServiceSystem{
                 case 3: {
                     System.out.print("Select user id to delete:  ");
                     String userID = reader.readLine();
-                    UserOpsBean.deleteUser(userID);
+                    userService.deleteUser(userID);
                 }break;
                 case 4: {
                     System.out.print("Select user id:  ");
                     String userID = reader.readLine();
-                    UserOpsBean.printUserInfo(userID);
+                    userService.printUserInfo(userID);
                 }break;
                 case 5: {
                     new AdministratorScreen();
@@ -105,11 +105,11 @@ public class CustomersScreen extends ServiceSystem{
             switch (userType) {
                 case 1: {
                     // adding administrator
-                    UserOpsBean.addNewUser(UserOpsBean.UserType.Administrator, userName, id, origName, lastName, email, password, age);
+                    userService.addNewUser(UserOpsBean.UserType.Administrator, userName, id, origName, lastName, email, password, age);
                 }break;
                 case 2: {
                     //Adding ReadWriteUsers
-                    UserOpsBean.addNewUser(UserOpsBean.UserType.ReadWriteUser, userName, id, origName, lastName, email, password, age);
+                    userService.addNewUser(UserOpsBean.UserType.ReadWriteUser, userName, id, origName, lastName, email, password, age);
                 }break;
             }
         }
@@ -159,37 +159,37 @@ public class CustomersScreen extends ServiceSystem{
             {
                 case 1:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.UserName,
                             username, new User().setUserName(newValue));
                 }break;
                 case 2:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.FirstName,
                             username, new User().setFirstName(newValue));
                 }break;
                 case 3:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.LastName,
                             username, new User().setLastName(newValue));
                 }break;
                 case 4:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.Email,
                             username, new User().setEmail(newValue));
                 }break;
                 case 5:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.Password,
                             username, new User().setPassword(newValue));
                 }break;
                 case 6:
                 {
-                    UserOpsBean.updateUserDetailsByUserName(
+                    userService.updateUserDetailsByUserName(
                             UserOpsBean.UserCriteria.Age,
                             username, new User().setAge(newValue));
                 }break;

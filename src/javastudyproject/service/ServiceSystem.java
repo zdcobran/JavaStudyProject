@@ -5,11 +5,6 @@
 
 package javastudyproject.service;
 
-import java.util.ArrayList;
-import javastudyproject.db.FilesDB;
-import javastudyproject.service.OrderOpsBean;
-import javastudyproject.service.ProductsOpsBean;
-import javastudyproject.service.UserOpsBean;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -20,6 +15,7 @@ import javax.persistence.Persistence;
  */
 public class ServiceSystem {
 
+    protected EntityManagerFactory emf;
     protected EntityManager em;
     protected OrderOps orderService;
     protected ProductsOps productService;
@@ -28,13 +24,21 @@ public class ServiceSystem {
 
     public ServiceSystem ()
     {
-       EntityManagerFactory emf = Persistence.createEntityManagerFactory("JavaStudyProjectService");
+       emf = Persistence.createEntityManagerFactory("JavaStudyProject");
        em = emf.createEntityManager();
 
        orderService = new OrderOpsBean(em);
        productService = new ProductsOpsBean(em);
        userService = new UserOpsBean(em);
        categoryService = new CategoryOpsBean(em);
+
+       userService.createAdminUserIfNeeded(); //Creating the first user admin user if needed
+    }
+
+    public void cleanup()
+    {
+        em.close();
+        emf.close();
     }
 
 

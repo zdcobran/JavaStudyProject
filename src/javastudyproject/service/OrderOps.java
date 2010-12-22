@@ -21,5 +21,6 @@ public interface OrderOps {
     public void printOrdersByState(Order.StateType state) throws Exception;
     public void printOrdersUserNamesByPurchasedProduct(Product productToFind) throws Exception;
     public ArrayList<Order> getAllOrders();
+    public void addNewOrder(Order order) throws Exception;
 
 }

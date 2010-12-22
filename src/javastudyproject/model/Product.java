@@ -16,7 +16,6 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Product implements Serializable{
-
     @Id
     private String name;
     @OneToOne

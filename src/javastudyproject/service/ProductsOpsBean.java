@@ -7,6 +7,7 @@ import javastudyproject.model.Category;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
 import javastudyproject.reporting.SystemReporter;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import projectUtils.ProductPriceComparator;
@@ -36,14 +37,32 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void addNewProduct(String name, String serialNum, double price, int quantity, Category category) throws Exception
     {
-        em.persist(new Product(name, category, serialNum, price, quantity));
+        try
+        {
+            em.getTransaction().begin();
+            em.persist(new Product(name, category, serialNum, price, quantity));
+            em.getTransaction().commit();
+        }
+        catch(EntityExistsException e)
+        {
+            SystemReporter.report("The specific product is already exists. EM exception: " + e.getMessage(), true);
+        }
         //ToDoCatch exc
         SystemReporter.report("Product is added");
     }
 
     public void addNewCategory(String name) throws Exception
     {
-        em.persist(new Category(name));
+        try
+        {
+            em.getTransaction().begin();
+            em.persist(new Category(name));
+            em.getTransaction().commit();
+        }
+        catch(EntityExistsException e)
+        {
+            SystemReporter.report("The specific category is already exists. EM exception: " + e.getMessage(), true);
+        }
         //ToDoCatch exc
         SystemReporter.report("Category is added");
     }
@@ -55,7 +74,7 @@ public class ProductsOpsBean implements ProductsOps{
          for (Category category: categories)
          {
              SystemReporter.report(
-                     "Category run id : " + category.getRunId() +" name: " + category.getName());
+                     "Category run id : " + category.getRunId() + " name: " + category.getName());
          }
      }
 
@@ -68,6 +87,7 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void updateProductByName(ProductCriteria criteria, String name, Product productContainer) throws Exception
     {
+        em.getTransaction().begin();
         Product product = em.find(Product.class, name);
         switch(criteria)
         {
@@ -100,7 +120,8 @@ public class ProductsOpsBean implements ProductsOps{
             default:
                 SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
-        em.merge(product);
+        //em.merge(product);
+        em.getTransaction().commit();
     }
 
     /**
@@ -114,53 +135,28 @@ public class ProductsOpsBean implements ProductsOps{
     public ArrayList<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception
     {
         ArrayList<Product> returnList = new ArrayList<Product>();
+        Query query;
         switch(criteria)
         {
             case name:
-                for (Product product : products)
-                {
-                    if (product.getName().equals(productContainer.getName()))
-                    {
-                        returnList.add(product);
-                    }
-                }
+                returnList.add(em.find(Product.class, productContainer.getName()));
                 return returnList;
             case serialNum:
-               for (Product product : products)
-                {
-                    if (product.getSerialNumber().equals(productContainer.getSerialNumber()))
-                    {
-                        returnList.add(product);
-                    }
-                }
-                return returnList;
+                query = em.createQuery("SELECT c FROM Category c where c.serialNum = " + productContainer.getSerialNumber());
+                returnList.add((Product) query.getSingleResult());
+                break;
             case price:
-               for (Product product : products)
-                {
-                    if (product.getPrice() == productContainer.getPrice())
-                    {
-                        returnList.add(product);
-                    }
-                }
-                return returnList;
+                query = em.createQuery("SELECT c FROM Category c where c.price = " + productContainer.getPrice());
+                returnList.addAll((ArrayList<Product>) query.getResultList());
+                break;
             case quantity:
-                for (Product product : products)
-                {
-                    if (product.getQuantity() == productContainer.getQuantity())
-                    {
-                        returnList.add(product);
-                    }
-                }
-                return returnList;
+                query = em.createQuery("SELECT c FROM Category c where c.quantity = " + productContainer.getQuantity());
+                returnList.addAll((ArrayList<Product>) query.getResultList());
+                break;
             case category:
-                for (Product product : products)
-                {
-                    if (product.getCategory().getName().equals(productContainer.getCategory().getName()))
-                    {
-                        returnList.add(product);
-                    }
-                }
-                return returnList;
+                query = em.createQuery("SELECT c FROM Category c where c.category = " + productContainer.getCategory()); //TODO: i fill this will not work
+                returnList.addAll((ArrayList<Product>) query.getResultList());
+                break;
             default:
                 SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
@@ -169,22 +165,16 @@ public class ProductsOpsBean implements ProductsOps{
         return returnList;
     }
 
-    /**
+    /*
      * Prints product info by given name
      * @param name
      * @throws Exception
      */
     public void printProductInfo(String name) throws Exception
     {
-        for (Product product: products)
-        {
-            if (product.getName().equals(name))
-            {
-                printProductInfoImpl(product);
-                return;
-            }
-        }
-        SystemReporter.report("Didn't find product with given name", true);
+        Product product = em.find(Product.class, name);
+        if (product == null)
+            SystemReporter.report("Didn't find product with given name", true);
     }
 
     /**
@@ -194,18 +184,14 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void deleteProduct(String name) throws Exception
     {
+        em.getTransaction().begin();
+        Product product = em.find(Product.class, name);
+        if (product == null)
+            SystemReporter.report("Cannot find product" + name);
+        em.remove(product);
+        em.getTransaction().begin();
 
-        for (Product product: products)
-        {
-            if (product.getName().equals(name))
-            {
-                SystemReporter.report("Deleting product with this info: ");
-                printProductInfoImpl(product);
-                products.remove(product);
-                return;
-            }
-        }
-        SystemReporter.report("Didn't find product with given name", true);
+        //TODO: Catch exc ; SystemReporter.report("Didn't find product with given name", true);
     }
 
     /**
@@ -227,6 +213,7 @@ public class ProductsOpsBean implements ProductsOps{
 
     public void printAllProducts() throws Exception
     {
+        ArrayList<Product> products = getAllProducts();
         if (products.isEmpty())
         {
             SystemReporter.report("There is no products in the system", true);
@@ -246,31 +233,30 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void printProductsByPrice(LergerSmaller by, double price) throws Exception
     {
+        Query query;
+        ArrayList<Product> products = new ArrayList<Product>();
+        SystemReporter.report(
+                "Printing products with price " + by.toString() + " than " + price);
+        switch(by)
+        {
+            case Larger:
+                query = em.createQuery("SELECT p FROM product p where p.price >= " + price);
+                products = (ArrayList<Product>) query.getResultList();
+                break;
+            case Smaller:
+                query = em.createQuery("SELECT p FROM product p where p.price < " + price);
+                products = (ArrayList<Product>) query.getResultList();
+                break;
+        }
         if (products.isEmpty())
         {
             SystemReporter.report("There is no products in the system", true);
         }
-
-        SystemReporter.report(
-                "Printing products with price " + by.toString() + " than " + price);
         for (Product product: products)
         {
-            switch(by)
-            {
-                case Larger:
-                    if (product.getPrice() >= price)
-                    {
-                        printProductInfoImpl(product);
-                    }
-                    break;
-                case Smaller:
-                    if (product.getPrice() < price)
-                    {
-                        printProductInfoImpl(product);
-                    }
-                    break;
-            }
+            printProductInfoImpl(product);
         }
+
     }
 
     /**
@@ -280,6 +266,10 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void printProductsByCategory(Category category) throws Exception
     {
+        Query query;
+        ArrayList<Product> products = new ArrayList<Product>();
+        query = em.createQuery("SELECT p FROM product p where p.category = " + category);
+        products = (ArrayList<Product>) query.getResultList();
         if (products.isEmpty())
         {
             SystemReporter.report("There is no products in the system", true);
@@ -288,10 +278,7 @@ public class ProductsOpsBean implements ProductsOps{
         SystemReporter.report("Printing all product for category:" + category.getName());
         for (Product product: products)
         {
-            if (product.getCategory().equals(category))
-            {
-                printProductInfoImpl(product);
-            }
+            printProductInfoImpl(product);
         }
     }
 
@@ -301,38 +288,39 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void printMostSaleableProduct() throws Exception
     {
-        if (orders.isEmpty())
-        {
-            SystemReporter.report("There is no orders in the system", true);
-        }
-        HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
-        for (Order order : orders)
-        {
-            for (Product product : order.getProducts())
-            {
-                if (productAmount.containsKey(product))
-                {
-                    int currAmount = productAmount.get(product);
-                    currAmount += currAmount + product.getQuantity();
-                    productAmount.put(product, currAmount);
-                }
-                else
-                {
-                    productAmount.put(product, product.getQuantity());
-                }
-            }
-        }
-        Product mostSaleble = new Product();
-        int max = 0;
-        for (Product product : productAmount.keySet())
-        {
-            if (productAmount.get(product) >= max)
-            {
-                max = productAmount.get(product);
-                mostSaleble = product;
-            }
-        }
-        SystemReporter.report("The most saleable product is: " + mostSaleble.getName() + " with sales of: " + max);
+        //TODO:Add the correct query
+        //        if (orders.isEmpty())
+        //        {
+        //            SystemReporter.report("There is no orders in the system", true);
+        //        }
+        //        HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
+        //        for (Order order : orders)
+        //        {
+        //            for (Product product : order.getProducts())
+        //            {
+        //                if (productAmount.containsKey(product))
+        //                {
+        //                    int currAmount = productAmount.get(product);
+        //                    currAmount += currAmount + product.getQuantity();
+        //                    productAmount.put(product, currAmount);
+        //                }
+        //                else
+        //                {
+        //                    productAmount.put(product, product.getQuantity());
+        //                }
+        //            }
+        //        }
+        //        Product mostSaleble = new Product();
+        //        int max = 0;
+        //        for (Product product : productAmount.keySet())
+        //        {
+        //            if (productAmount.get(product) >= max)
+        //            {
+        //                max = productAmount.get(product);
+        //                mostSaleble = product;
+        //            }
+        //        }
+        //        SystemReporter.report("The most saleable product is: " + mostSaleble.getName() + " with sales of: " + max);
     }
 
     /**
@@ -341,13 +329,14 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void printSortedProductsByPrice() throws Exception
     {
-        ArrayList<Product> productsCopy = (ArrayList<Product>) products.clone();
-        Collections.sort(productsCopy, new ProductPriceComparator());
-        SystemReporter.report("Printing sorted products by price: ");
-        for(Product product : productsCopy)
-        {
-            printProductInfoImpl(product);
-        }
+            //TODO:Add the correct query
+            //        ArrayList<Product> productsCopy = (ArrayList<Product>) products.clone();
+            //        Collections.sort(productsCopy, new ProductPriceComparator());
+            //        SystemReporter.report("Printing sorted products by price: ");
+            //        for(Product product : productsCopy)
+            //        {
+            //            printProductInfoImpl(product);
+            //        }
     }
 
     public enum LergerSmaller

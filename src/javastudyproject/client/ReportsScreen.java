@@ -6,12 +6,10 @@
 package javastudyproject.client;
 
 import javastudyproject.service.ProductsOpsBean;
-import javastudyproject.service.OrderOpsBean;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import javastudyproject.service.UserOpsBean;
 import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
 
@@ -51,15 +49,15 @@ public class ReportsScreen extends OrdersScreen{
             switch (choise)
             {
                 case 1: { 
-                    UserOpsBean.printAllUsers();
+                    userService.printAllUsers();
                 }break;
                 case 2: {
                     System.out.println("Enter username: ");
                     String userName = reader.readLine();
-                    UserOpsBean.printUserInfo(userName);
+                    userService.printUserInfo(userName);
                 }break;
                 case 3: {
-                    OrderOpsBean.printAllOrders();
+                    orderService.printAllOrders();
                 }break;
                 case 4: {
                     System.out.print("Select Status(1. New 2. Pending 3. Ready 4. InProgress 5. Finished): ");
@@ -72,10 +70,10 @@ public class ReportsScreen extends OrdersScreen{
                         case 4: {state = Order.StateType.InProgress;}break;
                         case 5: {state = Order.StateType.Finished;}break;
                     }
-                    OrderOpsBean.printOrdersByState(state);
+                    orderService.printOrdersByState(state);
                 }break;
                 case 5: {
-                    ProductsOpsBean.printAllProducts();
+                    productService.printAllProducts();
                 }break;
                 case 6: {
                     System.out.print("1. Larger 2. Smaller : ");
@@ -86,10 +84,10 @@ public class ReportsScreen extends OrdersScreen{
                     switch (stateChosen)
                     {
                         case 1:
-                            ProductsOpsBean.printProductsByPrice(ProductsOpsBean.LergerSmaller.Larger, number);
+                            productService.printProductsByPrice(ProductsOpsBean.LergerSmaller.Larger, number);
                             break;
                         case 2:
-                            ProductsOpsBean.printProductsByPrice(ProductsOpsBean.LergerSmaller.Smaller, number);
+                            productService.printProductsByPrice(ProductsOpsBean.LergerSmaller.Smaller, number);
                             break;
                     }
                 }break;
@@ -102,7 +100,7 @@ public class ReportsScreen extends OrdersScreen{
                     }
                     System.out.print("Choose category index: ");
                     int catIndex = Integer.parseInt(reader.readLine());
-                    ProductsOpsBean.printProductsByCategory(categories.get(catIndex - 1));
+                    productService.printProductsByCategory(categories.get(catIndex - 1));
                 }break;
                 case 8: {
                     ArrayList<Product> products = productService.getAllProducts();
@@ -117,16 +115,16 @@ public class ReportsScreen extends OrdersScreen{
                     }
                     System.out.print("Type product index: ");
                     int productIndex = Integer.parseInt(reader.readLine());
-                    OrderOpsBean.printOrdersUserNamesByPurchasedProduct(products.get(productIndex -1));
+                    orderService.printOrdersUserNamesByPurchasedProduct(products.get(productIndex -1));
                 }break;
                 case 9: {
-                    ProductsOpsBean.printMostSaleableProduct();
+                    productService.printMostSaleableProduct();
                 }break;
                 case 10: {
-                    ProductsOpsBean.printSortedProductsByPrice();
+                    productService.printSortedProductsByPrice();
                 }break;
                 case 11: {
-                    ProductsOpsBean.printAllCategories();
+                    productService.printAllCategories();
                 }break;
                 case 12: {
                     new AdministratorScreen();

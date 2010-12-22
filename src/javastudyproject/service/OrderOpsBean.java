@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
 import javastudyproject.reporting.SystemReporter;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -100,8 +101,18 @@ public class OrderOpsBean implements OrderOps{
        return (ArrayList<Order>) query.getResultList();
     }
 
-    public void addNewOrder(Order order)
+    public void addNewOrder(Order order) throws Exception
     {
-        
+        try
+        {
+            em.getTransaction().begin();
+            em.persist(order);
+            em.getTransaction().commit();
+        }
+        catch(EntityExistsException e)
+        {
+            SystemReporter.report("The specific order is already exists. EM exception: " + e.getMessage(), true);
+        }
+        SystemReporter.report("Added new order");
     }
 }

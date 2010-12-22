@@ -28,6 +28,7 @@ public interface ProductsOps {
     public void printSortedProductsByPrice() throws Exception;
     public void printAllCategories() throws Exception;
     public void addNewCategory(String name) throws Exception;
+    public void addNewProduct(String name, String serialNum, double price, int quantity, Category category) throws Exception;
     public ArrayList<Product> getAllProducts();
     public void printAllProducts() throws Exception;
     public ArrayList<Category> getAllCategories();

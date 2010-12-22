@@ -22,7 +22,7 @@ public class ReadOnlyUser extends User implements Serializable{
 
     private String owningUserName;
 
-    @MapsId @OneToOne
+    //@MapsId @OneToOne
     private int readOnlyUserOrderId;
 
     public ReadOnlyUser() {};

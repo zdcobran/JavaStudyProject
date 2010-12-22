@@ -5,9 +5,7 @@
 
 package javastudyproject.model;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import javastudyproject.model.Order;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,10 +23,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public class User implements Serializable  {
-
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected int userRunId;
+    @Id
     protected String userName;
     protected String id;
     protected String firstName;
@@ -125,5 +122,10 @@ public class User implements Serializable  {
     {
         this.age = age;
         return this;
+    }
+
+    public boolean isNull()
+    {
+        return this == null;
     }
 }

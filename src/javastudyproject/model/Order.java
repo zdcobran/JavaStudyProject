@@ -7,11 +7,14 @@ package javastudyproject.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +36,10 @@ public class Order implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
     private double totalPrice;
-    private ArrayList<Product> orderProducts;
+    @OneToMany
+    @ElementCollection(targetClass=Product.class)
+    private Collection orderProducts;
+    //private ArrayList<Product> orderProducts = new ArrayList<Product>();
     private DeliveryType deliveryType;
     private StateType state;
 
@@ -73,7 +79,7 @@ public class Order implements Serializable{
 
     public ArrayList<Product> getProducts()
     {
-         return orderProducts;
+         return (ArrayList<Product>)orderProducts;
     }
 
     public void updateState(StateType state)

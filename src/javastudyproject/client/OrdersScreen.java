@@ -106,7 +106,7 @@ public class OrdersScreen extends ServiceSystem {
             case 4: {state = Order.StateType.InProgress;}break;
             case 5: {state = Order.StateType.Finished;}break;
         }
-        OrderOpsBean.updateOrderStatus(id, state);
+        orderService.updateOrderStatus(id, state);
     }
 
     /**

@@ -76,7 +76,7 @@ public class ReadOnlyUserScreen extends OrdersScreen {
                 for (Product product : order.getProducts())
                 {
                     isPrinted = true;
-                    ProductsOpsBean.printProductInfoImpl(product);
+                    productService.printProductInfoImpl(product);
                 }
             }
         }
