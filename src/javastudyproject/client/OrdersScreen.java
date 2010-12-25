@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.service.OrderOpsBean;
 import javastudyproject.reporting.SystemReporter;
@@ -86,7 +87,7 @@ public class OrdersScreen extends ServiceSystem {
     private void updateOrderStatus() throws Exception
     {
         System.out.print("Choose order: ");
-        ArrayList<Order> orders = orderService.getAllOrders();
+        List<Order> orders = orderService.getAllOrders();
 
 
         for (int i = 0; i < orders.size(); i++)
@@ -115,7 +116,7 @@ public class OrdersScreen extends ServiceSystem {
      */
     private void deleteOrder() throws Exception
     {
-        ArrayList<Order> orders = orderService.getAllOrders();
+        List<Order> orders = orderService.getAllOrders();
 
         for (int i = 0; i < orders.size(); i++)
         {

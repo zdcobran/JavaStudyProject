@@ -17,10 +17,10 @@ public class ServiceSystem {
 
     protected EntityManagerFactory emf;
     protected EntityManager em;
-    protected OrderOps orderService;
-    protected ProductsOps productService;
-    protected UserOps userService;
-    protected CategoryOps categoryService;
+    protected OrderOpsBean orderService;
+    protected ProductsOpsBean productService;
+    protected UserOpsBean userService;
+    protected CategoryOpsBean categoryService;
 
     public ServiceSystem ()
     {
@@ -31,7 +31,6 @@ public class ServiceSystem {
        productService = new ProductsOpsBean(em);
        userService = new UserOpsBean(em);
        categoryService = new CategoryOpsBean(em);
-
        userService.createAdminUserIfNeeded(); //Creating the first user admin user if needed
     }
 

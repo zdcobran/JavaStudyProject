@@ -5,7 +5,7 @@
 
 package javastudyproject.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.Category;
 import javastudyproject.model.Product;
 import javastudyproject.service.ProductsOpsBean.LergerSmaller;
@@ -18,7 +18,7 @@ import javastudyproject.service.ProductsOpsBean.ProductCriteria;
 public interface ProductsOps {
 
     public void updateProductByName(ProductCriteria criteria, String name, Product productContainer) throws Exception;
-    public ArrayList<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception;
+    public List<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception;
     public void printProductInfo(String name) throws Exception;
     public void deleteProduct(String name) throws Exception;
     public void printProductInfoImpl(Product product) throws Exception;
@@ -29,7 +29,7 @@ public interface ProductsOps {
     public void printAllCategories() throws Exception;
     public void addNewCategory(String name) throws Exception;
     public void addNewProduct(String name, String serialNum, double price, int quantity, Category category) throws Exception;
-    public ArrayList<Product> getAllProducts();
+    public List<Product> getAllProducts();
     public void printAllProducts() throws Exception;
-    public ArrayList<Category> getAllCategories();
+    public List<Category> getAllCategories();
 }

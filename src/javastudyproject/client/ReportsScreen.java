@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
 
@@ -92,7 +93,7 @@ public class ReportsScreen extends OrdersScreen{
                     }
                 }break;
                 case 7: {
-                    ArrayList<Category> categories = categoryService.getAllCategories();
+                    List<Category> categories = categoryService.getAllCategories();
                     System.out.print("All categories: ");
                     for (int i = 0; i < categories.size(); i++)
                     {
@@ -103,7 +104,7 @@ public class ReportsScreen extends OrdersScreen{
                     productService.printProductsByCategory(categories.get(catIndex - 1));
                 }break;
                 case 8: {
-                    ArrayList<Product> products = productService.getAllProducts();
+                    List<Product> products = productService.getAllProducts();
                     if (products.isEmpty())
                     {
                         SystemReporter.report("There are no products in the system", true);

@@ -3,6 +3,7 @@ package javastudyproject.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import javastudyproject.model.Category;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
@@ -25,9 +26,9 @@ public class CategoryOpsBean implements CategoryOps{
     }
 
     
-    public ArrayList<Category> getAllCategories()
+    public List<Category> getAllCategories()
     {
        Query query = em.createQuery("SELECT o FROM Category o");
-       return (ArrayList<Category>) query.getResultList();
+       return (List<Category>) query.getResultList();
     }
 }

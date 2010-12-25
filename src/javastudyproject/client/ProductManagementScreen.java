@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.Product;
 import javastudyproject.model.Category;
 import javastudyproject.service.ServiceSystem;
@@ -65,7 +66,7 @@ public class ProductManagementScreen extends ServiceSystem {
                }break;
                 case 6:
                {
-                    ArrayList<Product> products = productService.getAllProducts();
+                    List<Product> products = productService.getAllProducts();
                     for (int i=0; i<products.size(); i++)
                        System.out.println(i+ ". " + products.get(i).getName());
                     System.out.print("Select product: ");
@@ -93,7 +94,7 @@ public class ProductManagementScreen extends ServiceSystem {
      */
     private void AddNewProduct() throws IOException, Exception {
 
-        ArrayList<Category> categories = categoryService.getAllCategories();
+        List<Category> categories = categoryService.getAllCategories();
 
         System.out.print("name: ");
         String name = reader.readLine();
@@ -138,7 +139,7 @@ public class ProductManagementScreen extends ServiceSystem {
                  String serialNum =  reader.readLine();
                  Product prodContainer = new Product();
                  prodContainer.setSerialNumber(serialNum);
-                 ArrayList<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.serialNum, prodContainer);
+                 List<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.serialNum, prodContainer);
                  for (Product prodInList : plist)
                         productService.printProductInfoImpl(prodInList);
             }break;
@@ -147,7 +148,7 @@ public class ProductManagementScreen extends ServiceSystem {
                 String name = reader.readLine();
                 Product prodContainer = new Product();
                  prodContainer.setName(name);
-                ArrayList<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.name, prodContainer);
+                List<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.name, prodContainer);
                  for (Product prodInList : plist)
                         productService.printProductInfoImpl(prodInList);
             }break;
@@ -156,7 +157,7 @@ public class ProductManagementScreen extends ServiceSystem {
                 double price = Double.parseDouble(reader.readLine());
                 Product prodContainer = new Product();
                  prodContainer.setPrice(price);
-                  ArrayList<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.price, prodContainer);
+                  List<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.price, prodContainer);
                  for (Product prodInList : plist)
                         productService.printProductInfoImpl(prodInList);
             }break;
@@ -166,7 +167,7 @@ public class ProductManagementScreen extends ServiceSystem {
                  Product prodContainer = new Product();
                  Category categoryContainer=  new Category(category);
                  prodContainer.setCategory(categoryContainer);
-                  ArrayList<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.category, prodContainer);
+                  List<Product> plist = productService.getProductsByGivenCriteria(ProductsOpsBean.ProductCriteria.category, prodContainer);
                  for (Product prodInList : plist)
                         productService.printProductInfoImpl(prodInList);
             }break;
@@ -178,8 +179,8 @@ public class ProductManagementScreen extends ServiceSystem {
      */
     private void UpdateProduct() throws Exception
     {
-        ArrayList<Product> products = productService.getAllProducts();
-        ArrayList<Category> categories = categoryService.getAllCategories();
+        List<Product> products = productService.getAllProducts();
+        List<Category> categories = categoryService.getAllCategories();
 
         for (int i=0;i<products.size();i++)
             System.out.println(i+ ". " + products.get(i).getName());

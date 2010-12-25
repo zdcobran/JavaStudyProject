@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
 import javastudyproject.model.User;
@@ -93,7 +94,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
                 }break;
                 case 2: {
                     System.out.print("Printing user " + workingUser.getUserName() + " orders: \n");
-                    ArrayList<Order> orders = orderService.getAllOrders();
+                    List<Order> orders = orderService.getAllOrders();
                     for (Order order : orders)
                     {
                         if (order.getUser().getUserName().equals(workingUser.getUserName()))
@@ -227,7 +228,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
         
         //To dynamicaly update the product amount in case that the order didn't take place
         HashMap<String, Integer> productsAmount =  new HashMap<String, Integer>();
-        ArrayList<Product> products = productService.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         for (int i=0; i<products.size();i++)
         {
             productsAmount.put(products.get(i).getName(), products.get(i).getQuantity());

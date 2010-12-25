@@ -1,6 +1,7 @@
 package javastudyproject.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
 import javastudyproject.reporting.SystemReporter;
@@ -24,7 +25,9 @@ public class OrderOpsBean implements OrderOps{
     {
         Order order = em.find(Order.class, orderRunId);
         order.updateState(status);
+        em.getTransaction().begin();
         em.merge(order);
+        em.getTransaction().commit();
 
         //Catch exc
         //SystemReporter.report("Didn't found order id: " + orderRunId, true);
@@ -33,13 +36,15 @@ public class OrderOpsBean implements OrderOps{
     public void deleteOrder(int orderRunId) throws Exception
     {
         Order order = em.find(Order.class, orderRunId);
+        em.getTransaction().begin();
         em.remove(order);
+        em.getTransaction().commit();
         SystemReporter.report("Didn't found order id: " + orderRunId, true);
     }
 
     public void printAllOrders() throws Exception
     {
-        ArrayList<Order> orders = getAllOrders();
+        List<Order> orders = getAllOrders();
         if (orders.isEmpty())
         {
             SystemReporter.report("There is no orders", true);
@@ -54,7 +59,7 @@ public class OrderOpsBean implements OrderOps{
     {
         SystemReporter.report("Printing all orders with this state: " + state);
         Query query = em.createQuery("SELECT o FROM Order o where o.state = " + state);
-        ArrayList<Order> orders = (ArrayList<Order>) query.getResultList();
+        List<Order> orders = query.getResultList();
         if (orders.isEmpty())
         {
             SystemReporter.report("There is no orders with state: " + state, true);
@@ -69,7 +74,7 @@ public class OrderOpsBean implements OrderOps{
     {
         SystemReporter.report("Finding all user that purchased " + productToFind.getName());
         Query query = em.createQuery("SELECT o FROM Order o "); //Fix query
-        ArrayList<Order> orders = (ArrayList<Order>) query.getResultList();
+        List<Order> orders = query.getResultList();
 
         for (Order order : orders)
         {
@@ -95,10 +100,10 @@ public class OrderOpsBean implements OrderOps{
         });
     }
 
-    public ArrayList<Order> getAllOrders()
+    public List<Order> getAllOrders()
     {
        Query query = em.createQuery("SELECT o FROM Order o");
-       return (ArrayList<Order>) query.getResultList();
+       return query.getResultList();
     }
 
     public void addNewOrder(Order order) throws Exception

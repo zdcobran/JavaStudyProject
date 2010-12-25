@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
 import javastudyproject.model.ReadOnlyUser;
@@ -64,7 +65,7 @@ public class ReadOnlyUserScreen extends OrdersScreen {
     public void PrintGrantedOrders(User user) throws Exception
     {
         boolean isPrinted = false;
-        ArrayList<Order> orders = orderService.getAllOrders();
+        List<Order> orders = orderService.getAllOrders();
 
         for (Order order: orders)
         {

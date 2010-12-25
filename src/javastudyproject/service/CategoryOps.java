@@ -5,7 +5,7 @@
 
 package javastudyproject.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.Category;
 
 /**
@@ -13,5 +13,5 @@ import javastudyproject.model.Category;
  * @author alon
  */
 public interface CategoryOps {
-    public ArrayList<Category> getAllCategories();
+    public List<Category> getAllCategories();
 }

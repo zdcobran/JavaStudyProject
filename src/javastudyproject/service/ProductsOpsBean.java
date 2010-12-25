@@ -3,6 +3,7 @@ package javastudyproject.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import javastudyproject.model.Category;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
@@ -41,6 +42,7 @@ public class ProductsOpsBean implements ProductsOps{
         {
             em.getTransaction().begin();
             em.persist(new Product(name, category, serialNum, price, quantity));
+            em.flush();
             em.getTransaction().commit();
         }
         catch(EntityExistsException e)
@@ -57,6 +59,7 @@ public class ProductsOpsBean implements ProductsOps{
         {
             em.getTransaction().begin();
             em.persist(new Category(name));
+            em.flush();
             em.getTransaction().commit();
         }
         catch(EntityExistsException e)
@@ -70,7 +73,7 @@ public class ProductsOpsBean implements ProductsOps{
     public void printAllCategories() throws Exception
     {
          SystemReporter.report("Printing all categories: ");
-         ArrayList<Category> categories = getAllCategories();
+         List<Category> categories = getAllCategories();
          for (Category category: categories)
          {
              SystemReporter.report(
@@ -95,32 +98,33 @@ public class ProductsOpsBean implements ProductsOps{
                 //TODO: validating that the new name is unique
                 product.setName(productContainer.getName());
                 SystemReporter.report("Updating product name to: " + productContainer.getName());
-                return;
+                break;
             case serialNum:
                 //TODO: validating that the new sn is unique
                 product.setSerialNumber(productContainer.getSerialNumber());
                 SystemReporter.report(
                         "Updating product serial number to: " + productContainer.getSerialNumber());
-                return;
+                break;
             case price:
                 product.setPrice(productContainer.getPrice());
                 SystemReporter.report(
                         "Updating product price to: " + productContainer.getPrice());
-                return;
+                break;
             case quantity:
                 product.setQuantity(productContainer.getQuantity());
                 SystemReporter.report(
                         "Updating product quantity to: " + productContainer.getQuantity());
-                return;
+                break;
             case category:
                 product.setCategory(productContainer.getCategory());
                 SystemReporter.report(
                         "Updating product category to: " + productContainer.getCategory().getName());
-                return;
+                break;
             default:
                 SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
-        //em.merge(product);
+        em.merge(product);
+        em.flush();
         em.getTransaction().commit();
     }
 
@@ -132,9 +136,9 @@ public class ProductsOpsBean implements ProductsOps{
      * @return
      * @throws Exception
      */
-    public ArrayList<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception
+    public List<Product> getProductsByGivenCriteria(ProductCriteria criteria, Product productContainer) throws Exception
     {
-        ArrayList<Product> returnList = new ArrayList<Product>();
+        List<Product> returnList = new ArrayList<Product>();
         Query query;
         switch(criteria)
         {
@@ -142,20 +146,20 @@ public class ProductsOpsBean implements ProductsOps{
                 returnList.add(em.find(Product.class, productContainer.getName()));
                 return returnList;
             case serialNum:
-                query = em.createQuery("SELECT c FROM Category c where c.serialNum = " + productContainer.getSerialNumber());
-                returnList.add((Product) query.getSingleResult());
-                break;
+               query = em.createQuery("SELECT c FROM Product c where c.serialNum = " + productContainer.getSerialNumber());
+               returnList.addAll((List<Product>) query.getResultList());
+               break;
             case price:
-                query = em.createQuery("SELECT c FROM Category c where c.price = " + productContainer.getPrice());
-                returnList.addAll((ArrayList<Product>) query.getResultList());
+                query = em.createQuery("SELECT c FROM Product c where c.price = " + productContainer.getPrice());
+                returnList.addAll((List<Product>) query.getResultList());
                 break;
             case quantity:
-                query = em.createQuery("SELECT c FROM Category c where c.quantity = " + productContainer.getQuantity());
-                returnList.addAll((ArrayList<Product>) query.getResultList());
+                query = em.createQuery("SELECT c FROM Product c where c.quantity = " + productContainer.getQuantity());
+                returnList.addAll((List<Product>) query.getResultList());
                 break;
             case category:
-                query = em.createQuery("SELECT c FROM Category c where c.category = " + productContainer.getCategory()); //TODO: i fill this will not work
-                returnList.addAll((ArrayList<Product>) query.getResultList());
+                query = em.createQuery("SELECT c FROM Product c where c.category = " + productContainer.getCategory().getName()); //TODO: i fill this will not work
+                returnList.addAll((List<Product>) query.getResultList());
                 break;
             default:
                 SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
@@ -173,6 +177,7 @@ public class ProductsOpsBean implements ProductsOps{
     public void printProductInfo(String name) throws Exception
     {
         Product product = em.find(Product.class, name);
+        printProductInfoImpl(product);
         if (product == null)
             SystemReporter.report("Didn't find product with given name", true);
     }
@@ -213,7 +218,7 @@ public class ProductsOpsBean implements ProductsOps{
 
     public void printAllProducts() throws Exception
     {
-        ArrayList<Product> products = getAllProducts();
+        List<Product> products = getAllProducts();
         if (products.isEmpty())
         {
             SystemReporter.report("There is no products in the system", true);
@@ -234,18 +239,18 @@ public class ProductsOpsBean implements ProductsOps{
     public void printProductsByPrice(LergerSmaller by, double price) throws Exception
     {
         Query query;
-        ArrayList<Product> products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<Product>();
         SystemReporter.report(
                 "Printing products with price " + by.toString() + " than " + price);
         switch(by)
         {
             case Larger:
                 query = em.createQuery("SELECT p FROM product p where p.price >= " + price);
-                products = (ArrayList<Product>) query.getResultList();
+                products = (List<Product>) query.getResultList();
                 break;
             case Smaller:
                 query = em.createQuery("SELECT p FROM product p where p.price < " + price);
-                products = (ArrayList<Product>) query.getResultList();
+                products = (List<Product>) query.getResultList();
                 break;
         }
         if (products.isEmpty())
@@ -267,9 +272,9 @@ public class ProductsOpsBean implements ProductsOps{
     public void printProductsByCategory(Category category) throws Exception
     {
         Query query;
-        ArrayList<Product> products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<Product>();
         query = em.createQuery("SELECT p FROM product p where p.category = " + category);
-        products = (ArrayList<Product>) query.getResultList();
+        products =  query.getResultList();
         if (products.isEmpty())
         {
             SystemReporter.report("There is no products in the system", true);
@@ -349,15 +354,15 @@ public class ProductsOpsBean implements ProductsOps{
         name, serialNum, price, quantity, category
     }
 
-    public ArrayList<Product> getAllProducts()
+    public List<Product> getAllProducts()
     {
-       Query query = em.createQuery("SELECT o FROM Order o");
-       return (ArrayList<Product>) query.getResultList();
+       Query query = em.createQuery("SELECT o FROM Product o");
+       return  query.getResultList();
     }
 
-    public ArrayList<Category> getAllCategories()
+    public List<Category> getAllCategories()
     {
        Query query = em.createQuery("SELECT c FROM Category c");
-       return (ArrayList<Category>) query.getResultList();
+       return  query.getResultList();
     }
 }

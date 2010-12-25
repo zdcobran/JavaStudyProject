@@ -40,6 +40,7 @@ public class UserOpsBean implements UserOps{
         catch(Exception e)
         {
             SystemReporter.report("Wrong user name provided", true);
+            throw e;
         }
         if (user.getPassword().equals(password))
             return user;
@@ -107,10 +108,16 @@ public class UserOpsBean implements UserOps{
         {
 
             case Administrator:
+                em.getTransaction().begin();
                 em.persist(new AdministratorUser(userName, id, firstName, lastName, email, password, age));
+                em.flush();
+                em.getTransaction().commit();
                 break;
             case ReadWriteUser:
+                 em.getTransaction().begin();
                 em.persist(new ReadWriteUser(userName, id, firstName, lastName, email, password, age));
+                em.flush();
+                em.getTransaction().commit();
                 break;
             case ReadOnlyUser:
                 // TODO: need appropriate query
@@ -130,7 +137,11 @@ public class UserOpsBean implements UserOps{
 //                }
 //                if (!found)
 //                    SystemReporter.report("The provided owning user or id was not found", true);
+                em.getTransaction().begin();
                 em.persist(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
+                em.flush();
+                em.getTransaction().commit();
+
                 break;
         }
         SystemReporter.report("User created successfully");
@@ -265,7 +276,10 @@ public class UserOpsBean implements UserOps{
         User user = em.find(User.class, userName);
         if(user.isNull())
             SystemReporter.report("Didn't find user with given name", true);
+        em.getTransaction().begin();
         em.remove(user);
+        em.flush();
+        em.getTransaction().commit();
     }
 
     /**
@@ -273,7 +287,7 @@ public class UserOpsBean implements UserOps{
      * @param product
      * @throws Exception
      */
-    private  void printUserInfoImpl(User user) throws Exception
+    private void printUserInfoImpl(User user) throws Exception
     {
               SystemReporter.report("User info:", new String[] {
                     "User name: " + user.getUserName(),
@@ -310,7 +324,10 @@ public class UserOpsBean implements UserOps{
         }
         catch (Exception e)
         {
+            em.getTransaction().begin();
             em.persist(new AdministratorUser("admin", "admin", "admin", "admin", "admin@root.com", "123456", "99"));
+            em.flush();
+            em.getTransaction().commit();
         }
     }
 

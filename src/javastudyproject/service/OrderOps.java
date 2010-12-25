@@ -6,6 +6,7 @@
 package javastudyproject.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
 
@@ -20,7 +21,7 @@ public interface OrderOps {
     public void printAllOrders() throws Exception;
     public void printOrdersByState(Order.StateType state) throws Exception;
     public void printOrdersUserNamesByPurchasedProduct(Product productToFind) throws Exception;
-    public ArrayList<Order> getAllOrders();
+    public List<Order> getAllOrders();
     public void addNewOrder(Order order) throws Exception;
 
 }
