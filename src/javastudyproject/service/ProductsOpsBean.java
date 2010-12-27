@@ -158,7 +158,7 @@ public class ProductsOpsBean implements ProductsOps{
                 returnList.addAll((List<Product>) query.getResultList());
                 break;
             case category:
-                query = em.createQuery("SELECT c FROM Product c where c.category = " + productContainer.getCategory().getName()); //TODO: i fill this will not work
+                query = em.createQuery("SELECT p FROM Product p inner join p.category  c where c.name = '" + productContainer.getCategory().getName()+"'"); //TODO: i fill this will not work
                 returnList.addAll((List<Product>) query.getResultList());
                 break;
             default:
@@ -194,9 +194,7 @@ public class ProductsOpsBean implements ProductsOps{
         if (product == null)
             SystemReporter.report("Cannot find product" + name);
         em.remove(product);
-        em.getTransaction().begin();
-
-        //TODO: Catch exc ; SystemReporter.report("Didn't find product with given name", true);
+        em.getTransaction().commit();
     }
 
     /**
@@ -245,11 +243,11 @@ public class ProductsOpsBean implements ProductsOps{
         switch(by)
         {
             case Larger:
-                query = em.createQuery("SELECT p FROM product p where p.price >= " + price);
+                query = em.createQuery("SELECT p FROM Product p where p.price >= " + price);
                 products = (List<Product>) query.getResultList();
                 break;
             case Smaller:
-                query = em.createQuery("SELECT p FROM product p where p.price < " + price);
+                query = em.createQuery("SELECT p FROM Product p where p.price < " + price);
                 products = (List<Product>) query.getResultList();
                 break;
         }
@@ -273,7 +271,7 @@ public class ProductsOpsBean implements ProductsOps{
     {
         Query query;
         List<Product> products = new ArrayList<Product>();
-        query = em.createQuery("SELECT p FROM product p where p.category = " + category);
+        query = em.createQuery("SELECT p FROM Product p where p.category = " + category);
         products =  query.getResultList();
         if (products.isEmpty())
         {

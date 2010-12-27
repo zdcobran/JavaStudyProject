@@ -25,8 +25,6 @@ import javax.persistence.TemporalType;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Table(name="users")
 public class User implements Serializable  {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected int userRunId;
     @Id
     protected String userName;
     protected String id;

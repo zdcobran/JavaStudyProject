@@ -15,17 +15,19 @@ import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
 import javastudyproject.model.ReadOnlyUser;
 import javastudyproject.model.User;
+import javastudyproject.service.ServiceSystem;
+import javax.persistence.Query;
 
 /**
  * read only user main menu
  * @author eyarkoni
  */
-public class ReadOnlyUserScreen extends OrdersScreen {
+public class ReadOnlyUserScreen extends ServiceSystem {
 
     private BufferedReader reader;
-    private User workingUser;
+    private ReadOnlyUser workingUser;
 
-    public ReadOnlyUserScreen(User user) throws Exception {
+    public ReadOnlyUserScreen(ReadOnlyUser user) throws Exception {
 
         reader = new BufferedReader(new InputStreamReader(System.in));
         workingUser = user;
@@ -65,22 +67,18 @@ public class ReadOnlyUserScreen extends OrdersScreen {
     public void PrintGrantedOrders(User user) throws Exception
     {
         boolean isPrinted = false;
-        List<Order> orders = orderService.getAllOrders();
+        Query query = em.createQuery("select o from Order o where o.id = "+workingUser.getReadOnlyUserOrderId());
+        List<Order> orders = (List<Order> )query.getResultList();
 
         for (Order order: orders)
         {
-            if (order.getUser().getUserName().equals(
-                    ((ReadOnlyUser)user).getOwningUserName())
-                    && order.getRunId()
-                    == ((ReadOnlyUser)user).getReadOnlyUserOrderId())
-            {
-                for (Product product : order.getProducts())
+                isPrinted = true;
+                for (Product prod : order.getProducts())
                 {
-                    isPrinted = true;
-                    productService.printProductInfoImpl(product);
+                    productService.printProductInfoImpl(prod);
                 }
-            }
-        }
+          }
+        
         if (!isPrinted)
             SystemReporter.report("No granted orders available");
     }

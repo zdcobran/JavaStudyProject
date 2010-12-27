@@ -9,11 +9,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -38,11 +42,11 @@ public class Order implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
     private double totalPrice;
-    @OneToMany
-    @ElementCollection(targetClass=Product.class)
-    private Collection orderProducts;
-    //private ArrayList<Product> orderProducts = new ArrayList<Product>();
+    @ManyToMany
+    private  List<Product> orderProducts;
+    @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;
+    @Enumerated(EnumType.STRING)
     private StateType state;
 
     //constructors
@@ -70,7 +74,7 @@ public class Order implements Serializable{
         return this;
     }
 
-    public Order addMultipleProducts(ArrayList<Product> productsList)
+    public Order addMultipleProducts(List<Product> productsList)
     {
         for (Product product: productsList)
         {
@@ -79,9 +83,9 @@ public class Order implements Serializable{
         return this;
     }
 
-    public ArrayList<Product> getProducts()
+    public List<Product> getProducts()
     {
-         return (ArrayList<Product>)orderProducts;
+         return (List<Product>)orderProducts;
     }
 
     public void updateState(StateType state)

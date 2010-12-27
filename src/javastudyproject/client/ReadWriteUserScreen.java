@@ -16,14 +16,16 @@ import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
 import javastudyproject.model.User;
+import javastudyproject.service.ServiceSystem;
 import javastudyproject.service.UserOpsBean;
 import javastudyproject.service.UserOpsBean.UserType;
+import sun.security.provider.SystemSigner;
 
 /**
  * Read write user screen implementation
  * @author Alon pisnoy
  */
-public class ReadWriteUserScreen extends OrdersScreen {
+public class ReadWriteUserScreen extends ServiceSystem {
 
     private BufferedReader reader;
     private User workingUser;
@@ -224,7 +226,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
     {
 
         //TODO: need to integrate the em
-        ArrayList<Product> myProductList = new ArrayList<Product>();
+        List<Product> myProductList = new ArrayList<Product>();
         
         //To dynamicaly update the product amount in case that the order didn't take place
         HashMap<String, Integer> productsAmount =  new HashMap<String, Integer>();
@@ -341,20 +343,20 @@ public class ReadWriteUserScreen extends OrdersScreen {
      */
     private void updateTheProductsQuantityByOrder(Order order)
     {
-        //TODO: Create appropriate query
-//        ArrayList<Product> products = productService.getAllProducts();
-//
-//        for (Product product: order.getProducts())
-//        {
-//            for (Product genProduct: products)
-//            {
-//                if(product.getName().equals(genProduct.getName()))
-//                {
-//                    genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
-//                    break;
-//                }
-//            }
-//        }
+        List<Product> products = productService.getAllProducts();
+        em.getTransaction().begin();
+        for (Product product: order.getProducts())
+        {
+           for (Product genProduct: products)
+            {
+                if(product.getName().equals(genProduct.getName()))
+                {
+                    genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
+                    em.merge(genProduct);
+                }
+            }
+        }
+         em.getTransaction().commit();
     }
 
     /**
@@ -365,7 +367,7 @@ public class ReadWriteUserScreen extends OrdersScreen {
      * @param quantity
      * @return
      */
-    private ArrayList<Product> addToCart(ArrayList<Product> productsList, Product newProduct, int quantity)
+    private List<Product> addToCart(List<Product> productsList, Product newProduct, int quantity)
     {
         for (Product product: productsList)
         {

@@ -6,6 +6,7 @@
 package javastudyproject.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.User;
 import javastudyproject.service.UserOpsBean.UserCriteria;
 import javastudyproject.service.UserOpsBean.UserType;
@@ -38,10 +39,10 @@ public interface UserOps {
             String ownningUserName,
             int readOnlyUserOrderId) throws Exception;
      public void updateUserDetailsByUserName(UserCriteria criteria, String userName, User userContainer) throws Exception;
-     public ArrayList<User> getUserByGivenCriteria(UserCriteria criteria, User userContainer) throws Exception;
+     public List<User> getUserByGivenCriteria(UserCriteria criteria, User userContainer) throws Exception;
      public void printUserInfo(String userName) throws Exception;
      public void deleteUser(String userName) throws Exception;
-     public ArrayList<User> getAllUsers();
+     public List<User> getAllUsers();
      public void printAllUsers() throws Exception;
      public void createAdminUserIfNeeded();
 

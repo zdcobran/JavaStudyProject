@@ -58,7 +58,7 @@ public class OrderOpsBean implements OrderOps{
     public void printOrdersByState(Order.StateType state) throws Exception
     {
         SystemReporter.report("Printing all orders with this state: " + state);
-        Query query = em.createQuery("SELECT o FROM Order o where o.state = " + state);
+        Query query = em.createQuery("SELECT o FROM Order o where o.state = :STATE").setParameter("STATE", state);
         List<Order> orders = query.getResultList();
         if (orders.isEmpty())
         {

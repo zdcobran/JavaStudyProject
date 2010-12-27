@@ -38,7 +38,7 @@ public class AdministratorScreen extends ServiceSystem {
             {
                 case 1: { new ProductManagementScreen(); }break;
                 case 2: { new CustomersScreen(); }break;
-                case 3: { new ServiceSystem(); }break;
+                case 3: { new OrdersScreen(); }break;
                 case 4: { new ReportsScreen(); }break;
                 case 5: {
                     new LoginScreen();

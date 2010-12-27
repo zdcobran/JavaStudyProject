@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.reporting.SystemReporter;
+import javastudyproject.service.ServiceSystem;
 
 /**
  * Contains all administrator reports in the system
  * @author eyarkoni
  */
-public class ReportsScreen extends OrdersScreen{
+public class ReportsScreen extends ServiceSystem{
 
     private BufferedReader reader;
 

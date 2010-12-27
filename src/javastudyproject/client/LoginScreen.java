@@ -10,6 +10,7 @@ import javastudyproject.service.UserOpsBean;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import javastudyproject.model.ReadOnlyUser;
 import javastudyproject.service.ServiceSystem;
 import javastudyproject.reporting.SystemReporter;
 
@@ -82,7 +83,7 @@ public class LoginScreen extends ServiceSystem {
                 new ReadWriteUserScreen(user);
             }
             else if (user.toString().equals("ReadOnlyUser")) {
-                new ReadOnlyUserScreen(user);
+                new ReadOnlyUserScreen((ReadOnlyUser)user);
             }
             return true;
 

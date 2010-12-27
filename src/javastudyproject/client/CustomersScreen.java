@@ -43,14 +43,14 @@ public class CustomersScreen extends ServiceSystem{
                     UpdateExistingUser();
                 }break;
                 case 3: {
-                    System.out.print("Select user id to delete:  ");
+                    System.out.print("Select user name to delete:  ");
                     String userID = reader.readLine();
                     userService.deleteUser(userID);
                 }break;
                 case 4: {
-                    System.out.print("Select user id:  ");
-                    String userID = reader.readLine();
-                    userService.printUserInfo(userID);
+                    System.out.print("Select user name:  ");
+                    String username = reader.readLine();
+                    userService.printUserInfo(username);
                 }break;
                 case 5: {
                     new AdministratorScreen();

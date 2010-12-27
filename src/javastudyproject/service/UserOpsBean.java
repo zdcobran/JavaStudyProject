@@ -6,6 +6,7 @@
 package javastudyproject.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import javastudyproject.model.Order;
 import javastudyproject.db.FilesDB;
 import javastudyproject.model.AdministratorUser;
@@ -87,6 +88,8 @@ public class UserOpsBean implements UserOps{
             int readOnlyUserOrderId) throws Exception
     {
 
+
+
          //validating that the new user name is unique
          if (em.find(User.class, userName) != null)
          {
@@ -99,7 +102,7 @@ public class UserOpsBean implements UserOps{
         }
 
        //validating that the new user email is unique
-       if (em.createQuery("select u from User u where u.email = " + email ).getFirstResult() == 0)
+       if (em.createQuery("select u from User u where u.email = '" + email+"'" ).getFirstResult() == 0)
         {
             SystemReporter.report("The provided user email: " + email + " is already exists in the system", true);
         }
@@ -171,7 +174,7 @@ public class UserOpsBean implements UserOps{
 
                 user.setUserName(userContainer.getUserName());
                 SystemReporter.report("Updated user name to: " + userContainer.getUserName());
-                return;
+                break;
             case Id:
                 //validating that the new id is unique
                  if (em.createQuery("select u from User u where u.id = " + userContainer.getId() ).getFirstResult() == 0)
@@ -181,20 +184,20 @@ public class UserOpsBean implements UserOps{
                 user.setId(userContainer.getId());
                 SystemReporter.report(
                         "Updated user id to: " + userContainer.getId());
-                return;
+                break;
             case FirstName:
                 user.setFirstName(userContainer.getFirstName());
                 SystemReporter.report(
                         "Updated users first name to: " + userContainer.getFirstName());
-                return;
+                break;
             case LastName:
                 user.setLastName(userContainer.getLastName());
                 SystemReporter.report(
                         "Updated users last name to: " + userContainer.getLastName());
-                return;
+                break;
             case Email:
                //validating that the new id is unique
-                  if (em.createQuery("select u from User u where u.email = " + userContainer.getEmail() ).getFirstResult() == 0)
+                  if (em.createQuery("select u from User u where u.email = '" + userContainer.getEmail() +"'").getFirstResult() == 0)
                 {
                     SystemReporter.report("The provided user email: " + userContainer.getEmail() + " is already exists in the system", true);
                 }
@@ -202,17 +205,19 @@ public class UserOpsBean implements UserOps{
                 user.setEmail(userContainer.getEmail());
                 SystemReporter.report(
                         "Updated users email to: " + userContainer.getEmail());
-                return;
+                break;
             case Age:
                 user.setAge(userContainer.getAge());
                 SystemReporter.report(
                         "Updated users age to: " + userContainer.getAge());
-                return;
+                break;
 
             default:
                 SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
+        em.getTransaction().begin();
         em.merge(user);
+        em.getTransaction().commit();
     }
 
     /**
@@ -303,17 +308,17 @@ public class UserOpsBean implements UserOps{
 
     public void printAllUsers() throws Exception
     {
-        ArrayList<User> users = getAllUsers();
+        List<User> users = getAllUsers();
         for (User user: users)
         {
             printUserInfoImpl(user);
         }
     }
 
-    public ArrayList<User> getAllUsers()
+    public List<User> getAllUsers()
     {
-       Query query = em.createQuery("SELECT o FROM Order o");
-       return (ArrayList<User>) query.getResultList();
+       Query query = em.createQuery("SELECT u FROM User u");
+       return (List<User>) query.getResultList();
     }
 
     public void createAdminUserIfNeeded()
