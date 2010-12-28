@@ -96,7 +96,7 @@ public class UserOpsBean implements UserOps{
             SystemReporter.report("The provided user name: " + userName + " is already exists in the system", true);
          }
         //validating that the new user ID is unique
-        if (em.createQuery("select u from User u where u.id = " + id ).getFirstResult() == 0)
+        if (em.createQuery("select u from User u where u.id = '" + id +"'" ).getFirstResult() == 0)
         {
             SystemReporter.report("The provided user id: " + id + " is already exists in the system", true);
         }

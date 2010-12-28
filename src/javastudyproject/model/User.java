@@ -6,15 +6,19 @@
 package javastudyproject.model;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Users class
@@ -25,13 +29,14 @@ import javax.persistence.TemporalType;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Table(name="users")
 public class User implements Serializable  {
+
     @Id
     protected String userName;
     protected String id;
+    protected String email;
     protected String firstName;
     protected String lastName;
     protected String password;
-    protected String email;
     @Temporal(TemporalType.DATE)
     protected Date createDate;
     protected String age;
