@@ -1,8 +1,10 @@
 package javastudyproject.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javastudyproject.model.Category;
+import javastudyproject.model.Order;
 import javastudyproject.model.Product;
 import javastudyproject.reporter.SystemReporter;
 import javax.persistence.EntityExistsException;
@@ -340,7 +342,40 @@ public class ProductsOpsBean implements ProductsOps{
      */
     public void printMostSaleableProduct() throws Exception
     {
-        Query query = em.createQuery("SELECT o From Order o inner join o.orderProducts p group by");
+        Query query = em.createQuery("SELECT o FROM Order o");
+        List<Order> orders =query.getResultList();
+        if (orders.isEmpty())
+        {
+            SystemReporter.report("There is no orders in the system", true);
+        }
+        HashMap<Product, Integer> productAmount =  new HashMap<Product, Integer>();
+        for (Order order : orders)
+        {
+            for (Product product : order.getProducts())
+            {
+                if (productAmount.containsKey(product))
+                {
+                    int currAmount = productAmount.get(product);
+                    currAmount += currAmount + product.getQuantity();
+                    productAmount.put(product, currAmount);
+                }
+                else
+                {
+                    productAmount.put(product, product.getQuantity());
+                }
+            }
+        }
+        Product mostSaleble = new Product();
+        int max = 0;
+        for (Product product : productAmount.keySet())
+        {
+            if (productAmount.get(product) >= max)
+            {
+                max = productAmount.get(product);
+                mostSaleble = product;
+            }
+        }
+        SystemReporter.report("The most saleable product is: " + mostSaleble.getName() + " with sales of: " + max);
     }
 
     /**
