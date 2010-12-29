@@ -29,7 +29,7 @@ public class Product implements Serializable{
     //constructor
     public Product()
     {
-        
+        //Empty constructor
     }
 
     public Product(String name, Category category,String serialNum, double price, int quantity)

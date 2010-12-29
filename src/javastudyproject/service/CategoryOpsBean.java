@@ -1,16 +1,9 @@
 package javastudyproject.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import javastudyproject.model.Category;
-import javastudyproject.model.Order;
-import javastudyproject.model.Product;
-import javastudyproject.reporting.SystemReporter;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import projectUtils.ProductPriceComparator;
 
 /**
  * The class handling all products operations

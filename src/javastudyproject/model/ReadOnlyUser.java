@@ -8,13 +8,9 @@ package javastudyproject.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 
 /**
- *
+ * Read only user class
  * @author EladYarkoni
  */
 @Entity

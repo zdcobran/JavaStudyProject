@@ -5,7 +5,6 @@
 
 package javastudyproject.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;

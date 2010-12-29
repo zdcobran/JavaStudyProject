@@ -10,7 +10,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- *
+ * Initializing all interfaces and the entity manager
  * @author EladYarkoni
  */
 public class ServiceSystem {
@@ -31,7 +31,14 @@ public class ServiceSystem {
        productService = new ProductsOpsBean(em);
        userService = new UserOpsBean(em);
        categoryService = new CategoryOpsBean(em);
-       userService.createAdminUserIfNeeded(); //Creating the first user admin user if needed
+       try
+       {
+            userService.createAdminUserIfNeeded(); //Creating the first user admin user if needed
+       }
+       catch (Exception e)
+       {
+           System.out.println("Failed to create the first admin user :(");
+       }
     }
 
     public void cleanup()
@@ -39,6 +46,4 @@ public class ServiceSystem {
         em.close();
         emf.close();
     }
-
-
 }

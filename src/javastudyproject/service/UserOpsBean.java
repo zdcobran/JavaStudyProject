@@ -7,14 +7,11 @@ package javastudyproject.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import javastudyproject.model.Order;
-import javastudyproject.db.FilesDB;
 import javastudyproject.model.AdministratorUser;
-import javastudyproject.model.Order;
 import javastudyproject.model.ReadOnlyUser;
 import javastudyproject.model.ReadWriteUser;
 import javastudyproject.model.User;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -106,47 +103,40 @@ public class UserOpsBean implements UserOps{
         {
             SystemReporter.report("The provided user email: " + email + " is already exists in the system", true);
         }
- 
-        switch(type)
+        try
         {
-
-            case Administrator:
-                em.getTransaction().begin();
-                em.persist(new AdministratorUser(userName, id, firstName, lastName, email, password, age));
-                em.flush();
-                em.getTransaction().commit();
-                break;
-            case ReadWriteUser:
-                 em.getTransaction().begin();
-                em.persist(new ReadWriteUser(userName, id, firstName, lastName, email, password, age));
-                em.flush();
-                em.getTransaction().commit();
-                break;
-            case ReadOnlyUser:
-                // TODO: need appropriate query
-//                if(ownningUserName == null)
-//                    SystemReporter.report("Owning user name was not provided", true);
-//                boolean found = false;
-//                for (Order order: orders)
-//                {
-//                    if (order.getUser().getUserName().equals(ownningUserName))
-//                    {
-//                        if (order.getRunId() == readOnlyUserOrderId)
-//                        {
-//                            found = true;
-//                            break;
-//                        }
-//                    }
-//                }
-//                if (!found)
-//                    SystemReporter.report("The provided owning user or id was not found", true);
-                em.getTransaction().begin();
-                em.persist(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
-                em.flush();
-                em.getTransaction().commit();
-
-                break;
+            switch(type)
+            {
+                case Administrator:
+                    em.getTransaction().begin();
+                    em.persist(new AdministratorUser(userName, id, firstName, lastName, email, password, age));
+                    em.flush();
+                    em.getTransaction().commit();
+                    break;
+                case ReadWriteUser:
+                    em.getTransaction().begin();
+                    em.persist(new ReadWriteUser(userName, id, firstName, lastName, email, password, age));
+                    em.flush();
+                    em.getTransaction().commit();
+                    break;
+                case ReadOnlyUser:
+                    em.getTransaction().begin();
+                    em.persist(new ReadOnlyUser(userName, id, firstName, lastName, email, password, age, ownningUserName, readOnlyUserOrderId));
+                    em.flush();
+                    em.getTransaction().commit();
+                    break;
+            }
         }
+        catch(Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + e.getMessage(), true);
+        }
+
         SystemReporter.report("User created successfully");
     }
 
@@ -177,7 +167,7 @@ public class UserOpsBean implements UserOps{
                 break;
             case Id:
                 //validating that the new id is unique
-                 if (em.createQuery("select u from User u where u.id = " + userContainer.getId() ).getFirstResult() == 0)
+                if (em.createQuery("select u from User u where u.id = " + userContainer.getId() ).getFirstResult() == 0)
                 {
                     SystemReporter.report("The provided user id: " + userContainer.getId() + " is already exists in the system", true);
                 }
@@ -215,9 +205,21 @@ public class UserOpsBean implements UserOps{
             default:
                 SystemReporter.report("Wrong criteria provided: " + criteria + ", not as expected", true);
         }
-        em.getTransaction().begin();
-        em.merge(user);
-        em.getTransaction().commit();
+        try
+        {
+            em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
+        }
+        catch(Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + e.getMessage(), true);
+        }
     }
 
     /**
@@ -281,10 +283,22 @@ public class UserOpsBean implements UserOps{
         User user = em.find(User.class, userName);
         if(user.isNull())
             SystemReporter.report("Didn't find user with given name", true);
-        em.getTransaction().begin();
-        em.remove(user);
-        em.flush();
-        em.getTransaction().commit();
+        try
+        {
+            em.getTransaction().begin();
+            em.remove(user);
+            em.flush();
+            em.getTransaction().commit();
+        }
+        catch(Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + e.getMessage(), true);
+        }
     }
 
     /**
@@ -321,7 +335,7 @@ public class UserOpsBean implements UserOps{
        return (List<User>) query.getResultList();
     }
 
-    public void createAdminUserIfNeeded()
+    public void createAdminUserIfNeeded() throws Exception
     {
         try
         {
@@ -329,10 +343,23 @@ public class UserOpsBean implements UserOps{
         }
         catch (Exception e)
         {
-            em.getTransaction().begin();
-            em.persist(new AdministratorUser("admin", "admin", "admin", "admin", "admin@root.com", "123456", "99"));
-            em.flush();
-            em.getTransaction().commit();
+            try
+            {
+                em.getTransaction().begin();
+                em.persist(new AdministratorUser("admin", "admin", "admin",
+                        "admin", "admin@root.com", "123456", "99"));
+                em.flush();
+                em.getTransaction().commit();
+            }
+            catch(Exception ex)
+            {
+                if (em.getTransaction().isActive())
+                {
+                    em.getTransaction().rollback();
+                }
+                SystemReporter.report(
+                        "Catched exception when performed write to DB: " + ex.getMessage(),true);
+            }
         }
     }
 

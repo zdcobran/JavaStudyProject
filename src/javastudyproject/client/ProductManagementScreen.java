@@ -8,13 +8,12 @@ package javastudyproject.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.Product;
 import javastudyproject.model.Category;
 import javastudyproject.service.ServiceSystem;
 import javastudyproject.service.ProductsOpsBean;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 
 /**
  * the product management screen for administrator user

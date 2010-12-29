@@ -5,7 +5,6 @@
 
 package javastudyproject.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.User;
 import javastudyproject.service.UserOpsBean.UserCriteria;
@@ -44,6 +43,6 @@ public interface UserOps {
      public void deleteUser(String userName) throws Exception;
      public List<User> getAllUsers();
      public void printAllUsers() throws Exception;
-     public void createAdminUserIfNeeded();
+     public void createAdminUserIfNeeded() throws Exception;
 
 }

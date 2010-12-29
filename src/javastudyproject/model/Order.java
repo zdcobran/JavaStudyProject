@@ -7,19 +7,18 @@ package javastudyproject.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.ElementCollection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -44,7 +43,10 @@ public class Order implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
     private double totalPrice;
-    @ManyToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "joined_orders_products",
+    joinColumns = {@JoinColumn(name = "order_id")},
+    inverseJoinColumns = {@JoinColumn(name = "product_name")})
     private  List<Product> orderProducts;
     @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;

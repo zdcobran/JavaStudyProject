@@ -9,10 +9,9 @@ import javastudyproject.service.ProductsOpsBean;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.*;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 import javastudyproject.service.ServiceSystem;
 
 /**
@@ -95,10 +94,10 @@ public class ReportsScreen extends ServiceSystem{
                 }break;
                 case 7: {
                     List<Category> categories = categoryService.getAllCategories();
-                    System.out.print("All categories: ");
+                    System.out.print("All categories: \n");
                     for (int i = 0; i < categories.size(); i++)
                     {
-                        System.out.print(i+ 1 + ". " + categories.get(i).getName());
+                        System.out.print(i+ 1 + ". " + categories.get(i).getName() + "\n");
                     }
                     System.out.print("Choose category index: ");
                     int catIndex = Integer.parseInt(reader.readLine());
@@ -110,10 +109,10 @@ public class ReportsScreen extends ServiceSystem{
                     {
                         SystemReporter.report("There are no products in the system", true);
                     }
-                    System.out.print("All products: ");
+                    System.out.print("All products: \n");
                     for (int i = 0; i < products.size(); i++)
                     {
-                        System.out.print(i+ 1 + ". " + products.get(i).getName());
+                        System.out.print(i+ 1 + ". " + products.get(i).getName() + "\n");
                     }
                     System.out.print("Type product index: ");
                     int productIndex = Integer.parseInt(reader.readLine());

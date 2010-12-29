@@ -6,7 +6,6 @@
 package javastudyproject.client;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,12 +13,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javastudyproject.model.*;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 import javastudyproject.model.User;
 import javastudyproject.service.ServiceSystem;
 import javastudyproject.service.UserOpsBean;
 import javastudyproject.service.UserOpsBean.UserType;
-import sun.security.provider.SystemSigner;
 
 /**
  * Read write user screen implementation
@@ -341,22 +339,34 @@ public class ReadWriteUserScreen extends ServiceSystem {
      * new quantity = old - order quantity
      * @param order
      */
-    private void updateTheProductsQuantityByOrder(Order order)
+    private void updateTheProductsQuantityByOrder(Order order) throws Exception
     {
         List<Product> products = productService.getAllProducts();
-        em.getTransaction().begin();
-        for (Product product: order.getProducts())
+        try
         {
-           for (Product genProduct: products)
+            em.getTransaction().begin();
+            for (Product product: order.getProducts())
             {
-                if(product.getName().equals(genProduct.getName()))
+               for (Product genProduct: products)
                 {
-                    genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
-                    em.merge(genProduct);
+                    if(product.getName().equals(genProduct.getName()))
+                    {
+                        genProduct.setQuantity(genProduct.getQuantity() - product.getQuantity());
+                        em.merge(genProduct);
+                    }
                 }
             }
+            em.getTransaction().commit();
         }
-         em.getTransaction().commit();
+        catch(Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + e.getMessage(), true);
+        }
     }
 
     /**

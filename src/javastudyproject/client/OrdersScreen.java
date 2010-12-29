@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import javastudyproject.model.*;
 import javastudyproject.service.OrderOpsBean;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 import javastudyproject.service.ServiceSystem;
 import javax.persistence.Query;
 
@@ -92,8 +92,8 @@ public class OrdersScreen extends ServiceSystem {
 
         for (int i = 0; i < orders.size(); i++)
         {
-           SystemReporter.report( i + ". Run ID-"
-                   + orders.get(i).getRunId() + " of user-"
+           SystemReporter.report( i+1 + ". Run ID - '"
+                   + orders.get(i).getRunId() + "' of user - "
                    + orders.get(i).getUser().getUserName());
         }
         int id = Integer.parseInt(reader.readLine());
@@ -126,6 +126,6 @@ public class OrdersScreen extends ServiceSystem {
         }
         System.out.print("Choose order: ");
         int id = Integer.parseInt(reader.readLine());
-        orderService.deleteOrder(id - 1);
+        orderService.deleteOrder(id);
     }
 }

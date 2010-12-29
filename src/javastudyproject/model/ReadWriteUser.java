@@ -10,7 +10,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 /**
- *
+ * Read write user class
  * @author EladYarkoni
  */
 @Entity

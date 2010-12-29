@@ -5,14 +5,11 @@
 
 package javastudyproject.client;
 
-import javastudyproject.service.ProductsOpsBean;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.*;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 import javastudyproject.model.ReadOnlyUser;
 import javastudyproject.model.User;
 import javastudyproject.service.ServiceSystem;

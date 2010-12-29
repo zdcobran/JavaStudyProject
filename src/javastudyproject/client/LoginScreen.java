@@ -6,13 +6,12 @@
 package javastudyproject.client;
 
 import javastudyproject.model.User;
-import javastudyproject.service.UserOpsBean;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javastudyproject.model.ReadOnlyUser;
 import javastudyproject.service.ServiceSystem;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 
 /**
  * This is the login screen which is the first screen of the program

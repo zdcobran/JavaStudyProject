@@ -1,10 +1,10 @@
 package javastudyproject.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import javastudyproject.model.Order;
 import javastudyproject.model.Product;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.model.User;
+import javastudyproject.reporter.SystemReporter;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -24,22 +24,50 @@ public class OrderOpsBean implements OrderOps{
     public void updateOrderStatus(int orderRunId, Order.StateType status) throws Exception
     {
         Order order = em.find(Order.class, orderRunId);
+        if (order == null)
+        {
+            SystemReporter.report("Didin't find order with runid: " + orderRunId, true );
+        }
         order.updateState(status);
-        em.getTransaction().begin();
-        em.merge(order);
-        em.getTransaction().commit();
-
-        //Catch exc
-        //SystemReporter.report("Didn't found order id: " + orderRunId, true);
+        try
+        {
+            em.getTransaction().begin();
+            em.merge(order);
+            em.getTransaction().commit();
+        }
+        catch(Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + e.getMessage(), true);
+        }
     }
     
     public void deleteOrder(int orderRunId) throws Exception
     {
         Order order = em.find(Order.class, orderRunId);
-        em.getTransaction().begin();
-        em.remove(order);
-        em.getTransaction().commit();
-        SystemReporter.report("Didn't found order id: " + orderRunId, true);
+        if (order == null)
+        {
+            SystemReporter.report("Didin't find order with runid: " + orderRunId, true );
+        }
+        try
+        {
+            em.getTransaction().begin();
+            em.remove(order);
+            em.getTransaction().commit();
+        }
+        catch(Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + e.getMessage(), true);
+        }
     }
 
     public void printAllOrders() throws Exception
@@ -72,20 +100,21 @@ public class OrderOpsBean implements OrderOps{
 
     public void printOrdersUserNamesByPurchasedProduct(Product productToFind) throws Exception
     {
-        SystemReporter.report("Finding all user that purchased " + productToFind.getName());
-        Query query = em.createQuery("SELECT o FROM Order o "); //Fix query
-        List<Order> orders = query.getResultList();
-
-        for (Order order : orders)
+        SystemReporter.report("Finding all user that purchased " + productToFind.getName() + "...");
+        Query query = em.createQuery(
+                "SELECT o FROM Order o inner join o.orderProducts p where p.name = '"
+                + productToFind.getName()+ "'");
+        List<Order> orders = (List<Order>)query.getResultList();
+        if (orders.isEmpty())
         {
-            for(Product product: order.getProducts())
-            {
-                if(product == productToFind)
-                {
-                    SystemReporter.report("The user: " + order.getUser().getUserName() + " Purchased this product.");
-                    break;
-                }
-            }
+            SystemReporter.report("Nobody purchased product " + productToFind.getName());
+            return;
+        }
+
+        for (Order order: orders)
+        {
+            SystemReporter.report("The user " + order.getUser().getUserName() +
+                    " purchased product: " + productToFind.getName());
         }
     }
 
@@ -116,7 +145,20 @@ public class OrderOpsBean implements OrderOps{
         }
         catch(EntityExistsException e)
         {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
             SystemReporter.report("The specific order is already exists. EM exception: " + e.getMessage(), true);
+        }
+        catch(Exception ex)
+        {
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            SystemReporter.report(
+                    "Catched exception when performed write to DB: " + ex.getMessage(), true);
         }
         SystemReporter.report("Added new order");
     }

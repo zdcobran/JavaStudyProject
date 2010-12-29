@@ -6,10 +6,9 @@
 package javastudyproject.client;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import javastudyproject.service.ServiceSystem;
-import javastudyproject.reporting.SystemReporter;
+import javastudyproject.reporter.SystemReporter;
 
 /**
  * The Administrator main menu
@@ -28,7 +27,7 @@ public class AdministratorScreen extends ServiceSystem {
         System.out.println("2. Customers  Management");
         System.out.println("3. Orders  Management");
         System.out.println("4. Reports\n");
-        System.out.println("5. Save and exit\n");
+        System.out.println("5. Exit\n");
 
         System.out.print("Your choise: ");
 
