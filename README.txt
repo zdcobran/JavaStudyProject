@@ -1,8 +1,7 @@
 -----------------------------------------------
-ERProducts 0.1 alpha
+ERProducts 0.2 alpha
 Authors: 
 Elad yarkoni - 036690840
-
 Alon Pisnoy - 310529912
 -----------------------------------------------
 
@@ -23,9 +22,11 @@ Authors comments
      Administrator User, ReadonlyUser and ReadWrite user.
   2. The ObjectSystem class manage the Object lists in this program like products, orders, users and categories.
   3. Operations classes like OrderOps, ProductOps and UserOps that contain the whole product opeartions
-  4. Reports: Internal and system which handle the program report system
-  5. Menus: contains the Product menus. at this time, just textual menus
-  6. DB: accessing the database. at this time, just "FilesDB" (Serialized files).
+  5. Each class has an interface that initialized by central Service
+  6. Reports: Internal and system which handle the program report system
+  7. Menus: contains the Product menus. at this time, just textual menus
+  8. DB: The DB is access by persistent menager
+  9. The project DB is sample(APP APP) the default one
 
 - Premises
 
@@ -34,6 +35,28 @@ Authors comments
      and category property under product object.
   2. The product user messages can be forward in the future to a log file so the whole messages are passing through
      our special Report System that can be changed once.
-  3. Users are stored in the users.db file and the db initializing is create the default admin user
+  3. The default admin user is created in DB when the project is starts (if not exists)
   4. When read only user is deleted, it's orders remain in the orders for history
+  
+ -DB scheme
+ 
+	Orders
+	Key: Generated ID
+	OneToOne: To user
+	OneToMany: To Product
+	
+	User
+	Has: intertance to Admin, ReadWrite and Read only
+	Key: Uusername
+	
+	Product
+	Key:name
+	OneToOne: Category
+	
+	Category
+	Key:Generated ID
+	
+	Joined_Order_Products
+	Key: oreder_id, product_name
+	Auto generated table from the one to many relationship
   

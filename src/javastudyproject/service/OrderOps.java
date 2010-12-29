@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package javastudyproject.service;
 
 import java.util.List;
@@ -10,7 +5,7 @@ import javastudyproject.model.Order;
 import javastudyproject.model.Product;
 
 /**
- *
+ * Orders interface
  * @author alon
  */
 public interface OrderOps {

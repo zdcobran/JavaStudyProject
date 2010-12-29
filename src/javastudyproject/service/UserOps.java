@@ -11,7 +11,7 @@ import javastudyproject.service.UserOpsBean.UserCriteria;
 import javastudyproject.service.UserOpsBean.UserType;
 
 /**
- *
+ * User interface
  * @author alon
  */
 public interface UserOps {

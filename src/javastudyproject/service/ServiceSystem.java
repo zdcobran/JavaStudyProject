@@ -22,6 +22,10 @@ public class ServiceSystem {
     protected UserOpsBean userService;
     protected CategoryOpsBean categoryService;
 
+    /*
+     * This method initialize all services including
+     the entity manager.
+     */
     public ServiceSystem ()
     {
        emf = Persistence.createEntityManagerFactory("JavaStudyProject");
@@ -41,6 +45,10 @@ public class ServiceSystem {
        }
     }
 
+   /*
+    * Closes the entity manage and the factory
+    * Will be perform on exit from main
+    */
     public void cleanup()
     {
         em.close();

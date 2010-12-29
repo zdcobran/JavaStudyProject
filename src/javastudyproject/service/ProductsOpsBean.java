@@ -63,6 +63,11 @@ public class ProductsOpsBean implements ProductsOps{
         SystemReporter.report("Product is added");
     }
 
+    /**
+     * Add new category
+     * @param name
+     * @throws Exception
+     */
     public void addNewCategory(String name) throws Exception
     {
         try
@@ -402,12 +407,18 @@ public class ProductsOpsBean implements ProductsOps{
         name, serialNum, price, quantity, category
     }
 
+    /*
+     * Get all products fron DB
+     */
     public List<Product> getAllProducts()
     {
        Query query = em.createQuery("SELECT o FROM Product o");
        return  query.getResultList();
     }
 
+    /*
+     * Get all categories from DB
+     */
     public List<Category> getAllCategories()
     {
        Query query = em.createQuery("SELECT c FROM Category c");

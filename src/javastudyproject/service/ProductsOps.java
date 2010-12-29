@@ -12,7 +12,7 @@ import javastudyproject.service.ProductsOpsBean.LergerSmaller;
 import javastudyproject.service.ProductsOpsBean.ProductCriteria;
 
 /**
- *
+ * Products interface
  * @author alon
  */
 public interface ProductsOps {
